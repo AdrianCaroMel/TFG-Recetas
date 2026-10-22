@@ -89,6 +89,8 @@
     <string name="comparacion_titulo">Este mismo plan en tus supermercados</string>
     <string name="comparacion_mas">+%1$s</string>
     <string name="ahorro_frente_caro">Ahorras %1$s frente al más caro</string>
+    <string name="sin_app_mapas">No hay ninguna app de mapas instalada</string>
+    <string name="toca_para_mapa">Toca el nombre de un supermercado para buscarlo en el mapa.</string>
     <string name="precio_verificado">✓ precio verificado</string>
     <string name="precio_estimado">≈ precio estimado</string>
     <string name="comparacion_no_vende">no vende todos los productos del plan</string>

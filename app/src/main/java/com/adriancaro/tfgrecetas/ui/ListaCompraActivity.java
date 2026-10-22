@@ -1,6 +1,8 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import com.adriancaro.tfgrecetas.modelo.PlanMensual;
 import com.adriancaro.tfgrecetas.modelo.Supermercado;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +66,10 @@ public class ListaCompraActivity extends BaseActivity {
             if (linea.getSupermercado() != actual) {
                 actual = linea.getSupermercado();
                 View tarjeta = getLayoutInflater().inflate(R.layout.item_supermercado, contenedor, false);
-                ((TextView) tarjeta.findViewById(R.id.tvSupermercado)).setText(actual.getNombreVisible());
+                TextView tvSuper = tarjeta.findViewById(R.id.tvSupermercado);
+                tvSuper.setText("📍 " + actual.getNombreVisible());
+                final Supermercado elSuper = actual;
+                tvSuper.setOnClickListener(v -> abrirMapa(elSuper));
                 ((TextView) tarjeta.findViewById(R.id.tvSubtotal)).setText(Formato.euros(subtotal(actual)));
                 // Antes del aviso de precios, que es la ultima vista
                 contenedor.addView(tarjeta, contenedor.getChildCount() - 1);
@@ -72,6 +78,8 @@ public class ListaCompraActivity extends BaseActivity {
             productos.addView(crearFila(productos, linea));
         }
         actualizarContador();
+        ((TextView) findViewById(R.id.tvAvisoPrecios)).setText(
+                getString(R.string.toca_para_mapa) + "\n" + getString(R.string.aviso_precios));
     }
 
     /**
@@ -167,6 +175,16 @@ public class ListaCompraActivity extends BaseActivity {
             actualizarContador();
         });
         return fila;
+    }
+
+    /** Abre el mapa buscando ese supermercado cerca del usuario (como hacen FindIt u Ofertia). */
+    private void abrirMapa(Supermercado s) {
+        Uri busqueda = Uri.parse("geo:0,0?q=" + Uri.encode("supermercado " + s.getNombreVisible()));
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, busqueda));
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(findViewById(R.id.raiz), R.string.sin_app_mapas, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     /** "1,98 €/kg", "4,35 €/l" o "0,22 €/ud" */
