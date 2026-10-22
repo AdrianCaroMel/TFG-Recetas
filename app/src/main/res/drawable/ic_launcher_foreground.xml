@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icono provisional: un plato (circulo) con un tenedor y un cuchillo -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- plato -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+    <path
+        android:fillColor="#C8E6C9"
+        android:pathData="M54,38a16,16 0,1 1,0 32a16,16 0,1 1,0 -32z" />
+    <!-- tenedor -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,32h2v10h2v-10h2v10h2v-10h2v12c0,2 -1.5,3.5 -3,4v26h-4v-26c-1.5,-0.5 -3,-2 -3,-4z" />
+    <!-- cuchillo -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M84,32c-3,2 -4,8 -4,14v4h2v24h4v-42z" />
+</vector>

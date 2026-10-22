@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Recetas con presupuesto</string>
+
+    <!-- Titulos de pantalla -->
+    <string name="titulo_supermercados">1. Supermercados</string>
+    <string name="titulo_restricciones">2. Restricciones</string>
+    <string name="titulo_presupuesto">3. Presupuesto</string>
+    <string name="titulo_plan">Mi plan del mes</string>
+    <string name="titulo_receta">Receta</string>
+    <string name="titulo_lista_compra">Lista de la compra</string>
+
+    <!-- Inicio -->
+    <string name="bienvenida_titulo">Come bien todo el mes sin pasarte del presupuesto</string>
+    <string name="bienvenida_texto">Dinos en qué supermercados compras, qué no puedes comer y cuánto puedes gastar al mes. Te preparamos un plan de comidas y cenas para 30 días con su lista de la compra.</string>
+    <string name="empezar">Empezar</string>
+    <string name="ver_mi_plan">Ver mi plan</string>
+    <string name="cambiar_datos">Cambiar mis datos</string>
+
+    <!-- Pasos -->
+    <string name="pregunta_supermercados">¿En qué supermercados puedes o quieres comprar?</string>
+    <string name="ayuda_supermercados">Puedes marcar varios. Cada producto se compra donde salga más barato.</string>
+    <string name="pregunta_restricciones">¿Tienes alguna alergia, intolerancia o dieta?</string>
+    <string name="ayuda_restricciones">Si no tienes ninguna, deja todo sin marcar y pulsa Siguiente.</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="error_supermercado">Elige al menos un supermercado</string>
+
+    <string name="pregunta_presupuesto">¿Cuánto puedes gastar al mes en comida? (€)</string>
+    <string name="pregunta_personas">¿Cuántas personas coméis?</string>
+    <string name="pregunta_momentos">¿Qué quieres que te planifiquemos?</string>
+    <string name="comida">Comida</string>
+    <string name="cena">Cena</string>
+    <string name="tengo_basicos">Ya tengo aceite, sal y pimentón en casa</string>
+    <string name="generar_plan">Generar mi plan</string>
+    <string name="error_presupuesto">Escribe un presupuesto mayor que 0</string>
+    <string name="error_personas">Escribe un número de personas entre 1 y 10</string>
+    <string name="error_momentos">Marca al menos comida o cena</string>
+
+    <!-- Plan -->
+    <string name="boton_lista_compra">Lista de la compra</string>
+    <string name="boton_otro_plan">Otro plan</string>
+</resources>

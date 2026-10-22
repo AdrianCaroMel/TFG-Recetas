@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TFGRecetas">
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.SupermercadosActivity"
+            android:label="@string/titulo_supermercados"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.RestriccionesActivity"
+            android:label="@string/titulo_restricciones"
+            android:parentActivityName=".ui.SupermercadosActivity" />
+
+        <activity
+            android:name=".ui.PresupuestoActivity"
+            android:label="@string/titulo_presupuesto"
+            android:parentActivityName=".ui.RestriccionesActivity" />
+
+        <activity
+            android:name=".ui.PlanActivity"
+            android:label="@string/titulo_plan"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.RecetaActivity"
+            android:label="@string/titulo_receta"
+            android:parentActivityName=".ui.PlanActivity" />
+
+        <activity
+            android:name=".ui.ListaCompraActivity"
+            android:label="@string/titulo_lista_compra"
+            android:parentActivityName=".ui.PlanActivity" />
+
+    </application>
+
+</manifest>
