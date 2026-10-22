@@ -13,3 +13,18 @@ idProducto;supermercado;precio;fecha;fuente
 28;LIDL;15.14;2026-10-19;Folleto Lidl: atun Nixe aceite girasol 72 g escurrido, precio normal 1,09 EUR
 37;ALCAMPO;8.89;2026-10-22;Web Alcampo: Auchan sarta de chorizo dulce 280 g a 2,49 EUR
 5;ALCAMPO;1.98;2026-10-22;Web Alcampo: Producto Alcampo couscous 1 kg a 1,98 EUR
+1;ALCAMPO;1.05;2026-09-26;RadarSuper /precios/arroz: arroz marca Alcampo desde 1,05 EUR/kg
+1;CARREFOUR;1.09;2026-09-26;RadarSuper /precios/arroz: marca Carrefour desde 1,09 EUR/kg
+1;MERCADONA;1.15;2026-09-26;RadarSuper /precios/arroz: Hacendado desde 1,15 EUR/kg
+1;DIA;1.15;2026-09-26;RadarSuper /precios/arroz: marca Dia desde 1,15 EUR/kg
+10;MERCADONA;1.40;2026-09-22;RadarSuper /precios/garbanzos: garbanzo cocido Hacendado 1,40 EUR/kg
+9;MERCADONA;1.85;2026-10;RadarSuper legumbres Mercadona: lenteja pardina Hacendado 1,85 EUR/kg
+25;MERCADONA;1.25;2026-07-07;RadarSuper: tomate triturado Hacendado 800 g a 1,00 EUR
+34;CARREFOUR;5.00;2026-08-21;RadarSuper /precios/pechuga-de-pollo: Carrefour desde 5,00 EUR/kg
+34;DIA;6.49;2026-08-21;RadarSuper /precios/pechuga-de-pollo: pechuga entera familiar Dia 6,49 EUR/kg
+34;MERCADONA;7.30;2026-08-21;RadarSuper /precios/pechuga-de-pollo: filetes Hacendado 0,56 kg a 2,25 EUR (sic, 7,30 EUR/kg)
+35;MERCADONA;5.50;2026-07-09;RadarSuper /precios/carne-picada: preparado carne picada 0,5 kg a 2,75 EUR
+35;DIA;5.58;2026-07-09;RadarSuper /precios/carne-picada: marca Dia desde 5,58 EUR/kg
+28;MERCADONA;8.75;2026-10;RadarSuper: atun claro en aceite de girasol Hacendado 240 g a 2,10 EUR
+30;CARREFOUR;8.75;2026-10-19;RadarSuper: queso rallado cuatro quesos Carrefour 200 g a 1,75 EUR
+3;MERCADONA;1.14;2026-05;RadarSuper (Marbella): espagueti Hacendado 500 g a 0,57 EUR
