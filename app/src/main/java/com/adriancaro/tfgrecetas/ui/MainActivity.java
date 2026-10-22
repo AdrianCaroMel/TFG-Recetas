@@ -1,6 +1,9 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -29,6 +32,7 @@ public class MainActivity extends BaseActivity {
     private View accesos;
     private TextView tvPerfil;
     private boolean logoAnimado = false;
+    private ValueAnimator animacionFondo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,35 @@ public class MainActivity extends BaseActivity {
 
         // Volver a rellenar los pasos
         btnCambiarDatos.setOnClickListener(v -> startActivity(new Intent(this, SupermercadosActivity.class)));
+
+        prepararFondoAnimado();
+    }
+
+    /**
+     * La cabecera cambia muy despacio entre dos degradados verdes (8 s ida y vuelta).
+     * Da sensacion de "vida" sin distraer.
+     */
+    private void prepararFondoAnimado() {
+        final GradientDrawable fondo = (GradientDrawable) findViewById(R.id.appbar).getBackground().mutate();
+        final int a1 = ContextCompat.getColor(this, R.color.degradado_inicio);
+        final int a2 = ContextCompat.getColor(this, R.color.degradado_alt_inicio);
+        final int b1 = ContextCompat.getColor(this, R.color.degradado_fin);
+        final int b2 = ContextCompat.getColor(this, R.color.degradado_alt_fin);
+        final ArgbEvaluator mezcla = new ArgbEvaluator();
+        animacionFondo = ValueAnimator.ofFloat(0f, 1f);
+        animacionFondo.setDuration(8000);
+        animacionFondo.setRepeatMode(ValueAnimator.REVERSE);
+        animacionFondo.setRepeatCount(ValueAnimator.INFINITE);
+        animacionFondo.addUpdateListener(a -> {
+            float f = (Float) a.getAnimatedValue();
+            fondo.setColors(new int[]{(Integer) mezcla.evaluate(f, a1, a2), (Integer) mezcla.evaluate(f, b1, b2)});
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        animacionFondo.pause();
     }
 
     @Override
@@ -83,6 +116,12 @@ public class MainActivity extends BaseActivity {
         cardPasos.setVisibility(completo ? View.GONE : View.VISIBLE);
         if (completo) {
             tvPerfil.setText(resumenPerfil(PerfilStorage.cargar(this)));
+        }
+
+        if (animacionFondo.isPaused()) {
+            animacionFondo.resume();
+        } else if (!animacionFondo.isStarted()) {
+            animacionFondo.start();
         }
 
         // El logo entra con un pequeno rebote la primera vez

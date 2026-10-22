@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Etiqueta redondeada (su color se cambia desde Java segun sea comida o cena) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/comida_fondo" />
+    <corners android:radius="50dp" />
+</shape>

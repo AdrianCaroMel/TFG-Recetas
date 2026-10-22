@@ -137,8 +137,12 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         boolean sobra = plan.getSobrante() > 0.005;
         tvSobrante.setVisibility(sobra ? View.VISIBLE : View.GONE);
         tvSobrante.setText(context.getString(R.string.te_sobran, Formato.euros(plan.getSobrante())));
-        tvDetalles.setText(context.getString(R.string.resumen_plan, plan.getDias().size(),
-                recetasDistintas(), Formato.personas(context, perfil.getPersonas())));
+        String detalles = context.getString(R.string.resumen_plan, plan.getDias().size(),
+                recetasDistintas(), Formato.personas(context, perfil.getPersonas()));
+        if (plan.getSupermercado() != null) {
+            detalles += "\n" + context.getString(R.string.todo_en, plan.getSupermercado().getNombreVisible());
+        }
+        tvDetalles.setText(detalles);
 
         boolean hayAviso = !plan.isCompleto() && !plan.getAviso().isEmpty();
         cardAviso.setVisibility(hayAviso ? View.VISIBLE : View.GONE);
@@ -165,7 +169,9 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private View crearFilaMomento(ViewGroup padre, int indiceDia, Momento momento, Receta receta) {
         View fila = LayoutInflater.from(context).inflate(R.layout.item_momento, padre, false);
-        ((TextView) fila.findViewById(R.id.tvMomento)).setText(momento.getNombreVisible());
+        TextView tvMomento = fila.findViewById(R.id.tvMomento);
+        tvMomento.setText(momento.getNombreVisible());
+        Formato.pildora(tvMomento, momento.name());
         ((TextView) fila.findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
         String info = "⏱ " + context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
                 + context.getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(receta).getKcal())) + "  ·  "

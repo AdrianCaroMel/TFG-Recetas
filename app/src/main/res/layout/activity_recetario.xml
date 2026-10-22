@@ -52,7 +52,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipTodas"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Chip.Opcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -60,21 +60,21 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipRapidas"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Chip.Opcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filtro_rapidas" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipLigeras"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Chip.Opcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filtro_ligeras" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipFavoritas"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Chip.Opcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filtro_favoritas" />

@@ -17,6 +17,7 @@ public class PerfilUsuario {
     private boolean tengoBasicos = false; // ya tiene aceite, sal y especias en casa
     private int dias = 30;                // dias que dura el plan
     private long semilla = 1;             // cambia al pulsar "Regenerar" para dar otro plan
+    private boolean unSoloSupermercado = true; // hacer toda la compra en el super mas barato de los elegidos
 
     /** Lista de momentos (comida / cena) que hay que rellenar cada dia. */
     public List<Momento> getMomentos() {
@@ -28,6 +29,24 @@ public class PerfilUsuario {
             momentos.add(Momento.CENA);
         }
         return momentos;
+    }
+
+    /** Copia del perfil en la que solo se puede comprar en un supermercado. */
+    public PerfilUsuario soloEn(Supermercado supermercado) {
+        PerfilUsuario copia = new PerfilUsuario();
+        List<Supermercado> uno = new ArrayList<Supermercado>();
+        uno.add(supermercado);
+        copia.supermercados = uno;
+        copia.restricciones = restricciones;
+        copia.presupuesto = presupuesto;
+        copia.personas = personas;
+        copia.planificarComida = planificarComida;
+        copia.planificarCena = planificarCena;
+        copia.tengoBasicos = tengoBasicos;
+        copia.dias = dias;
+        copia.semilla = semilla;
+        copia.unSoloSupermercado = true;
+        return copia;
     }
 
     public List<Supermercado> getSupermercados() { return supermercados; }
@@ -48,4 +67,6 @@ public class PerfilUsuario {
     public void setDias(int dias) { this.dias = dias; }
     public long getSemilla() { return semilla; }
     public void setSemilla(long semilla) { this.semilla = semilla; }
+    public boolean isUnSoloSupermercado() { return unSoloSupermercado; }
+    public void setUnSoloSupermercado(boolean unSoloSupermercado) { this.unSoloSupermercado = unSoloSupermercado; }
 }

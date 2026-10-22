@@ -123,7 +123,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipComida"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Chip.Opcion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/comida"
@@ -131,12 +131,26 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCena"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Chip.Opcion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cena"
                     android:textSize="16sp" />
             </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/swUnSolo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/un_solo_super"
+                android:textAppearance="@style/Texto.Cuerpo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/un_solo_super_ayuda"
+                android:textAppearance="@style/Texto.Secundario" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/swBasicos"

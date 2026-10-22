@@ -15,6 +15,7 @@ public class PlanMensual {
     private boolean completo = true;
     private String aviso = "";
     private double presupuestoMinimo = -1; // solo se rellena si el presupuesto no llega
+    private Supermercado supermercado;     // si toda la compra se hace en un solo super (si no, null)
 
     public double getSobrante() {
         return presupuesto - costeTotal;
@@ -31,6 +32,8 @@ public class PlanMensual {
     public void setCompleto(boolean completo) { this.completo = completo; }
     public String getAviso() { return aviso; }
     public void setAviso(String aviso) { this.aviso = aviso; }
+    public Supermercado getSupermercado() { return supermercado; }
+    public void setSupermercado(Supermercado supermercado) { this.supermercado = supermercado; }
     public double getPresupuestoMinimo() { return presupuestoMinimo; }
     public void setPresupuestoMinimo(double presupuestoMinimo) { this.presupuestoMinimo = presupuestoMinimo; }
 }
