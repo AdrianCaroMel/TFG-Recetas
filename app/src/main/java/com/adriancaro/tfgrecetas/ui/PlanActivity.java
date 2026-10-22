@@ -86,6 +86,7 @@ public class PlanActivity extends BaseActivity implements PlanAdapter.Acciones {
         PlanStorage.borrar(this);
         mostrarPlan();
         rvPlan.scrollToPosition(0);
+        rvPlan.scheduleLayoutAnimation();
         Snackbar.make(rvPlan, R.string.otro_plan_generado, Snackbar.LENGTH_SHORT).show();
     }
 

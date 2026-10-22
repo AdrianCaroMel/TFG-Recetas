@@ -1,10 +1,12 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -119,13 +121,18 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View cardAviso = vista.findViewById(R.id.cardAviso);
         TextView tvAviso = vista.findViewById(R.id.tvAviso);
 
-        tvGasto.setText(Formato.euros(plan.getCosteTotal()));
+        // El gasto "cuenta" desde 0 hasta el total
+        ValueAnimator contador = ValueAnimator.ofFloat(0f, (float) plan.getCosteTotal());
+        contador.setDuration(900);
+        contador.setInterpolator(new DecelerateInterpolator());
+        contador.addUpdateListener(a -> tvGasto.setText(Formato.euros((Float) a.getAnimatedValue())));
+        contador.start();
         tvPresupuesto.setText(context.getString(R.string.de_presupuesto, Formato.euros(plan.getPresupuesto())));
         int porcentaje = 0;
         if (plan.getPresupuesto() > 0) {
             porcentaje = (int) Math.round(plan.getCosteTotal() * 100 / plan.getPresupuesto());
         }
-        barra.setProgress(Math.min(100, porcentaje));
+        barra.setProgressCompat(Math.min(100, porcentaje), true);
 
         boolean sobra = plan.getSobrante() > 0.005;
         tvSobrante.setVisibility(sobra ? View.VISIBLE : View.GONE);

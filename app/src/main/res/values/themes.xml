@@ -30,24 +30,35 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
 
+        <item name="android:windowAnimationStyle">@style/AnimacionPantallas</item>
         <item name="materialCardViewStyle">@style/Tarjeta</item>
         <item name="materialButtonStyle">@style/Boton</item>
     </style>
 
+    <!-- Transicion entre pantallas: la nueva entra desde la derecha -->
+    <style name="AnimacionPantallas" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/entrar_derecha</item>
+        <item name="android:activityOpenExitAnimation">@anim/salir_izquierda</item>
+        <item name="android:activityCloseEnterAnimation">@anim/entrar_izquierda</item>
+        <item name="android:activityCloseExitAnimation">@anim/salir_derecha</item>
+    </style>
+
     <!-- Colores de los iconos y textos de la barra superior verde -->
     <style name="ThemeOverlay.TFGRecetas.BarraSuperior" parent="">
-        <item name="colorControlNormal">@color/sobre_verde</item>
-        <item name="colorOnSurface">@color/sobre_verde</item>
-        <item name="colorOnSurfaceVariant">@color/sobre_verde</item>
+        <item name="colorControlNormal">@color/sobre_degradado</item>
+        <item name="colorOnSurface">@color/sobre_degradado</item>
+        <item name="colorOnSurfaceVariant">@color/sobre_degradado</item>
     </style>
 
     <!-- ===== Componentes ===== -->
 
     <style name="Tarjeta" parent="Widget.Material3.CardView.Outlined">
-        <item name="cardCornerRadius">16dp</item>
+        <item name="cardCornerRadius">22dp</item>
         <item name="cardBackgroundColor">@color/superficie</item>
         <item name="strokeColor">@color/borde</item>
         <item name="strokeWidth">1dp</item>
+        <!-- Al pulsar una tarjeta se hunde un poco -->
+        <item name="android:stateListAnimator">@animator/pulsar</item>
     </style>
 
     <!-- Tarjeta resaltada (resumen del gasto, estimacion...) -->
@@ -62,14 +73,19 @@
     </style>
 
     <style name="Boton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">14dp</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="backgroundTint">@color/cta</item>
+        <item name="android:textColor">@color/sobre_cta</item>
+        <item name="iconTint">@color/sobre_cta</item>
+        <item name="android:stateListAnimator">@animator/pulsar</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Boton.Contorno" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="cornerRadius">14dp</item>
+        <item name="cornerRadius">28dp</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
@@ -86,8 +102,7 @@
     <style name="BarraInferior">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/superficie</item>
-        <item name="android:elevation">8dp</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:padding">16dp</item>
     </style>

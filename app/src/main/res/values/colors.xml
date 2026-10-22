@@ -2,28 +2,38 @@
 <!-- Paleta de la app (modo claro). Los mismos nombres se redefinen en values-night para el modo oscuro. -->
 <resources>
     <!-- Marca -->
-    <color name="verde">#2E7D32</color>
+    <color name="verde">#00615F</color>
     <color name="sobre_verde">#FFFFFF</color>
-    <color name="verde_oscuro">#1B5E20</color>
-    <color name="verde_claro">#D4EDD3</color>
-    <color name="naranja">#E65100</color>
+    <color name="verde_oscuro">#003B39</color>
+    <color name="verde_claro">#D9EFEA</color>
+    <color name="naranja">#E2623C</color>
     <color name="sobre_naranja">#FFFFFF</color>
-    <color name="naranja_claro">#FFE5CC</color>
-    <color name="sobre_naranja_claro">#4A1F00</color>
+    <color name="naranja_claro">#FDE6DA</color>
+    <color name="sobre_naranja_claro">#5C1A0B</color>
 
     <!-- Avisos -->
     <color name="rojo_aviso">#B3261E</color>
     <color name="rojo_claro">#FCE8E6</color>
 
     <!-- Superficies y texto -->
-    <color name="fondo">#F5F7F2</color>
+    <color name="fondo">#FBF7EF</color>
     <color name="superficie">#FFFFFF</color>
-    <color name="fondo_tarjeta">#EDF4E8</color>
-    <color name="texto_principal">#1B1D1A</color>
-    <color name="texto_secundario">#5C6359</color>
-    <color name="borde">#DCE3D7</color>
+    <color name="fondo_tarjeta">#F3EDE2</color>
+    <color name="texto_principal">#1D2B2A</color>
+    <color name="texto_secundario">#5D6B69</color>
+    <color name="borde">#EAE2D3</color>
     <color name="blanco">#FFFFFF</color>
 
     <!-- Fondo del icono de la app (igual en claro y oscuro) -->
-    <color name="icono_fondo">#2E7D32</color>
+    <color name="icono_fondo">#00615F</color>
+    <!-- Degradados (version fancy) -->
+    <color name="degradado_inicio">#00514F</color>
+    <color name="degradado_medio">#00756A</color>
+    <color name="degradado_fin">#009A7E</color>
+    <color name="calido_inicio">#F2704A</color>
+    <color name="calido_fin">#F79D45</color>
+    <color name="sobre_degradado">#FFFFFF</color>
+    <!-- Botones principales: amarillo calido (inspirado en Glovo) con texto oscuro -->
+    <color name="cta">#FFC244</color>
+    <color name="sobre_cta">#1D2B2A</color>
 </resources>

@@ -45,6 +45,16 @@
             android:parentActivityName=".ui.PlanActivity" />
 
         <activity
+            android:name=".ui.RecetarioActivity"
+            android:label="@string/titulo_recetario"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ConsejosActivity"
+            android:label="@string/titulo_consejos"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
             android:name=".ui.ListaCompraActivity"
             android:label="@string/titulo_lista_compra"
             android:parentActivityName=".ui.PlanActivity" />

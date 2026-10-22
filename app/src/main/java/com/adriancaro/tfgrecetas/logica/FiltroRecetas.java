@@ -27,11 +27,34 @@ public class FiltroRecetas {
                     break;
                 }
             }
-            if (valida) {
+            if (valida && cumpleLimitesNutricionales(r, perfil)) {
                 validas.add(r);
             }
         }
         return validas;
+    }
+
+    /**
+     * Algunas dietas medicas no prohiben productos sino cantidades por racion:
+     * diabetes limita los hidratos y la dieta blanda / baja en grasa limitan la grasa
+     * (asi quedan fuera, por ejemplo, los fritos).
+     */
+    public static boolean cumpleLimitesNutricionales(Receta receta, PerfilUsuario perfil) {
+        Nutricion n = null;
+        for (Restriccion r : perfil.getRestricciones()) {
+            if (r == Restriccion.CONTROL_AZUCAR || r == Restriccion.DIETA_BLANDA || r == Restriccion.BAJA_EN_GRASA) {
+                if (n == null) {
+                    n = Nutricion.deRacion(receta);
+                }
+                if (r == Restriccion.CONTROL_AZUCAR && n.getHidratos() > Restriccion.MAX_HIDRATOS_DIABETES) {
+                    return false;
+                }
+                if (r != Restriccion.CONTROL_AZUCAR && n.getGrasas() > Restriccion.MAX_GRASAS) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static boolean productoPermitido(Producto p, PerfilUsuario perfil) {

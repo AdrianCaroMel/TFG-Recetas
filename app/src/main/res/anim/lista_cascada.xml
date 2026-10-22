@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Los elementos de la lista aparecen uno detras de otro -->
+<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
+    android:animation="@anim/item_aparecer"
+    android:animationOrder="normal"
+    android:delay="12%" />

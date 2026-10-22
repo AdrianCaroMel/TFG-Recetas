@@ -40,12 +40,18 @@ public class RestriccionesActivity extends BaseActivity {
         tvPregunta.setText(R.string.pregunta_restricciones);
         tvAyuda.setText(R.string.ayuda_restricciones);
 
-        // Dos grupos: alergias / intolerancias y dietas
+        // Tres grupos: alergias / intolerancias, dietas y dietas por salud
         final PerfilUsuario perfil = PerfilStorage.cargar(this);
         ChipGroup alergias = anadirSeccion(contenedor, getString(R.string.seccion_alergias));
         ChipGroup dietas = anadirSeccion(contenedor, getString(R.string.seccion_dieta));
+        ChipGroup medicas = anadirSeccion(contenedor, getString(R.string.seccion_dieta_medica));
+        TextView aviso = new TextView(this);
+        aviso.setText(R.string.aviso_dieta_medica);
+        aviso.setTextAppearance(R.style.Texto_Secundario);
+        aviso.setPadding(0, 12, 0, 0);
+        contenedor.addView(aviso);
         for (Restriccion r : Restriccion.values()) {
-            ChipGroup grupo = r.esDieta() ? dietas : alergias;
+            ChipGroup grupo = r.esDietaMedica() ? medicas : r.esDieta() ? dietas : alergias;
             chips.put(r, anadirChip(grupo, r.getNombreVisible(), perfil.getRestricciones().contains(r)));
         }
 

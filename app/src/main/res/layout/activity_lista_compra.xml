@@ -19,15 +19,18 @@
             android:id="@+id/contenedorCompra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/lista_cascada"
             android:orientation="vertical"
             android:padding="16dp">
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/Tarjeta.Destacada"
+        app:cardElevation="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:background="@drawable/degradado_calido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -38,14 +41,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_compra"
                         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                        android:textColor="@color/verde_oscuro" />
+                        android:textColor="@color/sobre_degradado" />
 
                     <TextView
                         android:id="@+id/tvTotalCompra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
-                        android:textColor="@color/verde_oscuro"
+                        android:textColor="@color/sobre_degradado"
                         android:textStyle="bold" />
 
                     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -53,8 +56,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        app:indicatorColor="@color/verde"
-                        app:trackColor="@color/superficie"
+                        app:indicatorColor="@color/sobre_degradado"
+                        app:trackColor="#40FFFFFF"
                         app:trackCornerRadius="5dp"
                         app:trackThickness="10dp" />
 
@@ -63,7 +66,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textAppearance="@style/Texto.Cuerpo" />
+                        android:textAppearance="@style/Texto.Cuerpo"
+                android:textColor="@color/sobre_degradado" />
 
                     <TextView
                         android:id="@+id/tvBasicos"
@@ -72,6 +76,7 @@
                         android:layout_marginTop="4dp"
                         android:text="@string/ya_tienes_basicos"
                         android:textAppearance="@style/Texto.Secundario"
+                        android:textColor="@color/sobre_degradado"
                         android:visibility="gone" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

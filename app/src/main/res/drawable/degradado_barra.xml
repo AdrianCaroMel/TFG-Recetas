@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fondo de la barra superior: degradado verde esmeralda con las esquinas de abajo redondeadas -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="0"
+        android:centerColor="@color/degradado_medio"
+        android:endColor="@color/degradado_fin"
+        android:startColor="@color/degradado_inicio" />
+    <corners
+        android:bottomLeftRadius="28dp"
+        android:bottomRightRadius="28dp" />
+</shape>

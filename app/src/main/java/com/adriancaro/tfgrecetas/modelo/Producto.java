@@ -17,6 +17,8 @@ public class Producto {
     private final String origen;      // VEGETAL, LACTEO, HUEVO, CARNE, PESCADO, MARISCO
     /** kcal, proteinas, hidratos y grasas por 100 g / 100 ml, o por unidad si la unidad es "ud". */
     private double[] nutrientes = new double[4];
+    /** Etiquetas para dietas por enfermedad: IRRITANTE, INDIGESTO, GRASO, SALADO. */
+    private List<String> etiquetas = new java.util.ArrayList<String>();
 
     public Producto(int id, String nombre, String categoria, String unidad, double envase,
                     double[] precios, List<String> alergenos, String origen) {
@@ -55,6 +57,14 @@ public class Producto {
         double factor = unidad.equals("ud") ? cantidad : cantidad / 100.0;
         return new double[]{nutrientes[0] * factor, nutrientes[1] * factor,
                 nutrientes[2] * factor, nutrientes[3] * factor};
+    }
+
+    public boolean tieneEtiqueta(String etiqueta) {
+        return etiquetas.contains(etiqueta);
+    }
+
+    public void setEtiquetas(List<String> etiquetas) {
+        this.etiquetas = etiquetas;
     }
 
     public void setNutrientes(double kcal, double proteinas, double hidratos, double grasas) {
