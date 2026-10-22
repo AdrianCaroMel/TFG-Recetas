@@ -4,9 +4,7 @@
 #  - Resto de cadenas: referencia x (indice OCU de la cadena / indice OCU de Mercadona).
 #    Indices del estudio de supermercados OCU 2026 (cadena mas barata = 100):
 #    Alcampo 103, Lidl 105, Mercadona 105, Aldi 107, Carrefour 109. Dia: 108 (estimado a partir de 2025).
-#  - Precios reales verificados que sustituyen al calculo (octubre 2026):
-#    huevos Mercadona (24 uds a 5,25 EUR) y Carrefour (12 L a 3,05 EUR), fuente FACUA;
-#    patatas Lidl (5 kg a 5,45 EUR), fuente FACUA; aceite de oliva virgen extra Mercadona 4,35 EUR/l, fuente merca2.es.
+#  - Los precios REALES comprobados estan en precios_reales.csv y sustituyen a estos al cargar la app.
 #  Son precios ORIENTATIVOS: cambian cada semana y segun la tienda. La app avisa de ello.
 # Una celda de precio vacia significa que ese supermercado no vende el producto.
 # unidad: g (gramos), ml (mililitros) o ud (unidades). envase: cantidad que trae cada envase.
