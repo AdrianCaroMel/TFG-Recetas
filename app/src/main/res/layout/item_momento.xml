@@ -19,10 +19,10 @@
 
         <TextView
             android:id="@+id/tvMomento"
+            style="@style/Pildora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textAppearance="@style/Texto.Etiqueta" />
+            android:layout_marginBottom="2dp" />
 
         <TextView
             android:id="@+id/tvNombreReceta"

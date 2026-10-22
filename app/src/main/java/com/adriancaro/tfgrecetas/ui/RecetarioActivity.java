@@ -156,7 +156,9 @@ public class RecetarioActivity extends BaseActivity {
             Receta r = visibles.get(position);
             View v = holder.itemView;
             ((TextView) v.findViewById(R.id.tvEmoji)).setText(Emoji.de(r));
-            ((TextView) v.findViewById(R.id.tvMomentoReceta)).setText(momento(r));
+            TextView tvMomento = v.findViewById(R.id.tvMomentoReceta);
+            tvMomento.setText(momento(r));
+            Formato.pildora(tvMomento, r.getTipo());
             ((TextView) v.findViewById(R.id.tvNombre)).setText(r.getNombre());
             ((TextView) v.findViewById(R.id.tvDatos)).setText("⏱ " + getString(R.string.minutos, r.getMinutos())
                     + "  ·  🔥 " + getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(r).getKcal()))

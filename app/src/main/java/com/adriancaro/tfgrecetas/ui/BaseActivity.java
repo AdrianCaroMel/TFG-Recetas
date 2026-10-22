@@ -97,6 +97,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         Chip chip = (Chip) getLayoutInflater().inflate(R.layout.item_chip, grupo, false);
         chip.setText(texto);
         chip.setChecked(marcado);
+        // Pequeno "pop" al tocarlo para que se note que ha cambiado
+        chip.setOnClickListener(v -> {
+            v.setScaleX(0.88f);
+            v.setScaleY(0.88f);
+            v.animate().scaleX(1f).scaleY(1f).setDuration(260)
+                    .setInterpolator(new android.view.animation.OvershootInterpolator(3f)).start();
+        });
         grupo.addView(chip);
         return chip;
     }

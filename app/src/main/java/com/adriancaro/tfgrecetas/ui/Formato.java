@@ -1,6 +1,10 @@
 package com.adriancaro.tfgrecetas.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.modelo.Supermercado;
@@ -42,6 +46,27 @@ public class Formato {
             return df.format(valor) + " ud.";
         }
         return df.format(valor) + " " + unidad;
+    }
+
+    /**
+     * Colorea una pildora segun el momento: ambar para comida, indigo para cena
+     * y verde si la receta sirve para las dos.
+     */
+    public static void pildora(TextView tv, String tipo) {
+        Context c = tv.getContext();
+        int fondo, texto;
+        if (tipo.equals("COMIDA")) {
+            fondo = R.color.comida_fondo;
+            texto = R.color.comida_texto;
+        } else if (tipo.equals("CENA")) {
+            fondo = R.color.cena_fondo;
+            texto = R.color.cena_texto;
+        } else {
+            fondo = R.color.verde_claro;
+            texto = R.color.verde_oscuro;
+        }
+        tv.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(c, fondo)));
+        tv.setTextColor(ContextCompat.getColor(c, texto));
     }
 
     /** "1 persona" / "3 personas" */

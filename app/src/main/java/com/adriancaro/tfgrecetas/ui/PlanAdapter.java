@@ -165,7 +165,9 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private View crearFilaMomento(ViewGroup padre, int indiceDia, Momento momento, Receta receta) {
         View fila = LayoutInflater.from(context).inflate(R.layout.item_momento, padre, false);
-        ((TextView) fila.findViewById(R.id.tvMomento)).setText(momento.getNombreVisible());
+        TextView tvMomento = fila.findViewById(R.id.tvMomento);
+        tvMomento.setText(momento.getNombreVisible());
+        Formato.pildora(tvMomento, momento.name());
         ((TextView) fila.findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
         String info = "⏱ " + context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
                 + context.getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(receta).getKcal())) + "  ·  "

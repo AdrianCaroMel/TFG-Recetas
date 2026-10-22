@@ -123,7 +123,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipComida"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Chip.Opcion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/comida"
@@ -131,7 +131,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCena"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Chip.Opcion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cena"
