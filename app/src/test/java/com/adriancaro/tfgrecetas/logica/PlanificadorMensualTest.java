@@ -191,6 +191,29 @@ public class PlanificadorMensualTest {
         }
     }
 
+    @Test
+    public void todasLasRecetasTienenCaloriasRazonables() {
+        for (Receta r : recetas) {
+            Nutricion n = Nutricion.deRacion(r);
+            assertTrue(r.getNombre() + ": " + n.getKcal() + " kcal", n.getKcal() > 150 && n.getKcal() < 1200);
+            assertTrue(r.getNombre(), n.getProteinas() > 0 && n.getPesoGramos() > 100);
+        }
+    }
+
+    @Test
+    public void lasCaloriasSeCalculanPorUnidadYPor100Gramos() {
+        Producto huevo = null;
+        Producto arroz = null;
+        for (Receta r : recetas) {
+            for (Ingrediente ing : r.getIngredientes()) {
+                if (ing.getProducto().getNombre().equals("Huevos")) huevo = ing.getProducto();
+                if (ing.getProducto().getNombre().equals("Arroz redondo")) arroz = ing.getProducto();
+            }
+        }
+        assertEquals(172, huevo.nutrientesDe(2)[0], 0.01);   // 2 huevos
+        assertEquals(283.2, arroz.nutrientesDe(80)[0], 0.01); // 80 g de arroz
+    }
+
     // ---------- utilidades ----------
 
     private PerfilUsuario perfil(double presupuesto, int personas, Supermercado... supers) {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.logica.CestaCompra;
+import com.adriancaro.tfgrecetas.logica.Nutricion;
 import com.adriancaro.tfgrecetas.modelo.DiaPlan;
 import com.adriancaro.tfgrecetas.modelo.Momento;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
@@ -160,6 +161,7 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((TextView) fila.findViewById(R.id.tvMomento)).setText(momento.getNombreVisible());
         ((TextView) fila.findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
         String info = "⏱ " + context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
+                + context.getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(receta).getKcal())) + "  ·  "
                 + context.getString(R.string.por_racion, Formato.euros(precios.costeRacion(receta)));
         ((TextView) fila.findViewById(R.id.tvInfoReceta)).setText(info);
 

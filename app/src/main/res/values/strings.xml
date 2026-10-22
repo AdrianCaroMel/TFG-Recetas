@@ -70,6 +70,10 @@
     <string name="ingredientes">Ingredientes</string>
     <string name="preparacion">Preparación</string>
     <string name="minutos">%1$d min</string>
+    <string name="por_racion_titulo">Por ración (1 persona)</string>
+    <string name="kcal">%1$d kcal</string>
+    <string name="macros">Proteínas %1$d g · Hidratos %2$d g · Grasas %3$d g</string>
+    <string name="racion_detalle">Una ración pesa unos %1$d g en crudo. Aporta el %2$d %% de las calorías de un día (referencia de 2000 kcal). Valores aproximados.</string>
 
     <!-- Lista de la compra -->
     <string name="compartir">Compartir</string>

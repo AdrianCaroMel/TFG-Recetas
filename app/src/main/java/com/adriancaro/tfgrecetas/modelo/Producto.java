@@ -15,6 +15,8 @@ public class Producto {
     private final double[] precios;   // precio por envase en cada Supermercado (-1 = no lo vende)
     private final List<String> alergenos;
     private final String origen;      // VEGETAL, LACTEO, HUEVO, CARNE, PESCADO, MARISCO
+    /** kcal, proteinas, hidratos y grasas por 100 g / 100 ml, o por unidad si la unidad es "ud". */
+    private double[] nutrientes = new double[4];
 
     public Producto(int id, String nombre, String categoria, String unidad, double envase,
                     double[] precios, List<String> alergenos, String origen) {
@@ -43,6 +45,20 @@ public class Producto {
     /** Aceite, sal, especias... cosas que mucha gente ya tiene en casa. */
     public boolean esBasico() {
         return categoria.equals("Básicos");
+    }
+
+    /**
+     * Valores nutricionales de una cantidad del producto (en su unidad):
+     * {kcal, proteinas g, hidratos g, grasas g}.
+     */
+    public double[] nutrientesDe(double cantidad) {
+        double factor = unidad.equals("ud") ? cantidad : cantidad / 100.0;
+        return new double[]{nutrientes[0] * factor, nutrientes[1] * factor,
+                nutrientes[2] * factor, nutrientes[3] * factor};
+    }
+
+    public void setNutrientes(double kcal, double proteinas, double hidratos, double grasas) {
+        nutrientes = new double[]{kcal, proteinas, hidratos, grasas};
     }
 
     public int getId() { return id; }
