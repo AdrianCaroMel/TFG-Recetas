@@ -43,6 +43,28 @@ con el índice de la OCU acertaba en algunos productos (chorizo en Alcampo: 8,85
 y fallaba en otros (pechuga de pollo en Lidl: 6,50 frente a 8,89 €/kg). Por eso se prioriza ir
 sustituyendo los estimados por reales: ver [06 - Precios por verificar](06-precios-por-verificar.md).
 
+## Actualización del 22/10/2026: 114 precios reales
+
+Con acceso a internet se obtuvieron precios del día directamente de las fuentes:
+
+| Fuente | Cómo | Cadenas |
+|---|---|---|
+| API pública de **tienda.mercadona.es** | Categorías de la tienda online, precio por kg/l de cada producto | Mercadona |
+| API de búsqueda de **dia.es** | Búsqueda de cada ingrediente; se usa el precio normal (tachado), no el de oferta | Dia |
+| **RadarSuper** (`/precios/<producto>`) | Tabla «por supermercado (hoy)» con el más barato por €/kg de cada cadena | Alcampo, Carrefour, Lidl (y contraste de Mercadona y Dia) |
+| Capturas de Adrián, FACUA, prensa | Manual | Lidl, Alcampo… |
+
+Reglas aplicadas: para cada ingrediente se elige el producto equivalente más barato por kilo de cada
+cadena (normalmente su marca blanca), se descartan platos preparados y productos que no son el
+ingrediente, y en RadarSuper se descartan valores atípicos (menos del 60 % o más del 180 % de la
+mediana del producto), que suelen ser otro producto mezclado. Carrefour bloquea el acceso
+automático (403) y Aldi no publica catálogo con precios, por eso se cubren con RadarSuper o quedan
+estimados.
+
+Con estos datos el supermercado más barato por producto se reparte entre las cadenas (Alcampo 16,
+Mercadona 13, Dia 6, Lidl 4, Carrefour 3), y el supermercado recomendado se elige comparando la misma
+compra del mes en cada uno.
+
 ## Mejora futura
 
 Actualizar los precios automáticamente desde un servicio (por ejemplo, con los datos que publican
