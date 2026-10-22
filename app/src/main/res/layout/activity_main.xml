@@ -1,49 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de inicio -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@color/fondo"
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/verde"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_launcher_foreground" />
-
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/bienvenida_titulo"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/bienvenida_texto"
-        android:textColor="@color/texto_secundario"
-        android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    <Button
-        android:id="@+id/btnPrincipal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/empezar" />
+            <ImageView
+                android:layout_width="112dp"
+                android:layout_height="112dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/fondo_circulo"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher_foreground" />
 
-    <Button
-        android:id="@+id/btnCambiarDatos"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cambiar_datos"
-        android:visibility="gone" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/bienvenida_titulo"
+                android:textAppearance="@style/Texto.Titulo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/bienvenida_texto"
+                android:textAppearance="@style/Texto.Secundario"
+                android:textSize="16sp" />
+
+            <!-- Como funciona: tres pasos -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPasos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <include
+                        android:id="@+id/paso1"
+                        layout="@layout/item_paso" />
+
+                    <include
+                        android:id="@+id/paso2"
+                        layout="@layout/item_paso" />
+
+                    <include
+                        android:id="@+id/paso3"
+                        layout="@layout/item_paso" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Resumen de los datos guardados (solo si ya los ha rellenado) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPerfil"
+                style="@style/Tarjeta.Destacada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tu_perfil"
+                        android:textAppearance="@style/Texto.Seccion" />
+
+                    <TextView
+                        android:id="@+id/tvPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:lineSpacingExtra="4dp"
+                        android:textAppearance="@style/Texto.Cuerpo" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        style="@style/BarraInferior"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empezar" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCambiarDatos"
+            style="@style/Boton.Contorno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/cambiar_datos"
+            android:visibility="gone"
+            app:icon="@drawable/ic_editar"
+            app:iconGravity="textStart" />
+    </LinearLayout>
 
 </LinearLayout>

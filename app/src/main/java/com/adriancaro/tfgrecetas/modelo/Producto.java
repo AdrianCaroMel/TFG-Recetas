@@ -42,7 +42,7 @@ public class Producto {
 
     /** Aceite, sal, especias... cosas que mucha gente ya tiene en casa. */
     public boolean esBasico() {
-        return categoria.equals("Basicos");
+        return categoria.equals("Básicos");
     }
 
     public int getId() { return id; }

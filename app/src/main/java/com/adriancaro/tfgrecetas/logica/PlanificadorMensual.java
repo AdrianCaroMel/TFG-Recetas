@@ -7,6 +7,8 @@ import com.adriancaro.tfgrecetas.modelo.PlanMensual;
 import com.adriancaro.tfgrecetas.modelo.Receta;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,36 +28,18 @@ import java.util.Random;
  */
 public class PlanificadorMensual {
 
+    private static final Locale ES = Locale.forLanguageTag("es-ES");
+
     public static PlanMensual generar(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
-        List<Momento> momentos = perfil.getMomentos();
-        List<Receta> validas = FiltroRecetas.recetasValidas(todasLasRecetas, perfil);
-
-        // Candidatas para cada momento del dia
-        Map<Momento, List<Receta>> candidatas = new HashMap<Momento, List<Receta>>();
-        for (Momento m : momentos) {
-            List<Receta> lista = new ArrayList<Receta>();
-            for (Receta r : validas) {
-                if (r.sirvePara(m)) {
-                    lista.add(r);
-                }
-            }
-            if (lista.isEmpty()) {
-                PlanMensual vacio = new PlanMensual();
-                vacio.setPresupuesto(perfil.getPresupuesto());
-                vacio.setCompleto(false);
-                vacio.setAviso("No hay recetas de " + m.getNombreVisible().toLowerCase(Locale.ROOT)
-                        + " compatibles con tus restricciones y supermercados. Prueba a elegir mas supermercados.");
-                return vacio;
-            }
-            candidatas.put(m, lista);
+        if (perfil.getMomentos().isEmpty()) {
+            return planVacio(perfil, "Elige al menos comida o cena para poder hacer el plan.");
         }
-
-        if (momentos.isEmpty()) {
-            PlanMensual vacio = new PlanMensual();
-            vacio.setPresupuesto(perfil.getPresupuesto());
-            vacio.setCompleto(false);
-            vacio.setAviso("Elige al menos comida o cena para poder hacer el plan.");
-            return vacio;
+        Map<Momento, List<Receta>> candidatas = candidatas(perfil, todasLasRecetas);
+        for (Momento m : perfil.getMomentos()) {
+            if (candidatas.get(m).isEmpty()) {
+                return planVacio(perfil, "No hay recetas de " + m.getNombreVisible().toLowerCase(ES)
+                        + " compatibles con tus restricciones y supermercados. Prueba a elegir más supermercados.");
+            }
         }
 
         // Pasada 1: lo mas barato posible, sin limite de dinero
@@ -69,9 +53,7 @@ public class PlanificadorMensual {
                 return parcial; // con el limite puesto ha encontrado otra combinacion que si entra
             }
             parcial.setPresupuestoMinimo(costeMinimo);
-            parcial.setAviso(String.format(Locale.ROOT,
-                    "Con %.2f euros no llega para todo el mes. Necesitarias unos %.2f euros.",
-                    perfil.getPresupuesto(), costeMinimo));
+            parcial.setAviso(avisoPresupuesto(perfil.getPresupuesto(), costeMinimo));
             return parcial;
         }
 
@@ -83,6 +65,139 @@ public class PlanificadorMensual {
             return barato;
         }
         return plan;
+    }
+
+    /**
+     * Gasto aproximado del mes eligiendo siempre lo mas barato (manteniendo algo de variedad).
+     * Devuelve -1 si no hay recetas para alguno de los momentos elegidos.
+     */
+    public static double costeMinimo(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
+        if (perfil.getMomentos().isEmpty()) {
+            return -1;
+        }
+        Map<Momento, List<Receta>> candidatas = candidatas(perfil, todasLasRecetas);
+        for (List<Receta> lista : candidatas.values()) {
+            if (lista.isEmpty()) {
+                return -1;
+            }
+        }
+        return construir(perfil, candidatas, Double.MAX_VALUE, 0, true).getCosteTotal();
+    }
+
+    /**
+     * Rehace un plan a partir de los dias ya decididos (por ejemplo, un plan guardado
+     * en el movil o uno en el que el usuario ha cambiado un plato): recalcula la lista
+     * de la compra, el coste y si se pasa del presupuesto.
+     */
+    public static PlanMensual desdeDias(PerfilUsuario perfil, List<DiaPlan> dias, List<Receta> todasLasRecetas) {
+        CestaCompra cesta = new CestaCompra(perfil);
+        PlanMensual plan = new PlanMensual();
+        plan.setPresupuesto(perfil.getPresupuesto());
+        for (DiaPlan dia : dias) {
+            for (Momento m : Momento.values()) {
+                if (dia.getReceta(m) != null) {
+                    cesta.anadir(dia.getReceta(m));
+                }
+            }
+            plan.getDias().add(dia);
+        }
+        terminar(plan, cesta);
+
+        boolean completo = dias.size() >= perfil.getDias()
+                && plan.getCosteTotal() <= perfil.getPresupuesto() + 1e-9;
+        plan.setCompleto(completo);
+        if (!completo) {
+            double minimo = costeMinimo(perfil, todasLasRecetas);
+            plan.setPresupuestoMinimo(minimo);
+            plan.setAviso(avisoPresupuesto(perfil.getPresupuesto(), minimo));
+        }
+        return plan;
+    }
+
+    /**
+     * Recetas que pueden sustituir a la del dia y momento indicados sin que el plan
+     * se pase del presupuesto, ordenadas de mas barata a mas cara.
+     */
+    public static List<Alternativa> alternativas(PerfilUsuario perfil, PlanMensual plan, int indiceDia,
+                                                 Momento momento, List<Receta> todasLasRecetas) {
+        DiaPlan dia = plan.getDias().get(indiceDia);
+        Receta actual = dia.getReceta(momento);
+        Receta otraDelDia = dia.getReceta(momento == Momento.COMIDA ? Momento.CENA : Momento.COMIDA);
+        // Si el plan ya se pasaba, al menos que el cambio no lo empeore
+        double limite = Math.max(perfil.getPresupuesto(), plan.getCosteTotal());
+
+        List<Alternativa> resultado = new ArrayList<Alternativa>();
+        for (Receta r : candidatas(perfil, todasLasRecetas).get(momento)) {
+            if (r == actual || r == otraDelDia) {
+                continue;
+            }
+            CestaCompra cesta = new CestaCompra(perfil);
+            for (int i = 0; i < plan.getDias().size(); i++) {
+                for (Momento m : Momento.values()) {
+                    Receta receta = (i == indiceDia && m == momento) ? r : plan.getDias().get(i).getReceta(m);
+                    if (receta != null) {
+                        cesta.anadir(receta);
+                    }
+                }
+            }
+            if (cesta.getCosteTotal() <= limite + 1e-9) {
+                resultado.add(new Alternativa(r, cesta.getCosteTotal() - plan.getCosteTotal()));
+            }
+        }
+        Collections.sort(resultado, new Comparator<Alternativa>() {
+            @Override
+            public int compare(Alternativa a, Alternativa b) {
+                return Double.compare(a.getDiferencia(), b.getDiferencia());
+            }
+        });
+        return resultado;
+    }
+
+    /** Una receta que puede ir en un hueco del plan y cuanto cambia el gasto del mes. */
+    public static class Alternativa {
+        private final Receta receta;
+        private final double diferencia;
+
+        public Alternativa(Receta receta, double diferencia) {
+            this.receta = receta;
+            this.diferencia = diferencia;
+        }
+
+        public Receta getReceta() { return receta; }
+        /** Euros que sube (positivo) o baja (negativo) el gasto del mes con este cambio. */
+        public double getDiferencia() { return diferencia; }
+    }
+
+    /** Recetas validas para cada momento que planifica el usuario. */
+    private static Map<Momento, List<Receta>> candidatas(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
+        List<Receta> validas = FiltroRecetas.recetasValidas(todasLasRecetas, perfil);
+        Map<Momento, List<Receta>> candidatas = new HashMap<Momento, List<Receta>>();
+        for (Momento m : perfil.getMomentos()) {
+            List<Receta> lista = new ArrayList<Receta>();
+            for (Receta r : validas) {
+                if (r.sirvePara(m)) {
+                    lista.add(r);
+                }
+            }
+            candidatas.put(m, lista);
+        }
+        return candidatas;
+    }
+
+    private static PlanMensual planVacio(PerfilUsuario perfil, String aviso) {
+        PlanMensual vacio = new PlanMensual();
+        vacio.setPresupuesto(perfil.getPresupuesto());
+        vacio.setCompleto(false);
+        vacio.setAviso(aviso);
+        return vacio;
+    }
+
+    private static String avisoPresupuesto(double presupuesto, double minimo) {
+        if (minimo < 0) {
+            return "No hay recetas compatibles con tus restricciones y supermercados.";
+        }
+        return String.format(ES, "Con %.2f € no llega para todo el mes. Necesitarías unos %.2f €.",
+                presupuesto, minimo);
     }
 
     /**

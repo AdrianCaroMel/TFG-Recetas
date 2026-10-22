@@ -7,15 +7,15 @@ package com.adriancaro.tfgrecetas.modelo;
  */
 public enum Restriccion {
 
-    SIN_GLUTEN("Sin gluten (celiaquia)"),
+    SIN_GLUTEN("Sin gluten (celiaquía)"),
     SIN_LACTOSA("Sin lactosa"),
-    SIN_HUEVO("Alergia al huevo"),
-    SIN_FRUTOS_SECOS("Alergia a frutos secos"),
-    SIN_PESCADO("Alergia al pescado"),
-    SIN_MARISCO("Alergia al marisco"),
-    SIN_SOJA("Alergia a la soja"),
-    VEGETARIANO("Vegetariano"),
-    VEGANO("Vegano");
+    SIN_HUEVO("Sin huevo"),
+    SIN_FRUTOS_SECOS("Sin frutos secos"),
+    SIN_PESCADO("Sin pescado"),
+    SIN_MARISCO("Sin marisco"),
+    SIN_SOJA("Sin soja"),
+    VEGETARIANO("Vegetariana"),
+    VEGANO("Vegana");
 
     private final String nombreVisible;
 
@@ -25,6 +25,11 @@ public enum Restriccion {
 
     public String getNombreVisible() {
         return nombreVisible;
+    }
+
+    /** True para las dietas (vegetariana, vegana); false para alergias e intolerancias. */
+    public boolean esDieta() {
+        return this == VEGETARIANO || this == VEGANO;
     }
 
     /**

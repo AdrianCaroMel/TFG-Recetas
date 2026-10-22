@@ -2,93 +2,133 @@ package com.adriancaro.tfgrecetas.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.datos.PerfilStorage;
+import com.adriancaro.tfgrecetas.datos.PlanStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.PlanificadorMensual;
+import com.adriancaro.tfgrecetas.modelo.DiaPlan;
+import com.adriancaro.tfgrecetas.modelo.Momento;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.PlanMensual;
+import com.adriancaro.tfgrecetas.modelo.Receta;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Muestra el plan del mes: resumen del gasto y la lista de dias.
- * El plan se calcula al entrar (es rapido) a partir del perfil guardado.
- * Como el azar usa una semilla guardada, siempre sale el mismo plan
- * hasta que el usuario pulsa "Otro plan".
+ * El plan se guarda en el movil (PlanStorage), asi no cambia al cerrar la app
+ * y se pueden cambiar platos sueltos. "Otro plan" genera uno nuevo.
  */
-public class PlanActivity extends AppCompatActivity {
+public class PlanActivity extends BaseActivity implements PlanAdapter.Acciones {
 
-    private TextView tvGasto;
-    private TextView tvSobrante;
-    private TextView tvAviso;
-    private ProgressBar barraGasto;
-    private ListView lvDias;
+    private PlanAdapter adapter;
+    private RecyclerView rvPlan;
+    private PlanMensual plan;
+    private PerfilUsuario perfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        prepararPantalla(true);
 
-        tvGasto = findViewById(R.id.tvGasto);
-        tvSobrante = findViewById(R.id.tvSobrante);
-        tvAviso = findViewById(R.id.tvAviso);
-        barraGasto = findViewById(R.id.barraGasto);
-        lvDias = findViewById(R.id.lvDias);
-        Button btnListaCompra = findViewById(R.id.btnListaCompra);
-        Button btnOtroPlan = findViewById(R.id.btnOtroPlan);
+        rvPlan = findViewById(R.id.rvPlan);
+        rvPlan.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new PlanAdapter(this, this);
+        rvPlan.setAdapter(adapter);
 
-        btnListaCompra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PlanActivity.this, ListaCompraActivity.class));
-            }
-        });
-
-        // Otro plan: se cambia la semilla del azar y se vuelve a calcular
-        btnOtroPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PerfilUsuario perfil = PerfilStorage.cargar(PlanActivity.this);
-                perfil.setSemilla(perfil.getSemilla() + 1);
-                PerfilStorage.guardar(PlanActivity.this, perfil);
-                mostrarPlan();
-            }
-        });
+        findViewById(R.id.btnListaCompra).setOnClickListener(v ->
+                startActivity(new Intent(this, ListaCompraActivity.class)));
 
         mostrarPlan();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_plan, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.accionOtroPlan) {
+            otroPlan();
+            return true;
+        }
+        if (item.getItemId() == R.id.accionCambiarDatos) {
+            startActivity(new Intent(this, SupermercadosActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void mostrarPlan() {
-        PerfilUsuario perfil = PerfilStorage.cargar(this);
-        PlanMensual plan = PlanificadorMensual.generar(perfil, RepositorioDatos.get(this).getRecetas());
+        perfil = PerfilStorage.cargar(this);
+        plan = PlanStorage.obtener(this);
+        adapter.mostrar(plan, perfil);
+    }
 
-        // Resumen del gasto
-        tvGasto.setText("Gasto del mes: " + Formato.euros(plan.getCosteTotal())
-                + " de " + Formato.euros(plan.getPresupuesto()));
-        tvSobrante.setText("Te sobran " + Formato.euros(plan.getSobrante())
-                + " para desayunos, fruta y caprichos · " + perfil.getPersonas()
-                + (perfil.getPersonas() == 1 ? " persona" : " personas"));
-        int porcentaje = 0;
-        if (plan.getPresupuesto() > 0) {
-            porcentaje = (int) Math.round(plan.getCosteTotal() * 100 / plan.getPresupuesto());
+    /** Otro plan: se cambia la semilla del azar y se vuelve a calcular. */
+    private void otroPlan() {
+        perfil.setSemilla(perfil.getSemilla() + 1);
+        PerfilStorage.guardar(this, perfil);
+        PlanStorage.borrar(this);
+        mostrarPlan();
+        rvPlan.scrollToPosition(0);
+        Snackbar.make(rvPlan, R.string.otro_plan_generado, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void abrirReceta(Receta receta) {
+        Intent intent = new Intent(this, RecetaActivity.class);
+        intent.putExtra(RecetaActivity.EXTRA_ID_RECETA, receta.getId());
+        startActivity(intent);
+    }
+
+    /** Ofrece las recetas que caben en el presupuesto y cambia la elegida. */
+    @Override
+    public void cambiarPlato(int indiceDia, Momento momento) {
+        List<Receta> recetas = RepositorioDatos.get(this).getRecetas();
+        final List<PlanificadorMensual.Alternativa> alternativas =
+                PlanificadorMensual.alternativas(perfil, plan, indiceDia, momento, recetas);
+        if (alternativas.isEmpty()) {
+            Snackbar.make(rvPlan, R.string.sin_alternativas, Snackbar.LENGTH_LONG).show();
+            return;
         }
-        barraGasto.setProgress(Math.min(100, porcentaje));
 
-        // Aviso si el presupuesto no llega para todo el mes
-        if (plan.isCompleto()) {
-            tvAviso.setVisibility(View.GONE);
-        } else {
-            tvAviso.setVisibility(View.VISIBLE);
-            tvAviso.setText(plan.getAviso());
+        String[] opciones = new String[alternativas.size()];
+        for (int i = 0; i < alternativas.size(); i++) {
+            PlanificadorMensual.Alternativa alt = alternativas.get(i);
+            String precio = Math.abs(alt.getDiferencia()) < 0.005
+                    ? getString(R.string.mismo_precio) : Formato.diferencia(alt.getDiferencia());
+            opciones[i] = alt.getReceta().getNombre() + "  (" + precio + ")";
         }
 
-        lvDias.setAdapter(new DiaAdapter(this, plan.getDias()));
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.elegir_otro_plato, plan.getDias().get(indiceDia).getNumero()))
+                .setItems(opciones, (dialogo, elegido) -> {
+                    List<DiaPlan> dias = new ArrayList<DiaPlan>();
+                    for (DiaPlan d : plan.getDias()) {
+                        dias.add(d.copiar());
+                    }
+                    dias.get(indiceDia).setReceta(momento, alternativas.get(elegido).getReceta());
+                    plan = PlanificadorMensual.desdeDias(perfil, dias, recetas);
+                    PlanStorage.guardar(this, plan);
+                    adapter.mostrar(plan, perfil);
+                    Snackbar.make(rvPlan, R.string.plato_cambiado, Snackbar.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.cancelar, null)
+                .show();
     }
 }

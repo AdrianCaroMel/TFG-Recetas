@@ -87,6 +87,19 @@ public class CestaCompra {
         return lista;
     }
 
+    /**
+     * Coste aproximado de UNA racion de la receta, pagando solo lo que se gasta de cada
+     * envase (sin redondear a paquetes enteros). Sirve para mostrar el precio por plato.
+     */
+    public double costeRacion(Receta receta) {
+        double coste = 0;
+        for (Ingrediente ing : receta.getIngredientes()) {
+            Producto p = ing.getProducto();
+            coste += ing.getCantidad() * precioEnvase(p) / p.getEnvase();
+        }
+        return coste;
+    }
+
     /** Supermercado (de los elegidos por el usuario) donde el producto es mas barato. */
     public Supermercado mejorSupermercado(Producto p) {
         Supermercado mejor = null;

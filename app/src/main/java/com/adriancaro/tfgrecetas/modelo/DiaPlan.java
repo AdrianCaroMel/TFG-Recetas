@@ -28,6 +28,14 @@ public class DiaPlan {
         return cena;
     }
 
+    /** Copia del dia (las recetas se comparten, no se copian). */
+    public DiaPlan copiar() {
+        DiaPlan copia = new DiaPlan(numero);
+        copia.comida = comida;
+        copia.cena = cena;
+        return copia;
+    }
+
     public int getNumero() { return numero; }
     public Receta getComida() { return comida; }
     public Receta getCena() { return cena; }
