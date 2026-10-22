@@ -13,6 +13,7 @@ public class Producto {
     private final String unidad;      // g, ml o ud
     private final double envase;      // cantidad que trae un envase
     private final double[] precios;   // precio por envase en cada Supermercado (-1 = no lo vende)
+    private final boolean[] verificado = new boolean[Supermercado.values().length]; // precio real comprobado
     private final List<String> alergenos;
     private final String origen;      // VEGETAL, LACTEO, HUEVO, CARNE, PESCADO, MARISCO
     /** kcal, proteinas, hidratos y grasas por 100 g / 100 ml, o por unidad si la unidad es "ud". */
@@ -32,6 +33,22 @@ public class Producto {
 
     public double precioEn(Supermercado s) {
         return precios[s.ordinal()];
+    }
+
+    /**
+     * Sustituye el precio estimado por uno real comprobado.
+     *
+     * @param precioPorUnidad euros por kg (si el producto va en g), por litro (ml) o por unidad (ud)
+     */
+    public void fijarPrecioReal(Supermercado s, double precioPorUnidad) {
+        double cantidad = unidad.equals("ud") ? envase : envase / 1000.0;
+        precios[s.ordinal()] = Math.round(precioPorUnidad * cantidad * 100) / 100.0;
+        verificado[s.ordinal()] = true;
+    }
+
+    /** True si el precio en ese supermercado es real (no estimado). */
+    public boolean esPrecioVerificado(Supermercado s) {
+        return verificado[s.ordinal()];
     }
 
     public boolean seVendeEn(Supermercado s) {

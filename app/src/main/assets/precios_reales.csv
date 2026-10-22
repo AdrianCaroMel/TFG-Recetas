@@ -1,0 +1,15 @@
+# PRECIOS REALES VERIFICADOS. Tienen prioridad sobre los precios estimados de productos.csv.
+# precio: euros por kg (productos en g), por litro (productos en ml) o por unidad (productos en ud).
+#         Asi sirve aunque cada supermercado venda un envase distinto.
+# Se usa el precio NORMAL (no el de oferta del folleto, que dura una semana).
+# Para anadir un precio: una linea nueva con la fecha y de donde sale.
+idProducto;supermercado;precio;fecha;fuente
+29;MERCADONA;0.219;2026-10-13;FACUA: 24 huevos a 5,25 EUR
+29;CARREFOUR;0.254;2026-10-13;FACUA: 12 huevos L El Mercado a 3,05 EUR
+12;LIDL;1.09;2026-09;FACUA: malla 5 kg a 5,45 EUR
+40;MERCADONA;4.35;2026-10-19;merca2.es: AOVE marca blanca 1 l
+34;LIDL;8.89;2026-10-19;Folleto Lidl: filete de pechuga de pollo, precio normal 8,89 EUR/kg (oferta 7,10)
+36;LIDL;5.99;2026-10-19;Folleto Lidl: trozo de lomo de cerdo, precio normal 5,99 EUR/kg (oferta 5,21)
+28;LIDL;15.14;2026-10-19;Folleto Lidl: atun Nixe aceite girasol 72 g escurrido, precio normal 1,09 EUR
+37;ALCAMPO;8.89;2026-10-22;Web Alcampo: Auchan sarta de chorizo dulce 280 g a 2,49 EUR
+5;ALCAMPO;1.98;2026-10-22;Web Alcampo: Producto Alcampo couscous 1 kg a 1,98 EUR

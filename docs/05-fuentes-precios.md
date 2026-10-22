@@ -31,6 +31,18 @@ en 38 y ganaba por ir antes en la lista). Elegir supermercados no servía para n
    el mes en cada supermercado del usuario, elige el más barato y muestra la comparación en la lista de
    la compra. Es más realista: nadie va a cuatro tiendas para ahorrar unos céntimos.
 
+## Precios verificados (`precios_reales.csv`)
+
+Desde octubre de 2026 los precios reales comprobados se guardan aparte, en
+`app/src/main/assets/precios_reales.csv`, con la fecha y la fuente de cada uno. Al cargar la app
+sustituyen al precio estimado. Van en euros por kilo, litro o unidad, así que sirven aunque cada
+supermercado venda un envase de distinto tamaño. Se usa el precio normal, no el de oferta.
+
+Comparando con capturas reales (folleto de Lidl del 19 al 25/10/2026 y web de Alcampo), el cálculo
+con el índice de la OCU acertaba en algunos productos (chorizo en Alcampo: 8,85 frente a 8,89 €/kg)
+y fallaba en otros (pechuga de pollo en Lidl: 6,50 frente a 8,89 €/kg). Por eso se prioriza ir
+sustituyendo los estimados por reales: ver [06 - Precios por verificar](06-precios-por-verificar.md).
+
 ## Mejora futura
 
 Actualizar los precios automáticamente desde un servicio (por ejemplo, con los datos que publican
