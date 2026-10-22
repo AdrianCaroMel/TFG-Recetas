@@ -57,14 +57,49 @@ public class PlanificadorMensual {
         }
         PlanMensual plan = generarEn(perfil.soloEn(elegido), todasLasRecetas);
         plan.setSupermercado(elegido);
+        if (plan.getDias().isEmpty()) {
+            return plan;
+        }
+        // La misma compra puede salir aun mas barata en otro de sus supermercados:
+        // se rehace el plan (mismas recetas) en el mas barato, asi coincide con la comparacion
+        Map<Supermercado, Double> costes = compararSupermercados(perfil, plan.getDias());
+        if (!costes.isEmpty()) {
+            Supermercado mejor = costes.keySet().iterator().next();
+            if (mejor != elegido && costes.get(mejor) < plan.getCosteTotal() - 0.005) {
+                PlanMensual mejorPlan = desdeDias(perfil.soloEn(mejor), plan.getDias(), todasLasRecetas);
+                mejorPlan.setSupermercado(mejor);
+                return mejorPlan;
+            }
+        }
         return plan;
     }
 
     /**
-     * De los supermercados del usuario, el que tiene el gasto minimo del mes mas bajo
-     * (a igualdad, el que el usuario eligio antes). Null si ninguno sirve por si solo.
+     * De los supermercados del usuario, en el que sale mas barata la compra del mes.
+     *
+     * Se hace un plan de referencia (lo mas barato posible repartiendo la compra) y se
+     * calcula cuanto costaria esa misma compra en cada supermercado. Asi la eleccion coincide
+     * con la comparacion que ve el usuario en la lista de la compra.
+     * Si ningun supermercado vende todos los productos de ese plan, se elige el de menor
+     * gasto minimo por si solo. Devuelve null si ninguno sirve.
      */
     public static Supermercado supermercadoMasBarato(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
+        PerfilUsuario repartido = perfil.soloEn(perfil.getSupermercados().get(0));
+        repartido.setSupermercados(perfil.getSupermercados());
+        repartido.setUnSoloSupermercado(false);
+        repartido.setPresupuesto(Double.MAX_VALUE / 4); // solo interesa la compra, no el limite
+        Map<Momento, List<Receta>> candidatas = candidatas(repartido, todasLasRecetas);
+        boolean hayRecetas = !repartido.getMomentos().isEmpty();
+        for (List<Receta> lista : candidatas.values()) {
+            hayRecetas &= !lista.isEmpty();
+        }
+        if (hayRecetas) {
+            PlanMensual referencia = construir(repartido, candidatas, Double.MAX_VALUE, 0, true);
+            Map<Supermercado, Double> costes = compararSupermercados(perfil, referencia.getDias());
+            if (!costes.isEmpty()) {
+                return costes.keySet().iterator().next();
+            }
+        }
         Supermercado mejor = null;
         double mejorCoste = Double.MAX_VALUE;
         for (Supermercado s : perfil.getSupermercados()) {

@@ -99,6 +99,29 @@ public class CargadorDatos {
         return recetas;
     }
 
+    /**
+     * Aplica los precios reales verificados (precios_reales.csv) sobre los estimados.
+     * Formato: idProducto;supermercado;precio;fecha;fuente (precio en EUR/kg, EUR/l o EUR/ud).
+     *
+     * @return cuantos precios se han aplicado
+     */
+    public static int aplicarPreciosReales(BufferedReader lector, List<Producto> productos) throws IOException {
+        Map<Integer, Producto> mapa = new HashMap<Integer, Producto>();
+        for (Producto p : productos) {
+            mapa.put(p.getId(), p);
+        }
+        int aplicados = 0;
+        for (String[] c : leerFilas(lector)) {
+            Producto p = mapa.get(Integer.parseInt(c[0].trim()));
+            if (p == null) {
+                throw new IOException("Precio real de un producto que no existe: " + c[0]);
+            }
+            p.fijarPrecioReal(Supermercado.valueOf(c[1].trim()), Double.parseDouble(c[2].trim()));
+            aplicados++;
+        }
+        return aplicados;
+    }
+
     /** Devuelve las filas de datos ya separadas, sin comentarios ni cabecera. */
     private static List<String[]> leerFilas(BufferedReader lector) throws IOException {
         List<String[]> filas = new ArrayList<String[]>();

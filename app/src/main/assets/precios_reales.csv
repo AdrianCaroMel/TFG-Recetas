@@ -1,0 +1,122 @@
+# PRECIOS REALES VERIFICADOS. Tienen prioridad sobre los precios estimados de productos.csv.
+# precio: euros por kg (productos en g), por litro (productos en ml) o por unidad (productos en ud).
+#         Asi sirve aunque cada supermercado venda un envase distinto.
+# Se usa el precio NORMAL (no el de oferta del folleto, que dura una semana).
+# Fuentes: API publica de tienda.mercadona.es y de dia.es, RadarSuper (precios del dia), capturas
+# de folletos y webs, FACUA. Se descartan valores atipicos (<60% o >180% de la mediana del producto).
+# Para anadir un precio: una linea nueva con la fecha y de donde sale.
+idProducto;supermercado;precio;fecha;fuente
+1;ALCAMPO;1.05;2026-10-22;RadarSuper /precios: PRODUCTO ECONÓMICO ALCAMPO Arroz redondo de categoria primera 1 kg.
+1;CARREFOUR;1.15;2026-10-22;RadarSuper /precios: Arroz categoría primera Carrefour 1 kg.
+1;DIA;1.6;2026-10-22;API dia.es: Arroz redondo J.Sendra Dia Arrozona 1 Kg
+1;MERCADONA;1.15;2026-10-22;API tienda.mercadona.es: Arroz redondo Hacendado
+2;ALCAMPO;1.15;2026-10-22;RadarSuper /precios: PRODUCTO ECONÓMICO ALCAMPO Pasta macarrón paquete 1 kg.
+2;CARREFOUR;1.1;2026-10-22;RadarSuper /precios: Pasta macarrones Carrefour Classic 1 kg.
+2;DIA;1.15;2026-10-22;API dia.es: Macarrones Dia Al Diante 1 Kg
+2;LIDL;0.89;2026-10-22;RadarSuper /precios: Macarrón n° 6
+2;MERCADONA;1.15;2026-10-22;API tienda.mercadona.es: Macarrón Hacendado
+3;ALCAMPO;1.15;2026-10-22;RadarSuper /precios: PRODUCTO ECONÓMICO ALCAMPO Pasta espagueti paquete 1 kg
+3;CARREFOUR;1.1;2026-10-22;RadarSuper /precios: Pasta espaguetis Carrefour Classic 1 kg.
+3;DIA;1.15;2026-10-22;API dia.es: Espagueti Dia Al Diante 1 Kg
+3;MERCADONA;1.15;2026-10-22;API tienda.mercadona.es: Spaghetti Hacendado
+4;DIA;5.8;2026-10-22;API dia.es: Plumas sin gluten Gallo 450 g
+4;MERCADONA;4.1;2026-10-22;API tienda.mercadona.es: Pasta estrellas sin gluten Felicia
+5;ALCAMPO;1.98;2026-10-22;Web Alcampo: Producto Alcampo couscous 1 kg a 1,98 EUR
+5;DIA;2.38;2026-10-22;API dia.es: Cous Cous Dia Al Diante 500 g
+5;MERCADONA;1.95;2026-10-22;API tienda.mercadona.es: Cous cous mediano Hacendado
+7;DIA;0.128;2026-10-22;API dia.es: Tortillas de trigo Dia Al Punto 320 g (8 uds)
+7;MERCADONA;0.144;2026-10-22;API tienda.mercadona.es: Tortillas de trigo Hacendado
+8;DIA;1.13;2026-10-22;API dia.es: Pan rallado El Molino de Dia 750 g
+8;MERCADONA;1.13;2026-10-22;API tienda.mercadona.es: Pan rallado Hacendado
+9;ALCAMPO;1.69;2026-10-22;RadarSuper /precios: RUBIO GARCIA Lenteja tipo castellana 1 kg
+9;CARREFOUR;1.81;2026-10-22;RadarSuper /precios: Lenteja pardina categoría extra Classic Carrefour 1 kg.
+9;DIA;1.7;2026-10-22;RadarSuper /precios: Lentejas cocidas Dia Vegecampo 400 g
+9;LIDL;1.25;2026-10-22;RadarSuper /precios: Lentejas categoría extra
+9;MERCADONA;1.85;2026-10-22;API tienda.mercadona.es: Lenteja pardina Hacendado
+10;ALCAMPO;1.03;2026-10-22;RadarSuper /precios: ORZA Garbanzos 1 kg.
+10;CARREFOUR;1.9;2026-10-22;RadarSuper /precios: Garbanzo pedrosillano Classic Carrefour 1 kg.
+10;DIA;2.0;2026-10-22;API dia.es: Garbanzos cocidos Dia Vegecampo 400 g
+10;LIDL;1.48;2026-10-22;RadarSuper /precios: Garbanzos
+10;MERCADONA;1.4;2026-10-22;API tienda.mercadona.es: Garbanzo cocido Hacendado
+11;ALCAMPO;1.79;2026-10-22;RadarSuper /precios: RUBIO GARCÍA Alubia blanca seca paquete de 1 kg.
+11;CARREFOUR;1.88;2026-10-22;RadarSuper /precios: Alubias cocidas categoría extra Classic Carrefour 400 g.
+11;DIA;1.88;2026-10-22;API dia.es: Alubias blancas cocidas Dia Vegecampo 400 g
+11;MERCADONA;1.32;2026-10-22;API tienda.mercadona.es: Alubia cocida blanca Hacendado
+12;ALCAMPO;1.0;2026-10-22;RadarSuper /precios: Patatas malla de 5 kg.
+12;CARREFOUR;0.99;2026-10-22;RadarSuper /precios: Patata saco de 10 kg
+12;DIA;0.95;2026-10-22;API dia.es: Patatas para freir 2 Kg
+12;LIDL;0.63;2026-10-22;RadarSuper /precios: Patata roja
+12;MERCADONA;1.0;2026-10-22;API tienda.mercadona.es: Patatas
+13;DIA;1.5;2026-10-22;API dia.es: Cebolla malla 1 kg
+13;MERCADONA;1.5;2026-10-22;API tienda.mercadona.es: Cebollas
+14;MERCADONA;0.463;2026-10-22;API tienda.mercadona.es: Ajos morados
+15;MERCADONA;2.1;2026-10-22;API tienda.mercadona.es: Tomates
+16;DIA;3.79;2026-10-22;API dia.es: Pimiento rojo unidad 350 g aprox.
+16;MERCADONA;2.9;2026-10-22;API tienda.mercadona.es: Pimiento rojo
+17;DIA;1.79;2026-10-22;API dia.es: Calabacín unidad 650 g aprox.
+17;MERCADONA;1.4;2026-10-22;API tienda.mercadona.es: Calabacín verde
+18;DIA;1.19;2026-10-22;API dia.es: Zanahoria 1 Kg
+18;MERCADONA;1.0;2026-10-22;API tienda.mercadona.es: Zanahorias
+19;DIA;2.11;2026-10-22;API dia.es: Espinacas cortadas Dia Vegecampo 450 g
+19;MERCADONA;4.33;2026-10-22;API tienda.mercadona.es: Espinacas cortadas y lavadas
+20;DIA;2.22;2026-10-22;API dia.es: Brócoli 500 g
+20;MERCADONA;2.3;2026-10-22;API tienda.mercadona.es: Brócoli
+21;DIA;1.15;2026-10-22;API dia.es: Lechuga iceberg unidad
+21;MERCADONA;0.88;2026-10-22;API tienda.mercadona.es: Lechugas corazón romana
+22;DIA;4.76;2026-10-22;API dia.es: Champiñón entero bandeja 250 g
+22;MERCADONA;5.2;2026-10-22;API tienda.mercadona.es: Champiñones blancos
+23;DIA;1.67;2026-10-22;API dia.es: Berenjena unidad
+23;MERCADONA;2.2;2026-10-22;API tienda.mercadona.es: Berenjena
+24;DIA;1.55;2026-10-22;API dia.es: Guisantes finos Dia Vegecampo 1 Kg
+24;MERCADONA;1.55;2026-10-22;API tienda.mercadona.es: Guisante fino Hacendado ultracongelado
+25;DIA;1.25;2026-10-22;API dia.es: Tomate triturado Dia Vegecampo 800 g
+25;MERCADONA;1.25;2026-10-22;API tienda.mercadona.es: Tomate triturado Hacendado
+26;DIA;3.47;2026-10-22;API dia.es: Maíz dulce Dia Vegecampo 285 g
+26;MERCADONA;3.44;2026-10-22;API tienda.mercadona.es: Maíz dulce Hacendado
+27;DIA;0.95;2026-10-22;API dia.es: Caldo de verduras Dia Al Punto 1 L
+27;MERCADONA;1.8;2026-10-22;API tienda.mercadona.es: Caldo de verduras casero Gallina blanca
+28;DIA;14.42;2026-10-22;API dia.es: Atún claro en aceite de girasol Calvo 2 x 52 g
+28;LIDL;15.14;2026-10-19;Folleto Lidl: atun Nixe aceite girasol 72 g escurrido, precio normal 1,09 EUR
+28;MERCADONA;8.75;2026-10-22;API tienda.mercadona.es: Atún claro en aceite de girasol Hacendado
+29;CARREFOUR;0.22;2026-10-22;RadarSuper /precios: Huevos Frescos Carrefour El Mercado 24 ud.
+29;DIA;0.219;2026-10-22;API dia.es: Huevos medianos M Dia 24 unidades
+29;MERCADONA;0.219;2026-10-22;API tienda.mercadona.es: Huevos
+30;DIA;8.25;2026-10-22;API dia.es: Queso rallado para gratinar Dia Láctea 200 g
+30;MERCADONA;4.75;2026-10-22;API tienda.mercadona.es: Queso rallado especial fundir mezcla Hacendado
+31;DIA;10.54;2026-10-22;API dia.es: Pesto verde Dia Salseo 185 g
+31;MERCADONA;10.26;2026-10-22;API tienda.mercadona.es: Salsa Pesto con albahaca Hacendado
+32;DIA;4.8;2026-10-22;API dia.es: Salsa de soja Dia Salseo 250 ml
+32;MERCADONA;4.8;2026-10-22;API tienda.mercadona.es: Salsa de Soja Hacendado
+34;CARREFOUR;5.16;2026-10-22;RadarSuper /precios: Pechuga de pollo Carrefour El Mercado 1,2 kg aprox
+34;DIA;6.49;2026-10-22;API dia.es: Pechuga de pollo entera formato familiar Selección de Dia 1.3 Kg aprox.
+34;LIDL;8.89;2026-10-19;Folleto Lidl: filete de pechuga de pollo, precio normal 8,89 EUR/kg (oferta 7,10)
+34;MERCADONA;6.2;2026-10-22;API tienda.mercadona.es: Pechugas enteras familiar de pollo
+35;ALCAMPO;8.9;2026-10-22;RadarSuper /precios: GRANJA GOURMET Preparado de carne picada (burger meat) de pollo 500 g.
+35;CARREFOUR;5.18;2026-10-22;RadarSuper /precios: Preparado de carne picada de cerdo Carrefour El Mercado 500 g
+35;DIA;5.58;2026-10-22;API dia.es: Carne picada de cerdo Selección de Dia 500 g
+35;MERCADONA;5.5;2026-10-22;API tienda.mercadona.es: Preparado de carne picada cerdo
+36;DIA;7.19;2026-10-22;API dia.es: Filete de cinta de lomo Selección de Dia 500 g
+36;LIDL;5.99;2026-10-19;Folleto Lidl: trozo de lomo de cerdo, precio normal 5,99 EUR/kg (oferta 5,21)
+36;MERCADONA;4.5;2026-10-22;API tienda.mercadona.es: Lomo de cerdo trozo
+37;ALCAMPO;8.89;2026-10-22;Web Alcampo: Auchan sarta de chorizo dulce 280 g a 2,49 EUR
+37;CARREFOUR;9.25;2026-10-22;RadarSuper /precios: Chorizo extra picante Carrefour sin gluten 280 g.
+37;DIA;7.91;2026-10-22;API dia.es: Chorizo oreado Selección de Dia 340 g
+37;LIDL;4.79;2026-10-22;RadarSuper /precios: Chorizo y salchichón extra en lonchas
+37;MERCADONA;6.9;2026-10-22;API tienda.mercadona.es: Chorizo oreado
+38;ALCAMPO;8.91;2026-10-22;RadarSuper /precios: WOFCO Filete de merluza argentina 1 kg.
+38;CARREFOUR;7.51;2026-10-22;RadarSuper /precios: Tarrito de verduritas con merluza desde 6 meses Hero Solo sin gluten pack de 6 unidades de 235 g.
+38;DIA;6.89;2026-10-22;API dia.es: Rodajas de merluza argentina Dia Mari Marinera 550 g
+38;LIDL;7.95;2026-10-22;RadarSuper /precios: Medallón de merluza
+38;MERCADONA;5.25;2026-10-22;API tienda.mercadona.es: Pescadilla de merluza sin cabeza Hacendado ultracongelada
+39;DIA;13.6;2026-10-22;API dia.es: Gambas peladas y crudas medianas Dia Mari Marinera 350 g
+39;MERCADONA;13.61;2026-10-22;API tienda.mercadona.es: Gamba pelada cruda tamaño mediano Hacendado ultracongelada
+40;ALCAMPO;3.79;2026-10-22;RadarSuper /precios: FINCA CASA NUEVA Aceite de oliva virgen extra 5 l.
+40;CARREFOUR;4.04;2026-10-22;RadarSuper /precios: Aceite de oliva virgen extra Carrefour Extra 5 l.
+40;DIA;4.25;2026-10-22;API dia.es: Aceite de oliva virgen extra Dia La Almazara del Olivar 3 L
+40;LIDL;4.35;2026-10-22;RadarSuper /precios: Aceite de Oliva Virgen Extra
+40;MERCADONA;3.77;2026-10-22;API tienda.mercadona.es: Aceite de oliva virgen extra Hacendado
+41;CARREFOUR;0.4;2026-10-22;RadarSuper /precios: Sal marina refinada fina Carrefour 1 kg.
+41;DIA;0.4;2026-10-22;API dia.es: Sal fina Dia 1 Kg
+41;MERCADONA;0.4;2026-10-22;API tienda.mercadona.es: Sal fina Hacendado
+42;DIA;17.07;2026-10-22;API dia.es: Pimentón dulce Dia Vegecampo 58 g
+42;MERCADONA;17.33;2026-10-22;API tienda.mercadona.es: Pimentón dulce Hacendado

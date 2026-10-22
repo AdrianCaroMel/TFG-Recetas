@@ -24,6 +24,8 @@ public class RepositorioDatos {
 
     private RepositorioDatos(Context context) throws IOException {
         productos = CargadorDatos.cargarProductos(abrir(context, "productos.csv"));
+        // Los precios reales comprobados tienen prioridad sobre los estimados
+        CargadorDatos.aplicarPreciosReales(abrir(context, "precios_reales.csv"), productos);
         recetas = CargadorDatos.cargarRecetas(abrir(context, "recetas.csv"),
                 abrir(context, "ingredientes.csv"), productos);
     }

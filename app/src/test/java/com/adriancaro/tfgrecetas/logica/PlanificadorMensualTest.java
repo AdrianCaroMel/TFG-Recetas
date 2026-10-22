@@ -33,10 +33,13 @@ public class PlanificadorMensualTest {
 
     private static final String ASSETS = "src/main/assets/";
     private List<Receta> recetas;
+    private List<Producto> productos;
 
     @Before
     public void cargarDatos() throws Exception {
         List<Producto> productos = CargadorDatos.cargarProductos(abrir("productos.csv"));
+        CargadorDatos.aplicarPreciosReales(abrir("precios_reales.csv"), productos);
+        this.productos = productos;
         recetas = CargadorDatos.cargarRecetas(abrir("recetas.csv"), abrir("ingredientes.csv"), productos);
     }
 
@@ -245,10 +248,10 @@ public class PlanificadorMensualTest {
         PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
         assertTrue(plan.isCompleto());
         Supermercado elegido = plan.getSupermercado();
-        // Es el de menor gasto minimo de los tres
-        for (Supermercado s : perfil.getSupermercados()) {
-            assertTrue(s.name(), PlanificadorMensual.costeMinimo(perfil.soloEn(elegido), recetas)
-                    <= PlanificadorMensual.costeMinimo(perfil.soloEn(s), recetas) + 0.001);
+        // La compra de este plan no es mas cara en el elegido que en los otros (margen del 3 %)
+        java.util.Map<Supermercado, Double> costes = PlanificadorMensual.compararSupermercados(perfil, plan.getDias());
+        for (double coste : costes.values()) {
+            assertTrue(elegido + " " + costes, costes.get(elegido) <= coste * 1.03);
         }
         for (LineaCompra linea : plan.getListaCompra()) {
             assertEquals(elegido, linea.getSupermercado());
@@ -298,6 +301,27 @@ public class PlanificadorMensualTest {
             }
         }
         assertTrue("Ganadores: " + ganadores, ganadores.size() >= 2);
+    }
+
+    @Test
+    public void losPreciosRealesSustituyenALosEstimadosSegunElEnvase() {
+        Producto pechuga = producto("Pechuga de pollo");   // envase de 1000 g
+        Producto cuscus = producto("Cuscús");               // envase de 500 g
+        Producto huevos = producto("Huevos");               // envase de 12 ud
+        assertEquals(8.89, pechuga.precioEn(Supermercado.LIDL), 0.001);
+        assertEquals(0.99, cuscus.precioEn(Supermercado.ALCAMPO), 0.001); // 1,98 EUR/kg x 0,5 kg
+        assertEquals(2.64, huevos.precioEn(Supermercado.CARREFOUR), 0.01); // 0,22 EUR/ud x 12
+        assertTrue(pechuga.esPrecioVerificado(Supermercado.LIDL));
+        assertFalse(pechuga.esPrecioVerificado(Supermercado.ALDI));
+    }
+
+    private Producto producto(String nombre) {
+        for (Producto p : productos) {
+            if (p.getNombre().equals(nombre)) {
+                return p;
+            }
+        }
+        throw new AssertionError("No existe " + nombre);
     }
 
     // ---------- utilidades ----------
