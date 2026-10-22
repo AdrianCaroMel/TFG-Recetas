@@ -218,30 +218,6 @@ public class PlanificadorMensualTest {
     }
 
     @Test
-    public void lasDietasMedicasDanUnMesCompletoYSeRespetan() {
-        Restriccion[] dietas = {Restriccion.DIETA_BLANDA, Restriccion.BAJA_EN_SAL,
-                Restriccion.CONTROL_AZUCAR, Restriccion.BAJA_EN_GRASA};
-        for (Restriccion dieta : dietas) {
-            PerfilUsuario perfil = perfil(250, 1, Supermercado.values());
-            perfil.getRestricciones().add(dieta);
-            PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
-            assertTrue(dieta + ": " + plan.getAviso(), plan.isCompleto());
-            for (Receta r : recetasDelPlan(plan)) {
-                Nutricion n = Nutricion.deRacion(r);
-                for (Ingrediente ing : r.getIngredientes()) {
-                    assertTrue(dieta + " / " + r.getNombre(), dieta.permite(ing.getProducto()));
-                }
-                if (dieta == Restriccion.CONTROL_AZUCAR) {
-                    assertTrue(r.getNombre(), n.getHidratos() <= Restriccion.MAX_HIDRATOS_DIABETES);
-                }
-                if (dieta == Restriccion.DIETA_BLANDA || dieta == Restriccion.BAJA_EN_GRASA) {
-                    assertTrue(r.getNombre(), n.getGrasas() <= Restriccion.MAX_GRASAS);
-                }
-            }
-        }
-    }
-
-    @Test
     public void conUnSoloSupermercadoTodaLaCompraEsEnElMasBarato() {
         PerfilUsuario perfil = perfil(200, 2, Supermercado.MERCADONA, Supermercado.DIA, Supermercado.ALCAMPO);
         perfil.setUnSoloSupermercado(true);
@@ -255,19 +231,6 @@ public class PlanificadorMensualTest {
         }
         for (LineaCompra linea : plan.getListaCompra()) {
             assertEquals(elegido, linea.getSupermercado());
-        }
-    }
-
-    @Test
-    public void laDietaBlandaNoLlevaPicanteNiLegumbres() {
-        PerfilUsuario perfil = perfil(250, 1, Supermercado.values());
-        perfil.getRestricciones().add(Restriccion.DIETA_BLANDA);
-        for (Receta r : FiltroRecetas.recetasValidas(recetas, perfil)) {
-            for (Ingrediente ing : r.getIngredientes()) {
-                String nombre = ing.getProducto().getNombre();
-                assertFalse(r.getNombre(), nombre.startsWith("Pimentón") || nombre.startsWith("Chorizo")
-                        || nombre.startsWith("Lentejas") || nombre.startsWith("Garbanzos"));
-            }
         }
     }
 

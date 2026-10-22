@@ -1,12 +1,10 @@
 package com.adriancaro.tfgrecetas.ui;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -121,18 +119,13 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View cardAviso = vista.findViewById(R.id.cardAviso);
         TextView tvAviso = vista.findViewById(R.id.tvAviso);
 
-        // El gasto "cuenta" desde 0 hasta el total
-        ValueAnimator contador = ValueAnimator.ofFloat(0f, (float) plan.getCosteTotal());
-        contador.setDuration(900);
-        contador.setInterpolator(new DecelerateInterpolator());
-        contador.addUpdateListener(a -> tvGasto.setText(Formato.euros((Float) a.getAnimatedValue())));
-        contador.start();
+        tvGasto.setText(Formato.euros(plan.getCosteTotal()));
         tvPresupuesto.setText(context.getString(R.string.de_presupuesto, Formato.euros(plan.getPresupuesto())));
         int porcentaje = 0;
         if (plan.getPresupuesto() > 0) {
             porcentaje = (int) Math.round(plan.getCosteTotal() * 100 / plan.getPresupuesto());
         }
-        barra.setProgressCompat(Math.min(100, porcentaje), true);
+        barra.setProgress(Math.min(100, porcentaje));
 
         boolean sobra = plan.getSobrante() > 0.005;
         tvSobrante.setVisibility(sobra ? View.VISIBLE : View.GONE);
@@ -169,10 +162,7 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private View crearFilaMomento(ViewGroup padre, int indiceDia, Momento momento, Receta receta) {
         View fila = LayoutInflater.from(context).inflate(R.layout.item_momento, padre, false);
-        ((TextView) fila.findViewById(R.id.tvEmojiPlato)).setText(Emoji.de(receta));
-        TextView tvMomento = fila.findViewById(R.id.tvMomento);
-        tvMomento.setText(momento.getNombreVisible());
-        Formato.pildora(tvMomento, momento.name());
+        ((TextView) fila.findViewById(R.id.tvMomento)).setText(momento.getNombreVisible());
         ((TextView) fila.findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
         String info = "⏱ " + context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
                 + context.getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(receta).getKcal())) + "  ·  "

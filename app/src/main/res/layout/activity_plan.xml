@@ -16,7 +16,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:layoutAnimation="@anim/lista_cascada"
         android:paddingStart="12dp"
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
