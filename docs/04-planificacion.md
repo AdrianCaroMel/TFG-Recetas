@@ -14,7 +14,13 @@ Planificación orientativa (ajustar con las fechas de entrega que dé el centro)
 
 ## Próximos pasos inmediatos
 
-1. Abrir el proyecto en Android Studio y ejecutarlo en el emulador.
-2. Pasar los tests (`app/src/test`).
-3. Revisar los precios de los CSV con las webs de los supermercados.
-4. Decidir qué mejoras de la fase 5 entran en el TFG.
+1. ~~Abrir el proyecto en Android Studio y ejecutarlo en el emulador.~~ Hecho.
+2. ~~Pasar los tests (`app/src/test`).~~ Hecho (13 tests, también en GitHub Actions).
+3. **Pendiente (pedido por Adrián): mostrar dónde comprar cada ingrediente.**
+   En el detalle de la receta (y/o en otro apartado), junto a cada ingrediente indicar
+   en qué supermercado conviene comprarlo y a qué precio, para comprar con la mejor
+   eficiencia. Idea: reutilizar `CestaCompra.mejorSupermercado(producto)`, que ya elige
+   el más barato entre los supermercados del usuario, y mostrarlo como etiqueta
+   («Lidl · 1,15 €») en cada fila de `item_ingrediente.xml`.
+4. Revisar los precios de los CSV con las webs de los supermercados.
+5. Decidir qué otras mejoras de la fase 5 entran en el TFG (favoritas, excluir recetas...).

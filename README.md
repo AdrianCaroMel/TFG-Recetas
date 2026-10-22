@@ -2,7 +2,7 @@
 
 Trabajo de Fin de Grado de **Adrián Caro Melgosa** — Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM), 2025-2027.
 
-Aplicación Android que, a partir de los **supermercados** donde compras, tus **restricciones alimenticias** y tu **presupuesto mensual**, te genera un **plan de comidas y cenas para todo el mes** con su **lista de la compra**, sin pasarse nunca del dinero que tienes.
+**PickEats** es una aplicación Android que, a partir de los **supermercados** donde compras, tus **restricciones alimenticias** y tu **presupuesto mensual**, te genera un **plan de comidas y cenas para todo el mes** con su **lista de la compra**, sin pasarse nunca del dinero que tienes.
 
 ## Cómo funciona
 

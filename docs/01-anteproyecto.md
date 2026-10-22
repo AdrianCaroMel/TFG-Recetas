@@ -1,6 +1,6 @@
 # 01 · Anteproyecto
 
-**Título provisional:** Recetas con presupuesto — planificador mensual de comidas según supermercado, restricciones y dinero disponible.
+**Título:** PickEats — planificador mensual de comidas según supermercado, restricciones y dinero disponible.
 
 **Autor:** Adrián Caro Melgosa · DAM 2025-2027 · Madrid
 

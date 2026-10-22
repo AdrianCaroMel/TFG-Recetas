@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Recetas con presupuesto</string>
+    <string name="app_name">PickEats</string>
 
     <!-- Títulos de pantalla -->
     <string name="titulo_supermercados">Supermercados</string>
