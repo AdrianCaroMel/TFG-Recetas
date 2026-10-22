@@ -14,6 +14,8 @@ import com.adriancaro.tfgrecetas.datos.PlanStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.PlanificadorMensual;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
+import com.adriancaro.tfgrecetas.modelo.Receta;
+import com.adriancaro.tfgrecetas.modelo.Supermercado;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -21,6 +23,8 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
 
 /**
  * Paso 3: presupuesto mensual, personas y que comidas planificar.
@@ -39,6 +43,7 @@ public class PresupuestoActivity extends BaseActivity {
     private Chip chipComida;
     private Chip chipCena;
     private MaterialSwitch swBasicos;
+    private MaterialSwitch swUnSolo;
     private MaterialCardView cardEstimacion;
     private TextView tvEstimacion;
 
@@ -61,6 +66,7 @@ public class PresupuestoActivity extends BaseActivity {
         chipComida = findViewById(R.id.chipComida);
         chipCena = findViewById(R.id.chipCena);
         swBasicos = findViewById(R.id.swBasicos);
+        swUnSolo = findViewById(R.id.swUnSolo);
         cardEstimacion = findViewById(R.id.cardEstimacion);
         tvEstimacion = findViewById(R.id.tvEstimacion);
 
@@ -73,12 +79,14 @@ public class PresupuestoActivity extends BaseActivity {
         chipComida.setChecked(perfil.isPlanificarComida());
         chipCena.setChecked(perfil.isPlanificarCena());
         swBasicos.setChecked(perfil.isTengoBasicos());
+        swUnSolo.setChecked(perfil.isUnSoloSupermercado());
 
         btnMenos.setOnClickListener(v -> cambiarPersonas(-1));
         btnMas.setOnClickListener(v -> cambiarPersonas(+1));
         chipComida.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
         chipCena.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
         swBasicos.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
+        swUnSolo.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
         etPresupuesto.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -110,12 +118,16 @@ public class PresupuestoActivity extends BaseActivity {
         perfil.setPlanificarComida(chipComida.isChecked());
         perfil.setPlanificarCena(chipCena.isChecked());
         perfil.setTengoBasicos(swBasicos.isChecked());
+        perfil.setUnSoloSupermercado(swUnSolo.isChecked());
     }
 
     /** El calculo es rapido (milisegundos), se puede hacer directamente al cambiar algo. */
     private void recalcularMinimo() {
         leerFormulario();
-        costeMinimo = PlanificadorMensual.costeMinimo(perfil, RepositorioDatos.get(this).getRecetas());
+        List<Receta> recetas = RepositorioDatos.get(this).getRecetas();
+        Supermercado mejor = perfil.isUnSoloSupermercado()
+                ? PlanificadorMensual.supermercadoMasBarato(perfil, recetas) : null;
+        costeMinimo = PlanificadorMensual.costeMinimo(mejor == null ? perfil : perfil.soloEn(mejor), recetas);
         mostrarEstimacion();
     }
 

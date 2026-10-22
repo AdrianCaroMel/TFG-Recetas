@@ -1,15 +1,19 @@
 package com.adriancaro.tfgrecetas.logica;
 
 import com.adriancaro.tfgrecetas.modelo.DiaPlan;
+import com.adriancaro.tfgrecetas.modelo.Ingrediente;
 import com.adriancaro.tfgrecetas.modelo.Momento;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.PlanMensual;
 import com.adriancaro.tfgrecetas.modelo.Receta;
+import com.adriancaro.tfgrecetas.modelo.Supermercado;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,7 +34,90 @@ public class PlanificadorMensual {
 
     private static final Locale ES = Locale.forLanguageTag("es-ES");
 
+    /**
+     * Genera el plan del mes.
+     *
+     * Si el usuario quiere hacer toda la compra en un solo supermercado (opcion por defecto,
+     * porque nadie va a cuatro tiendas para ahorrar unos centimos), se calcula el gasto minimo
+     * del mes en cada uno de sus supermercados y se planifica en el mas barato.
+     * Si prefiere repartir la compra, cada producto se compra donde sale mas barato.
+     */
     public static PlanMensual generar(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
+        if (!perfil.isUnSoloSupermercado() || perfil.getSupermercados().size() <= 1) {
+            PlanMensual plan = generarEn(perfil, todasLasRecetas);
+            if (perfil.getSupermercados().size() == 1) {
+                plan.setSupermercado(perfil.getSupermercados().get(0));
+            }
+            return plan;
+        }
+        Supermercado elegido = supermercadoMasBarato(perfil, todasLasRecetas);
+        if (elegido == null) {
+            // Ningun super tiene por si solo recetas para todo: se reparte la compra
+            return generarEn(perfil, todasLasRecetas);
+        }
+        PlanMensual plan = generarEn(perfil.soloEn(elegido), todasLasRecetas);
+        plan.setSupermercado(elegido);
+        return plan;
+    }
+
+    /**
+     * De los supermercados del usuario, el que tiene el gasto minimo del mes mas bajo
+     * (a igualdad, el que el usuario eligio antes). Null si ninguno sirve por si solo.
+     */
+    public static Supermercado supermercadoMasBarato(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
+        Supermercado mejor = null;
+        double mejorCoste = Double.MAX_VALUE;
+        for (Supermercado s : perfil.getSupermercados()) {
+            double coste = costeMinimo(perfil.soloEn(s), todasLasRecetas);
+            if (coste >= 0 && coste < mejorCoste - 1e-9) {
+                mejorCoste = coste;
+                mejor = s;
+            }
+        }
+        return mejor;
+    }
+
+    /**
+     * Cuanto costaria la compra de ESTE plan en cada uno de los supermercados del usuario
+     * (solo los que venden todos los productos que hacen falta). Ordenado de mas barato a mas caro.
+     */
+    public static Map<Supermercado, Double> compararSupermercados(PerfilUsuario perfil, List<DiaPlan> dias) {
+        List<Map.Entry<Supermercado, Double>> costes = new ArrayList<Map.Entry<Supermercado, Double>>();
+        for (Supermercado s : perfil.getSupermercados()) {
+            PerfilUsuario soloS = perfil.soloEn(s);
+            CestaCompra cesta = new CestaCompra(soloS);
+            boolean vendeTodo = true;
+            for (DiaPlan dia : dias) {
+                for (Momento m : Momento.values()) {
+                    Receta r = dia.getReceta(m);
+                    if (r == null) {
+                        continue;
+                    }
+                    for (Ingrediente ing : r.getIngredientes()) {
+                        vendeTodo &= ing.getProducto().seVendeEn(s);
+                    }
+                    cesta.anadir(r);
+                }
+            }
+            if (vendeTodo) {
+                costes.add(new AbstractMap.SimpleEntry<Supermercado, Double>(s, cesta.getCosteTotal()));
+            }
+        }
+        Collections.sort(costes, new Comparator<Map.Entry<Supermercado, Double>>() {
+            @Override
+            public int compare(Map.Entry<Supermercado, Double> a, Map.Entry<Supermercado, Double> b) {
+                return Double.compare(a.getValue(), b.getValue());
+            }
+        });
+        Map<Supermercado, Double> resultado = new LinkedHashMap<Supermercado, Double>();
+        for (Map.Entry<Supermercado, Double> e : costes) {
+            resultado.put(e.getKey(), e.getValue());
+        }
+        return resultado;
+    }
+
+    /** Genera el plan comprando en los supermercados del perfil (cada producto en el mas barato). */
+    private static PlanMensual generarEn(PerfilUsuario perfil, List<Receta> todasLasRecetas) {
         if (perfil.getMomentos().isEmpty()) {
             return planVacio(perfil, "Elige al menos comida o cena para poder hacer el plan.");
         }

@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.datos.FavoritosStorage;
-import com.adriancaro.tfgrecetas.datos.PerfilStorage;
+import com.adriancaro.tfgrecetas.datos.PlanStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.CestaCompra;
 import com.adriancaro.tfgrecetas.logica.Nutricion;
@@ -46,7 +46,7 @@ public class RecetaActivity extends BaseActivity {
             finish();
             return;
         }
-        PerfilUsuario perfil = PerfilStorage.cargar(this);
+        PerfilUsuario perfil = PlanStorage.perfilDelPlan(this);
         int personas = perfil.getPersonas();
 
         idReceta = receta.getId();

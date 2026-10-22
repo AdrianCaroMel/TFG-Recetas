@@ -139,6 +139,20 @@
             </com.google.android.material.chip.ChipGroup>
 
             <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/swUnSolo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/un_solo_super"
+                android:textAppearance="@style/Texto.Cuerpo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/un_solo_super_ayuda"
+                android:textAppearance="@style/Texto.Secundario" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/swBasicos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

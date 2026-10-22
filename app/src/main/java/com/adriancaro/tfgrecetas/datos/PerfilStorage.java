@@ -38,6 +38,7 @@ public class PerfilStorage {
         editor.putBoolean("cena", perfil.isPlanificarCena());
         editor.putBoolean("basicos", perfil.isTengoBasicos());
         editor.putLong("semilla", perfil.getSemilla());
+        editor.putBoolean("un_solo_super", perfil.isUnSoloSupermercado());
         editor.apply();
     }
 
@@ -66,6 +67,7 @@ public class PerfilStorage {
         perfil.setPlanificarCena(prefs.getBoolean("cena", true));
         perfil.setTengoBasicos(prefs.getBoolean("basicos", false));
         perfil.setSemilla(prefs.getLong("semilla", 1));
+        perfil.setUnSoloSupermercado(prefs.getBoolean("un_solo_super", true));
         return perfil;
     }
 

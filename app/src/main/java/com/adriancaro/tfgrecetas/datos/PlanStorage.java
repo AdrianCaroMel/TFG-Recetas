@@ -9,6 +9,7 @@ import com.adriancaro.tfgrecetas.modelo.Momento;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.PlanMensual;
 import com.adriancaro.tfgrecetas.modelo.Receta;
+import com.adriancaro.tfgrecetas.modelo.Supermercado;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ public class PlanStorage {
     private static final String FICHERO = "plan_actual";
     private static final String CLAVE_DIAS = "dias";
     private static final String CLAVE_COMPRADOS = "comprados";
+    private static final String CLAVE_SUPER = "supermercado";
 
     /** Devuelve el plan guardado o, si no hay ninguno, genera uno nuevo y lo guarda. */
     public static PlanMensual obtener(Context context) {
@@ -36,7 +38,10 @@ public class PlanStorage {
 
         List<DiaPlan> dias = leerDias(context);
         if (dias != null && !dias.isEmpty()) {
-            return PlanificadorMensual.desdeDias(perfil, dias, recetas);
+            Supermercado s = supermercadoGuardado(context, perfil);
+            PlanMensual plan = PlanificadorMensual.desdeDias(s == null ? perfil : perfil.soloEn(s), dias, recetas);
+            plan.setSupermercado(s);
+            return plan;
         }
         PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
         guardar(context, plan);
@@ -48,7 +53,30 @@ public class PlanStorage {
         for (DiaPlan dia : plan.getDias()) {
             texto.append(id(dia.getComida())).append(',').append(id(dia.getCena())).append(';');
         }
-        prefs(context).edit().putString(CLAVE_DIAS, texto.toString()).apply();
+        prefs(context).edit()
+                .putString(CLAVE_DIAS, texto.toString())
+                .putString(CLAVE_SUPER, plan.getSupermercado() == null ? "" : plan.getSupermercado().name())
+                .apply();
+    }
+
+    /**
+     * Perfil con el que se ha hecho el plan guardado: si toda la compra va a un solo
+     * supermercado, el perfil queda limitado a ese super (para cambiar platos, precios...).
+     */
+    public static PerfilUsuario perfilDelPlan(Context context) {
+        PerfilUsuario perfil = PerfilStorage.cargar(context);
+        Supermercado s = supermercadoGuardado(context, perfil);
+        return s == null ? perfil : perfil.soloEn(s);
+    }
+
+    private static Supermercado supermercadoGuardado(Context context, PerfilUsuario perfil) {
+        String nombre = prefs(context).getString(CLAVE_SUPER, "");
+        for (Supermercado s : perfil.getSupermercados()) {
+            if (s.name().equals(nombre)) {
+                return s;
+            }
+        }
+        return null;
     }
 
     /** Olvida el plan (y lo marcado como comprado). Se llama al cambiar los datos o pedir otro plan. */

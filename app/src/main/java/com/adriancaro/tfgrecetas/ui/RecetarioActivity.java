@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.datos.FavoritosStorage;
 import com.adriancaro.tfgrecetas.datos.PerfilStorage;
+import com.adriancaro.tfgrecetas.datos.PlanStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.CestaCompra;
 import com.adriancaro.tfgrecetas.logica.FiltroRecetas;
@@ -56,7 +57,8 @@ public class RecetarioActivity extends BaseActivity {
         prepararPantalla(true);
 
         PerfilUsuario perfil = PerfilStorage.cargar(this);
-        precios = new CestaCompra(perfil);
+        // Precio por racion con el supermercado del plan (si la compra es en uno solo)
+        precios = new CestaCompra(PlanStorage.perfilDelPlan(this));
         aptas.addAll(FiltroRecetas.recetasValidas(RepositorioDatos.get(this).getRecetas(), perfil));
 
         rvRecetas = findViewById(R.id.rvRecetas);
