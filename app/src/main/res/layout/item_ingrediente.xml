@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Fila de ingrediente: nombre a la izquierda, cantidad a la derecha -->
+<!--
+    Fila de ingrediente: casilla para ir marcando lo que ya está preparado,
+    nombre con el supermercado donde comprarlo debajo y la cantidad a la derecha.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
 
-    <TextView
-        android:id="@+id/tvIngrediente"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cbIngrediente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp" />
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_weight="1"
-        android:textAppearance="@style/Texto.Cuerpo" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvIngrediente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Texto.Cuerpo" />
+
+        <TextView
+            android:id="@+id/tvDonde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/Texto.Secundario"
+            android:textSize="13sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvCantidad"

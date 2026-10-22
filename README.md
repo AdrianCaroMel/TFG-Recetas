@@ -23,6 +23,14 @@ Si el presupuesto no da para el mes entero, la app lo avisa y dice cuánto harí
 - [ ] Más recetas y precios reales actualizados
 - [ ] Ver [docs/04-planificacion.md](docs/04-planificacion.md) para lo que falta
 
+## Versiones (ramas)
+
+| Rama | Qué tiene |
+|---|---|
+| `main` / `version-limpia-simple` | Versión limpia: plan, recetas, lista de la compra y precios reales. |
+| `version-fancy` | Más colores, animaciones, recetario, consejos y dietas por enfermedad. |
+| `Max` | Todo lo de la fancy y además: **modo cocina** paso a paso con temporizadores (vibra y suena), pantalla siempre encendida, **dónde comprar cada ingrediente** y a qué precio, ingredientes que se marcan al prepararlos y celebración al completar la compra. |
+
 ## Estructura
 
 ```

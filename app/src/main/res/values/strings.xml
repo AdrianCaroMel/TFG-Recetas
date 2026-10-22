@@ -155,4 +155,25 @@
         <item quantity="one">%d persona</item>
         <item quantity="other">%d personas</item>
     </plurals>
+    <plurals name="pasos">
+        <item quantity="one">%d paso</item>
+        <item quantity="other">%d pasos</item>
+    </plurals>
+
+    <!-- Modo cocina (Max) -->
+    <string name="modo_cocina">👩‍🍳 Modo cocina</string>
+    <string name="cocina_paso">PASO %1$d DE %2$d</string>
+    <string name="cocina_anterior">Anterior</string>
+    <string name="cocina_terminar">¡Terminado!</string>
+    <string name="cocina_temporizador">Este paso lleva su tiempo. Pon el temporizador y te avisamos.</string>
+    <string name="cocina_iniciar">▶ Iniciar %1$s</string>
+    <string name="cocina_pausar">⏸ Pausar</string>
+    <string name="cocina_seguir">▶ Seguir</string>
+    <string name="cocina_fin_tiempo">⏰ ¡Tiempo! Mira cómo va antes de seguir.</string>
+    <string name="cocina_listo">¡LISTO!</string>
+    <string name="cocina_final">Plato terminado. Sírvelo recién hecho y que aproveche.</string>
+    <string name="cocina_volver">Volver a la receta</string>
+    <string name="donde_comprar">🛒 %1$s · %2$s el envase</string>
+    <string name="ya_en_casa">🏠 Ya lo tienes en casa</string>
+    <string name="compra_completa">🎉 ¡Compra completada! Ya tienes todo lo del mes.</string>
 </resources>

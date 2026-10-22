@@ -16,7 +16,7 @@ Planificación orientativa (ajustar con las fechas de entrega que dé el centro)
 
 1. ~~Abrir el proyecto en Android Studio y ejecutarlo en el emulador.~~ Hecho.
 2. ~~Pasar los tests (`app/src/test`).~~ Hecho (13 tests, también en GitHub Actions).
-3. **Pendiente (pedido por Adrián): mostrar dónde comprar cada ingrediente.**
+3. ~~Mostrar dónde comprar cada ingrediente.~~ Hecho en la rama `Max`.
    En el detalle de la receta (y/o en otro apartado), junto a cada ingrediente indicar
    en qué supermercado conviene comprarlo y a qué precio, para comprar con la mejor
    eficiencia. Idea: reutilizar `CestaCompra.mejorSupermercado(producto)`, que ya elige

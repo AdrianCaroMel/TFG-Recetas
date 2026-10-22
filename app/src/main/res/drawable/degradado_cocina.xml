@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fondo del modo cocina: degradado oscuro a pantalla completa, para que el texto destaque -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:centerColor="@color/degradado_medio"
+        android:endColor="@color/degradado_fin"
+        android:startColor="@color/degradado_inicio" />
+</shape>

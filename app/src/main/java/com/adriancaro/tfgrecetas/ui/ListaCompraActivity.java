@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -173,8 +174,41 @@ public class ListaCompraActivity extends BaseActivity {
             PlanStorage.marcarComprado(this, id, marcado);
             pintarComprado(fila, cb, tvProducto, marcado);
             actualizarContador();
+            if (marcado) {
+                fila.setScaleX(0.96f);
+                fila.setScaleY(0.96f);
+                fila.animate().scaleX(1f).scaleY(1f).setDuration(220).start();
+                if (comprados.size() >= plan.getListaCompra().size()) {
+                    celebrarCompra();
+                }
+            }
         });
         return fila;
+    }
+
+    /** Lluvia de emojis sobre la barra de progreso cuando ya está todo comprado. */
+    private void celebrarCompra() {
+        final ViewGroup capa = (ViewGroup) getWindow().getDecorView();
+        String[] emojis = {"🎉", "🥕", "🍅", "🥖", "🧀", "🍋", "✨", "🛒"};
+        java.util.Random azar = new java.util.Random();
+        int ancho = capa.getWidth();
+        for (int i = 0; i < 24; i++) {
+            final TextView confeti = new TextView(this);
+            confeti.setText(emojis[i % emojis.length]);
+            confeti.setTextSize(22 + azar.nextInt(14));
+            confeti.setX(azar.nextInt(Math.max(1, ancho - 60)));
+            confeti.setY(-120);
+            capa.addView(confeti);
+            confeti.animate()
+                    .translationY(capa.getHeight() + 120)
+                    .rotation(azar.nextInt(720) - 360)
+                    .setStartDelay(azar.nextInt(500))
+                    .setDuration(1600 + azar.nextInt(1200))
+                    .setInterpolator(new android.view.animation.AccelerateInterpolator(0.7f))
+                    .withEndAction(() -> capa.removeView(confeti))
+                    .start();
+        }
+        Snackbar.make(findViewById(R.id.raiz), R.string.compra_completa, Snackbar.LENGTH_LONG).show();
     }
 
     /** Abre el mapa buscando ese supermercado cerca del usuario (como hacen FindIt u Ofertia). */

@@ -1,7 +1,9 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +22,10 @@ import com.adriancaro.tfgrecetas.logica.CestaCompra;
 import com.adriancaro.tfgrecetas.logica.Nutricion;
 import com.adriancaro.tfgrecetas.modelo.Ingrediente;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
+import com.adriancaro.tfgrecetas.modelo.Producto;
 import com.adriancaro.tfgrecetas.modelo.Receta;
+import com.adriancaro.tfgrecetas.modelo.Supermercado;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -66,6 +71,8 @@ public class RecetaActivity extends BaseActivity {
         anadirInfo(grupoInfo, "👥 " + Formato.personas(this, personas));
         anadirInfo(grupoInfo, "💶 " + getString(R.string.por_racion,
                 Formato.euros(new CestaCompra(perfil).costeRacion(receta))));
+        anadirInfo(grupoInfo, "📋 " + getResources().getQuantityString(R.plurals.pasos,
+                receta.getPasos().size(), receta.getPasos().size()));
 
         // Nutricion de una racion (las cantidades de la receta son por persona)
         Nutricion nutricion = Nutricion.deRacion(receta);
@@ -77,14 +84,44 @@ public class RecetaActivity extends BaseActivity {
                 Math.round(nutricion.getPesoGramos()), nutricion.porcentajeDiario()));
 
         // Ingredientes: cantidad por persona x numero de personas
+        // Debajo de cada uno, el supermercado (de los del plan) donde sale más barato.
+        // Al tocar la fila se marca, para ir viendo lo que ya está preparado.
+        CestaCompra cesta = new CestaCompra(perfil);
         LinearLayout contenedorIngredientes = findViewById(R.id.contenedorIngredientes);
         for (Ingrediente ing : receta.getIngredientes()) {
+            Producto producto = ing.getProducto();
             View fila = getLayoutInflater().inflate(R.layout.item_ingrediente, contenedorIngredientes, false);
-            ((TextView) fila.findViewById(R.id.tvIngrediente)).setText(ing.getProducto().getNombre());
+            TextView tvNombre = fila.findViewById(R.id.tvIngrediente);
+            tvNombre.setText(producto.getNombre());
             ((TextView) fila.findViewById(R.id.tvCantidad)).setText(
-                    Formato.cantidad(ing.getCantidad() * personas, ing.getProducto().getUnidad()));
+                    Formato.cantidad(ing.getCantidad() * personas, producto.getUnidad()));
+            TextView tvDonde = fila.findViewById(R.id.tvDonde);
+            Supermercado donde = cesta.mejorSupermercado(producto);
+            if (perfil.isTengoBasicos() && producto.esBasico()) {
+                tvDonde.setText(R.string.ya_en_casa);
+            } else if (donde != null) {
+                tvDonde.setText(getString(R.string.donde_comprar, donde.getNombreVisible(),
+                        Formato.euros(producto.precioEn(donde))));
+            } else {
+                tvDonde.setVisibility(View.GONE);
+            }
+            MaterialCheckBox cb = fila.findViewById(R.id.cbIngrediente);
+            fila.setOnClickListener(v -> {
+                boolean marcado = !cb.isChecked();
+                cb.setChecked(marcado);
+                tvNombre.setPaintFlags(marcado
+                        ? tvNombre.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                        : tvNombre.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                fila.animate().alpha(marcado ? 0.5f : 1f).setDuration(200).start();
+            });
             contenedorIngredientes.addView(fila);
         }
+
+        findViewById(R.id.btnCocina).setOnClickListener(v -> {
+            Intent intent = new Intent(this, CocinaActivity.class);
+            intent.putExtra(EXTRA_ID_RECETA, idReceta);
+            startActivity(intent);
+        });
 
         // Pasos numerados
         LinearLayout contenedorPasos = findViewById(R.id.contenedorPasos);

@@ -140,4 +140,15 @@
         </LinearLayout>
     </ScrollView>
 
+    <LinearLayout style="@style/BarraInferior">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCocina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/cta"
+            android:text="@string/modo_cocina"
+            android:textColor="@color/sobre_cta" />
+    </LinearLayout>
+
 </LinearLayout>
