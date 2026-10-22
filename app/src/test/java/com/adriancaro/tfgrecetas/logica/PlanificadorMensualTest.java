@@ -312,7 +312,7 @@ public class PlanificadorMensualTest {
         assertEquals(0.99, cuscus.precioEn(Supermercado.ALCAMPO), 0.001); // 1,98 EUR/kg x 0,5 kg
         assertEquals(3.05, huevos.precioEn(Supermercado.CARREFOUR), 0.01);
         assertTrue(pechuga.esPrecioVerificado(Supermercado.LIDL));
-        assertFalse(pechuga.esPrecioVerificado(Supermercado.MERCADONA));
+        assertFalse(pechuga.esPrecioVerificado(Supermercado.ALDI));
     }
 
     private Producto producto(String nombre) {
