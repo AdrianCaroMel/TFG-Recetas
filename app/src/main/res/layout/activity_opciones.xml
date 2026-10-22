@@ -20,6 +20,7 @@
             android:id="@+id/contenedorOpciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/lista_cascada"
             android:orientation="vertical"
             android:padding="16dp">
 

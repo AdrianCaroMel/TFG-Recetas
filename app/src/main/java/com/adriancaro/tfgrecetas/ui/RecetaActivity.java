@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.OvershootInterpolator;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +50,15 @@ public class RecetaActivity extends BaseActivity {
         int personas = perfil.getPersonas();
 
         idReceta = receta.getId();
-        ((TextView) findViewById(R.id.tvNombreReceta)).setText(Emoji.de(receta) + "  " + receta.getNombre());
+        ((TextView) findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
+        TextView tvEmoji = findViewById(R.id.tvEmojiGrande);
+        tvEmoji.setText(Emoji.de(receta));
+        // El emoji entra girando un poco y con rebote
+        tvEmoji.setScaleX(0.3f);
+        tvEmoji.setScaleY(0.3f);
+        tvEmoji.setRotation(-25f);
+        tvEmoji.animate().scaleX(1f).scaleY(1f).rotation(0f).setStartDelay(150).setDuration(650)
+                .setInterpolator(new OvershootInterpolator(2.5f)).start();
 
         // Datos rapidos: tiempo, personas y precio por racion
         ChipGroup grupoInfo = findViewById(R.id.grupoInfo);

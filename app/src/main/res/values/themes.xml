@@ -57,6 +57,8 @@
         <item name="cardBackgroundColor">@color/superficie</item>
         <item name="strokeColor">@color/borde</item>
         <item name="strokeWidth">1dp</item>
+        <!-- Al pulsar una tarjeta se hunde un poco -->
+        <item name="android:stateListAnimator">@animator/pulsar</item>
     </style>
 
     <!-- Tarjeta resaltada (resumen del gasto, estimacion...) -->
@@ -72,9 +74,10 @@
 
     <style name="Boton" parent="Widget.Material3.Button">
         <item name="cornerRadius">28dp</item>
-        <item name="backgroundTint">@color/naranja</item>
-        <item name="android:textColor">@color/sobre_naranja</item>
-        <item name="iconTint">@color/sobre_naranja</item>
+        <item name="backgroundTint">@color/cta</item>
+        <item name="android:textColor">@color/sobre_cta</item>
+        <item name="iconTint">@color/sobre_cta</item>
+        <item name="android:stateListAnimator">@animator/pulsar</item>
         <item name="android:textStyle">bold</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:textSize">16sp</item>

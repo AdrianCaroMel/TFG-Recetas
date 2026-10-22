@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Paleta de la app en modo oscuro -->
 <resources>
-    <color name="verde">#5FD3A5</color>
-    <color name="sobre_verde">#00281A</color>
-    <color name="verde_oscuro">#A7F0CF</color>
-    <color name="verde_claro">#0E3B2B</color>
-    <color name="naranja">#FF9478</color>
+    <color name="verde">#5CCFBF</color>
+    <color name="sobre_verde">#00201F</color>
+    <color name="verde_oscuro">#B5ECE3</color>
+    <color name="verde_claro">#0F3A37</color>
+    <color name="naranja">#FF9A7A</color>
     <color name="sobre_naranja">#4A1F00</color>
     <color name="naranja_claro">#5A2014</color>
     <color name="sobre_naranja_claro">#FFDCC2</color>
@@ -13,16 +13,18 @@
     <color name="rojo_aviso">#F2B8B5</color>
     <color name="rojo_claro">#4A1714</color>
 
-    <color name="fondo">#14110F</color>
-    <color name="superficie">#1E1A17</color>
-    <color name="fondo_tarjeta">#29231F</color>
-    <color name="texto_principal">#E2E4DE</color>
-    <color name="texto_secundario">#B3BAAE</color>
-    <color name="borde">#3A322C</color>
-    <color name="degradado_inicio">#0A4D38</color>
-    <color name="degradado_medio">#0E6650</color>
-    <color name="degradado_fin">#11766A</color>
-    <color name="calido_inicio">#B8471F</color>
-    <color name="calido_fin">#B87A0C</color>
+    <color name="fondo">#0F1615</color>
+    <color name="superficie">#172120</color>
+    <color name="fondo_tarjeta">#1F2B2A</color>
+    <color name="texto_principal">#E3EAE8</color>
+    <color name="texto_secundario">#A9B6B3</color>
+    <color name="borde">#2E3B39</color>
+    <color name="degradado_inicio">#063B39</color>
+    <color name="degradado_medio">#0A4E48</color>
+    <color name="degradado_fin">#0D6255</color>
+    <color name="calido_inicio">#A9472A</color>
+    <color name="calido_fin">#AD6A22</color>
     <color name="sobre_degradado">#FFFFFF</color>
+    <color name="cta">#FFC244</color>
+    <color name="sobre_cta">#1D2B2A</color>
 </resources>
