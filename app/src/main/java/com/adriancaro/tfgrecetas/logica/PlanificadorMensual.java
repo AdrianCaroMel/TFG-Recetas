@@ -57,6 +57,20 @@ public class PlanificadorMensual {
         }
         PlanMensual plan = generarEn(perfil.soloEn(elegido), todasLasRecetas);
         plan.setSupermercado(elegido);
+        if (plan.getDias().isEmpty()) {
+            return plan;
+        }
+        // La misma compra puede salir aun mas barata en otro de sus supermercados:
+        // se rehace el plan (mismas recetas) en el mas barato, asi coincide con la comparacion
+        Map<Supermercado, Double> costes = compararSupermercados(perfil, plan.getDias());
+        if (!costes.isEmpty()) {
+            Supermercado mejor = costes.keySet().iterator().next();
+            if (mejor != elegido && costes.get(mejor) < plan.getCosteTotal() - 0.005) {
+                PlanMensual mejorPlan = desdeDias(perfil.soloEn(mejor), plan.getDias(), todasLasRecetas);
+                mejorPlan.setSupermercado(mejor);
+                return mejorPlan;
+            }
+        }
         return plan;
     }
 
