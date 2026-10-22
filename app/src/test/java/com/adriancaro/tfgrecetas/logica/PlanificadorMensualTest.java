@@ -214,6 +214,55 @@ public class PlanificadorMensualTest {
         assertEquals(283.2, arroz.nutrientesDe(80)[0], 0.01); // 80 g de arroz
     }
 
+    @Test
+    public void conUnSoloSupermercadoTodaLaCompraEsEnElMasBarato() {
+        PerfilUsuario perfil = perfil(200, 2, Supermercado.MERCADONA, Supermercado.DIA, Supermercado.ALCAMPO);
+        perfil.setUnSoloSupermercado(true);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        assertTrue(plan.isCompleto());
+        Supermercado elegido = plan.getSupermercado();
+        // Es el de menor gasto minimo de los tres
+        for (Supermercado s : perfil.getSupermercados()) {
+            assertTrue(s.name(), PlanificadorMensual.costeMinimo(perfil.soloEn(elegido), recetas)
+                    <= PlanificadorMensual.costeMinimo(perfil.soloEn(s), recetas) + 0.001);
+        }
+        for (LineaCompra linea : plan.getListaCompra()) {
+            assertEquals(elegido, linea.getSupermercado());
+        }
+    }
+
+    @Test
+    public void laComparacionEmpiezaPorElSuperElegidoYCuadraConElCoste() {
+        PerfilUsuario perfil = perfil(200, 1, Supermercado.MERCADONA, Supermercado.CARREFOUR, Supermercado.ALCAMPO);
+        perfil.setUnSoloSupermercado(true);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        java.util.Map<Supermercado, Double> comparacion =
+                PlanificadorMensual.compararSupermercados(perfil, plan.getDias());
+        assertEquals(plan.getCosteTotal(), comparacion.get(plan.getSupermercado()), 0.001);
+        double anterior = 0;
+        for (double coste : comparacion.values()) {
+            assertTrue(coste >= anterior - 0.001); // ordenado de mas barato a mas caro
+            anterior = coste;
+        }
+    }
+
+    @Test
+    public void ningunSuperGanaEnTodosLosProductos() {
+        // Antes Lidl era el mas barato en los 42 productos y elegir supermercados no servia de nada
+        java.util.Set<Supermercado> ganadores = new java.util.HashSet<Supermercado>();
+        java.util.Set<Producto> vistos = new java.util.HashSet<Producto>();
+        PerfilUsuario todos = perfil(200, 1, Supermercado.values());
+        CestaCompra cesta = new CestaCompra(todos);
+        for (Receta r : recetas) {
+            for (Ingrediente ing : r.getIngredientes()) {
+                if (vistos.add(ing.getProducto())) {
+                    ganadores.add(cesta.mejorSupermercado(ing.getProducto()));
+                }
+            }
+        }
+        assertTrue("Ganadores: " + ganadores, ganadores.size() >= 2);
+    }
+
     // ---------- utilidades ----------
 
     private PerfilUsuario perfil(double presupuesto, int personas, Supermercado... supers) {
@@ -223,6 +272,7 @@ public class PlanificadorMensualTest {
             lista.add(s);
         }
         perfil.setSupermercados(lista);
+        perfil.setUnSoloSupermercado(false); // los tests clasicos reparten la compra
         perfil.setPresupuesto(presupuesto);
         perfil.setPersonas(personas);
         return perfil;

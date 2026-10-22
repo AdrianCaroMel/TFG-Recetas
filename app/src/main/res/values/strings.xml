@@ -83,6 +83,12 @@
     <string name="ya_tienes_basicos">Sin aceite, sal ni pimentón: ya los tienes en casa.</string>
     <string name="aviso_precios">Precios aproximados de referencia. Los productos frescos conviene comprarlos cada semana.</string>
     <string name="necesitas">necesitas %1$s</string>
+    <string name="un_solo_super">Hacer toda la compra en un solo supermercado</string>
+    <string name="un_solo_super_ayuda">Te diremos cuál de los tuyos sale más barato para tu plan. Si lo desactivas, cada producto se compra donde cueste menos.</string>
+    <string name="todo_en">🛒 Toda la compra en %1$s, el más barato de tus supermercados para este plan</string>
+    <string name="comparacion_titulo">Este mismo plan en tus supermercados</string>
+    <string name="comparacion_mas">+%1$s</string>
+    <string name="comparacion_no_vende">no vende todos los productos del plan</string>
 
     <plurals name="personas">
         <item quantity="one">%d persona</item>

@@ -10,10 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.datos.PerfilStorage;
 import com.adriancaro.tfgrecetas.datos.PlanStorage;
+import com.adriancaro.tfgrecetas.logica.PlanificadorMensual;
 import com.adriancaro.tfgrecetas.modelo.LineaCompra;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.PlanMensual;
@@ -21,6 +23,7 @@ import com.adriancaro.tfgrecetas.modelo.Supermercado;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,8 +43,8 @@ public class ListaCompraActivity extends BaseActivity {
         setContentView(R.layout.activity_lista_compra);
         prepararPantalla(true);
 
-        PerfilUsuario perfil = PerfilStorage.cargar(this);
         plan = PlanStorage.obtener(this);
+        PerfilUsuario perfil = PerfilStorage.cargar(this);
         comprados = PlanStorage.comprados(this);
 
         ((TextView) findViewById(R.id.tvTotalCompra)).setText(Formato.euros(plan.getCosteTotal()));
@@ -50,8 +53,10 @@ public class ListaCompraActivity extends BaseActivity {
         barraComprados = findViewById(R.id.barraComprados);
         barraComprados.setMax(Math.max(1, plan.getListaCompra().size()));
 
-        // La lista viene ordenada por supermercado: una tarjeta cada vez que cambia
         LinearLayout contenedor = findViewById(R.id.contenedorCompra);
+        mostrarComparacion(contenedor, perfil);
+
+        // La lista viene ordenada por supermercado: una tarjeta cada vez que cambia
         LinearLayout productos = null;
         Supermercado actual = null;
         for (LineaCompra linea : plan.getListaCompra()) {
@@ -67,6 +72,46 @@ public class ListaCompraActivity extends BaseActivity {
             productos.addView(crearFila(productos, linea));
         }
         actualizarContador();
+    }
+
+    /**
+     * Si el usuario tiene varios supermercados, muestra cuanto costaria este mismo plan
+     * en cada uno (el primero es el elegido, el mas barato).
+     */
+    private void mostrarComparacion(LinearLayout contenedor, PerfilUsuario perfil) {
+        if (perfil.getSupermercados().size() < 2) {
+            return;
+        }
+        Map<Supermercado, Double> costes = PlanificadorMensual.compararSupermercados(perfil, plan.getDias());
+        View tarjeta = getLayoutInflater().inflate(R.layout.item_comparacion, contenedor, false);
+        LinearLayout filas = tarjeta.findViewById(R.id.contenedorComparacion);
+        double masBarato = costes.isEmpty() ? 0 : costes.values().iterator().next();
+        for (Supermercado s : perfil.getSupermercados()) {
+            if (!costes.containsKey(s)) {
+                filas.addView(filaComparacion(filas, s.getNombreVisible(), getString(R.string.comparacion_no_vende), false));
+            }
+        }
+        int i = 0;
+        for (Map.Entry<Supermercado, Double> e : costes.entrySet()) {
+            String precio = i == 0 ? Formato.euros(e.getValue())
+                    : getString(R.string.comparacion_mas, Formato.euros(e.getValue() - masBarato));
+            filas.addView(filaComparacion(filas, e.getKey().getNombreVisible(), precio, i == 0), i);
+            i++;
+        }
+        contenedor.addView(tarjeta, 1);
+    }
+
+    private View filaComparacion(LinearLayout padre, String nombre, String valor, boolean ganador) {
+        View fila = getLayoutInflater().inflate(R.layout.item_ingrediente, padre, false);
+        TextView tvNombre = fila.findViewById(R.id.tvIngrediente);
+        TextView tvValor = fila.findViewById(R.id.tvCantidad);
+        tvNombre.setText(ganador ? "✓ " + nombre : nombre);
+        tvValor.setText(valor);
+        if (ganador) {
+            tvNombre.setTypeface(null, android.graphics.Typeface.BOLD);
+            tvValor.setTextColor(ContextCompat.getColor(this, R.color.verde));
+        }
+        return fila;
     }
 
     private View crearFila(LinearLayout padre, LineaCompra linea) {

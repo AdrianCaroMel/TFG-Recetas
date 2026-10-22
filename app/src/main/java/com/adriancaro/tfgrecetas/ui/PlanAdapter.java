@@ -130,8 +130,12 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         boolean sobra = plan.getSobrante() > 0.005;
         tvSobrante.setVisibility(sobra ? View.VISIBLE : View.GONE);
         tvSobrante.setText(context.getString(R.string.te_sobran, Formato.euros(plan.getSobrante())));
-        tvDetalles.setText(context.getString(R.string.resumen_plan, plan.getDias().size(),
-                recetasDistintas(), Formato.personas(context, perfil.getPersonas())));
+        String detalles = context.getString(R.string.resumen_plan, plan.getDias().size(),
+                recetasDistintas(), Formato.personas(context, perfil.getPersonas()));
+        if (plan.getSupermercado() != null) {
+            detalles += "\n" + context.getString(R.string.todo_en, plan.getSupermercado().getNombreVisible());
+        }
+        tvDetalles.setText(detalles);
 
         boolean hayAviso = !plan.isCompleto() && !plan.getAviso().isEmpty();
         cardAviso.setVisibility(hayAviso ? View.VISIBLE : View.GONE);

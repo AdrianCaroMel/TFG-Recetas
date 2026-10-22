@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adriancaro.tfgrecetas.R;
-import com.adriancaro.tfgrecetas.datos.PerfilStorage;
+import com.adriancaro.tfgrecetas.datos.PlanStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.CestaCompra;
 import com.adriancaro.tfgrecetas.logica.Nutricion;
@@ -35,7 +35,7 @@ public class RecetaActivity extends BaseActivity {
             finish();
             return;
         }
-        PerfilUsuario perfil = PerfilStorage.cargar(this);
+        PerfilUsuario perfil = PlanStorage.perfilDelPlan(this);
         int personas = perfil.getPersonas();
 
         ((TextView) findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());

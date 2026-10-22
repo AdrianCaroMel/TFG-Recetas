@@ -50,5 +50,6 @@ docs/                       Documentación del TFG
 - [02 - Requisitos](docs/02-requisitos.md)
 - [03 - Diseño y algoritmo](docs/03-diseno.md)
 - [04 - Planificación](docs/04-planificacion.md)
+- [05 - Fuentes y fiabilidad de los precios](docs/05-fuentes-precios.md)
 
-> Los precios de los productos son **aproximados y de referencia**; no están sacados en tiempo real de las webs de los supermercados.
+> Los precios son **orientativos**: combinan el índice de precios real de cada cadena (estudio OCU 2026) con algunos precios verificados en octubre de 2026. Ver [docs/05-fuentes-precios.md](docs/05-fuentes-precios.md).

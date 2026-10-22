@@ -74,15 +74,17 @@ public class PlanActivity extends BaseActivity implements PlanAdapter.Acciones {
     }
 
     private void mostrarPlan() {
-        perfil = PerfilStorage.cargar(this);
         plan = PlanStorage.obtener(this);
+        perfil = PlanStorage.perfilDelPlan(this);
         adapter.mostrar(plan, perfil);
     }
 
     /** Otro plan: se cambia la semilla del azar y se vuelve a calcular. */
     private void otroPlan() {
-        perfil.setSemilla(perfil.getSemilla() + 1);
-        PerfilStorage.guardar(this, perfil);
+        // Se usa el perfil completo (no la copia limitada al super del plan) para no perder supermercados
+        PerfilUsuario completo = PerfilStorage.cargar(this);
+        completo.setSemilla(completo.getSemilla() + 1);
+        PerfilStorage.guardar(this, completo);
         PlanStorage.borrar(this);
         mostrarPlan();
         rvPlan.scrollToPosition(0);
