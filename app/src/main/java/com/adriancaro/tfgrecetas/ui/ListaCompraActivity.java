@@ -83,34 +83,57 @@ public class ListaCompraActivity extends BaseActivity {
             return;
         }
         Map<Supermercado, Double> costes = PlanificadorMensual.compararSupermercados(perfil, plan.getDias());
+        if (costes.isEmpty()) {
+            return;
+        }
         View tarjeta = getLayoutInflater().inflate(R.layout.item_comparacion, contenedor, false);
         LinearLayout filas = tarjeta.findViewById(R.id.contenedorComparacion);
-        double masBarato = costes.isEmpty() ? 0 : costes.values().iterator().next();
+        double masBarato = costes.values().iterator().next();
+        double masCaro = masBarato;
+        for (double c : costes.values()) {
+            masCaro = Math.max(masCaro, c);
+        }
+
+        // Distintivo de ahorro, como en los comparadores de precios
+        if (masCaro - masBarato >= 0.5) {
+            TextView ahorro = new TextView(this);
+            ahorro.setText(getString(R.string.ahorro_frente_caro, Formato.euros(masCaro - masBarato)));
+            ahorro.setTextAppearance(R.style.Pildora);
+            ahorro.setBackgroundResource(R.drawable.fondo_pildora);
+            Formato.pildora(ahorro, "AMBAS");
+            int px = (int) (getResources().getDisplayMetrics().density * 10);
+            ahorro.setPadding(px, px / 3, px, px / 3);
+            filas.addView(ahorro);
+        }
+
+        // Una barra por supermercado: el mas barato en verde, el resto en naranja
+        int i = 0;
+        for (Map.Entry<Supermercado, Double> e : costes.entrySet()) {
+            View fila = getLayoutInflater().inflate(R.layout.item_barra_comparacion, filas, false);
+            boolean ganador = i == 0;
+            ((TextView) fila.findViewById(R.id.tvSuperBarra)).setText(
+                    (ganador ? "🏆 " : "") + e.getKey().getNombreVisible());
+            ((TextView) fila.findViewById(R.id.tvCosteBarra)).setText(ganador ? Formato.euros(e.getValue())
+                    : getString(R.string.comparacion_mas, Formato.euros(e.getValue() - masBarato)));
+            LinearProgressIndicator barra = fila.findViewById(R.id.barraSuper);
+            barra.setIndicatorColor(ContextCompat.getColor(this, ganador ? R.color.verde : R.color.naranja));
+            int progreso = (int) Math.round(1000 * e.getValue() / masCaro);
+            barra.postDelayed(() -> barra.setProgressCompat(progreso, true), 300 + 120L * i);
+            filas.addView(fila);
+            i++;
+        }
         for (Supermercado s : perfil.getSupermercados()) {
             if (!costes.containsKey(s)) {
                 filas.addView(filaComparacion(filas, s.getNombreVisible(), getString(R.string.comparacion_no_vende), false));
             }
-        }
-        int i = 0;
-        for (Map.Entry<Supermercado, Double> e : costes.entrySet()) {
-            String precio = i == 0 ? Formato.euros(e.getValue())
-                    : getString(R.string.comparacion_mas, Formato.euros(e.getValue() - masBarato));
-            filas.addView(filaComparacion(filas, e.getKey().getNombreVisible(), precio, i == 0), i);
-            i++;
         }
         contenedor.addView(tarjeta, 1);
     }
 
     private View filaComparacion(LinearLayout padre, String nombre, String valor, boolean ganador) {
         View fila = getLayoutInflater().inflate(R.layout.item_ingrediente, padre, false);
-        TextView tvNombre = fila.findViewById(R.id.tvIngrediente);
-        TextView tvValor = fila.findViewById(R.id.tvCantidad);
-        tvNombre.setText(ganador ? "✓ " + nombre : nombre);
-        tvValor.setText(valor);
-        if (ganador) {
-            tvNombre.setTypeface(null, android.graphics.Typeface.BOLD);
-            tvValor.setTextColor(ContextCompat.getColor(this, R.color.verde));
-        }
+        ((TextView) fila.findViewById(R.id.tvIngrediente)).setText(nombre);
+        ((TextView) fila.findViewById(R.id.tvCantidad)).setText(valor);
         return fila;
     }
 
@@ -124,7 +147,10 @@ public class ListaCompraActivity extends BaseActivity {
         String unidad = linea.getProducto().getUnidad();
         tvProducto.setText(linea.getProducto().getNombre());
         tvDetalle.setText(linea.getEnvases() + " × " + Formato.cantidad(linea.getProducto().getEnvase(), unidad)
-                + " · " + getString(R.string.necesitas, Formato.cantidad(linea.getCantidadNecesaria(), unidad)));
+                + " · " + getString(R.string.necesitas, Formato.cantidad(linea.getCantidadNecesaria(), unidad))
+                + "\n" + precioPorUnidad(linea)
+                + (linea.getProducto().esPrecioVerificado(linea.getSupermercado())
+                        ? "  ·  " + getString(R.string.precio_verificado) : "  ·  " + getString(R.string.precio_estimado)));
         tvPrecio.setText(Formato.euros(linea.getPrecioTotal()));
 
         final int id = linea.getProducto().getId();
@@ -141,6 +167,17 @@ public class ListaCompraActivity extends BaseActivity {
             actualizarContador();
         });
         return fila;
+    }
+
+    /** "1,98 €/kg", "4,35 €/l" o "0,22 €/ud" */
+    private String precioPorUnidad(LineaCompra linea) {
+        String unidad = linea.getProducto().getUnidad();
+        double envase = linea.getProducto().getEnvase();
+        double precio = linea.getProducto().precioEn(linea.getSupermercado());
+        if (unidad.equals("ud")) {
+            return Formato.euros(precio / envase) + "/ud";
+        }
+        return Formato.euros(precio * 1000 / envase) + (unidad.equals("ml") ? "/l" : "/kg");
     }
 
     /** Lo comprado se ve tachado y mas apagado. */

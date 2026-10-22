@@ -169,6 +169,7 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private View crearFilaMomento(ViewGroup padre, int indiceDia, Momento momento, Receta receta) {
         View fila = LayoutInflater.from(context).inflate(R.layout.item_momento, padre, false);
+        ((TextView) fila.findViewById(R.id.tvEmojiPlato)).setText(Emoji.de(receta));
         TextView tvMomento = fila.findViewById(R.id.tvMomento);
         tvMomento.setText(momento.getNombreVisible());
         Formato.pildora(tvMomento, momento.name());
