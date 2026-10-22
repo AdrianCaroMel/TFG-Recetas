@@ -11,10 +11,12 @@
 
     <com.google.android.material.card.MaterialCardView
         style="@style/Tarjeta.Destacada"
+        app:cardElevation="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+                    android:background="@drawable/degradado_calido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -25,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gasto_del_mes"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                android:textColor="@color/verde_oscuro" />
+                android:textColor="@color/sobre_degradado" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
-                    android:textColor="@color/verde_oscuro"
+                    android:textColor="@color/sobre_degradado"
                     android:textStyle="bold" />
 
                 <TextView
@@ -47,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textColor="@color/verde_oscuro" />
+                    android:textColor="@color/sobre_degradado" />
             </LinearLayout>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -56,8 +58,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:max="100"
-                app:indicatorColor="@color/verde"
-                app:trackColor="@color/superficie"
+                app:indicatorColor="@color/sobre_degradado"
+                app:trackColor="#40FFFFFF"
                 app:trackCornerRadius="5dp"
                 app:trackThickness="10dp" />
 
@@ -66,14 +68,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textAppearance="@style/Texto.Cuerpo" />
+                android:textAppearance="@style/Texto.Cuerpo"
+                android:textColor="@color/sobre_degradado" />
 
             <TextView
                 android:id="@+id/tvDetalles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textAppearance="@style/Texto.Secundario" />
+                android:textAppearance="@style/Texto.Secundario"
+                android:alpha="0.9"
+                android:textColor="@color/sobre_degradado" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

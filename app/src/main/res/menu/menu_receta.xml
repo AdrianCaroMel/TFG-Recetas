@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/accionFavorita"
+        android:icon="@drawable/ic_corazon_borde"
+        android:title="@string/favorita"
+        app:showAsAction="always" />
+</menu>

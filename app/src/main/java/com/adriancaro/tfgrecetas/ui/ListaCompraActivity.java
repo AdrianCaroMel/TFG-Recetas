@@ -117,7 +117,7 @@ public class ListaCompraActivity extends BaseActivity {
             }
         }
         tvComprados.setText(getString(R.string.productos_comprados, hechos, plan.getListaCompra().size()));
-        barraComprados.setProgress(hechos);
+        barraComprados.setProgressCompat(hechos, true);
     }
 
     private double subtotal(Supermercado s) {

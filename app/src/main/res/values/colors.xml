@@ -2,28 +2,35 @@
 <!-- Paleta de la app (modo claro). Los mismos nombres se redefinen en values-night para el modo oscuro. -->
 <resources>
     <!-- Marca -->
-    <color name="verde">#2E7D32</color>
+    <color name="verde">#12805C</color>
     <color name="sobre_verde">#FFFFFF</color>
-    <color name="verde_oscuro">#1B5E20</color>
-    <color name="verde_claro">#D4EDD3</color>
-    <color name="naranja">#E65100</color>
+    <color name="verde_oscuro">#064E3B</color>
+    <color name="verde_claro">#D1F2E4</color>
+    <color name="naranja">#F0583A</color>
     <color name="sobre_naranja">#FFFFFF</color>
-    <color name="naranja_claro">#FFE5CC</color>
-    <color name="sobre_naranja_claro">#4A1F00</color>
+    <color name="naranja_claro">#FFE1D9</color>
+    <color name="sobre_naranja_claro">#5C1A0B</color>
 
     <!-- Avisos -->
     <color name="rojo_aviso">#B3261E</color>
     <color name="rojo_claro">#FCE8E6</color>
 
     <!-- Superficies y texto -->
-    <color name="fondo">#F5F7F2</color>
+    <color name="fondo">#FFF8F1</color>
     <color name="superficie">#FFFFFF</color>
-    <color name="fondo_tarjeta">#EDF4E8</color>
-    <color name="texto_principal">#1B1D1A</color>
-    <color name="texto_secundario">#5C6359</color>
-    <color name="borde">#DCE3D7</color>
+    <color name="fondo_tarjeta">#F3EDE4</color>
+    <color name="texto_principal">#1F1A16</color>
+    <color name="texto_secundario">#6B6158</color>
+    <color name="borde">#EDE3D6</color>
     <color name="blanco">#FFFFFF</color>
 
     <!-- Fondo del icono de la app (igual en claro y oscuro) -->
-    <color name="icono_fondo">#2E7D32</color>
+    <color name="icono_fondo">#12805C</color>
+    <!-- Degradados (version fancy) -->
+    <color name="degradado_inicio">#0B7A55</color>
+    <color name="degradado_medio">#14A37F</color>
+    <color name="degradado_fin">#1FB5A3</color>
+    <color name="calido_inicio">#FF7A45</color>
+    <color name="calido_fin">#FFB627</color>
+    <color name="sobre_degradado">#FFFFFF</color>
 </resources>

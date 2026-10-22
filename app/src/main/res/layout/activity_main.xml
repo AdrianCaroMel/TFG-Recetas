@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pantalla de inicio -->
+<!-- Inicio (version fancy): cabecera con degradado + accesos a cada apartado -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/raiz"
@@ -17,92 +17,176 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="112dp"
-                android:layout_height="112dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/fondo_circulo"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_launcher_foreground" />
-
-            <TextView
+            <!-- Se llama "appbar" para que BaseActivity la estire por detras de la barra de estado -->
+            <FrameLayout
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="@string/bienvenida_titulo"
-                android:textAppearance="@style/Texto.Titulo" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:text="@string/bienvenida_texto"
-                android:textAppearance="@style/Texto.Secundario"
-                android:textSize="16sp" />
-
-            <!-- Como funciona: tres pasos -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPasos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp">
+                android:background="@drawable/degradado_hero">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:paddingStart="24dp"
+                    android:paddingTop="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="56dp">
 
-                    <include
-                        android:id="@+id/paso1"
-                        layout="@layout/item_paso" />
-
-                    <include
-                        android:id="@+id/paso2"
-                        layout="@layout/item_paso" />
-
-                    <include
-                        android:id="@+id/paso3"
-                        layout="@layout/item_paso" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Resumen de los datos guardados (solo si ya los ha rellenado) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPerfil"
-                style="@style/Tarjeta.Destacada"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    <ImageView
+                        android:id="@+id/logo"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/fondo_circulo"
+                        android:contentDescription="@string/app_name"
+                        android:elevation="6dp"
+                        android:src="@drawable/ic_launcher_foreground" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tu_perfil"
-                        android:textAppearance="@style/Texto.Seccion" />
+                        android:layout_marginTop="16dp"
+                        android:text="@string/app_name"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+                        android:textColor="@color/sobre_degradado"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:lineSpacingExtra="4dp"
-                        android:textAppearance="@style/Texto.Cuerpo" />
+                        android:layout_marginTop="4dp"
+                        android:text="@string/hola"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="@color/sobre_degradado" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:alpha="0.85"
+                        android:text="@string/lema"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:textColor="@color/sobre_degradado" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/contenido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-36dp"
+                android:layoutAnimation="@anim/lista_cascada"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Resumen de los datos guardados -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:cardElevation="6dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tu_perfil"
+                            android:textAppearance="@style/Texto.Seccion" />
+
+                        <TextView
+                            android:id="@+id/tvPerfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="4dp"
+                            android:textAppearance="@style/Texto.Cuerpo" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Accesos (solo si ya hay datos) -->
+                <LinearLayout
+                    android:id="@+id/accesos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/accesoPlan"
+                            layout="@layout/item_acceso" />
+
+                        <include
+                            android:id="@+id/accesoRecetario"
+                            layout="@layout/item_acceso" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/accesoCompra"
+                            layout="@layout/item_acceso" />
+
+                        <include
+                            android:id="@+id/accesoConsejos"
+                            layout="@layout/item_acceso" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Como funciona (primera vez) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPasos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="6dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/bienvenida_texto"
+                            android:textAppearance="@style/Texto.Cuerpo" />
+
+                        <include
+                            android:id="@+id/paso1"
+                            layout="@layout/item_paso" />
+
+                        <include
+                            android:id="@+id/paso2"
+                            layout="@layout/item_paso" />
+
+                        <include
+                            android:id="@+id/paso3"
+                            layout="@layout/item_paso" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -121,7 +205,6 @@
             style="@style/Boton.Contorno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/cambiar_datos"
             android:visibility="gone"
             app:icon="@drawable/ic_editar"

@@ -1,11 +1,18 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.adriancaro.tfgrecetas.R;
+import com.adriancaro.tfgrecetas.datos.FavoritosStorage;
 import com.adriancaro.tfgrecetas.datos.PerfilStorage;
 import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.logica.CestaCompra;
@@ -15,6 +22,7 @@ import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.Receta;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Detalle de una receta con las cantidades ya multiplicadas por las personas.
@@ -22,6 +30,8 @@ import com.google.android.material.chip.ChipGroup;
 public class RecetaActivity extends BaseActivity {
 
     public static final String EXTRA_ID_RECETA = "id_receta";
+
+    private int idReceta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +48,8 @@ public class RecetaActivity extends BaseActivity {
         PerfilUsuario perfil = PerfilStorage.cargar(this);
         int personas = perfil.getPersonas();
 
-        ((TextView) findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
+        idReceta = receta.getId();
+        ((TextView) findViewById(R.id.tvNombreReceta)).setText(Emoji.de(receta) + "  " + receta.getNombre());
 
         // Datos rapidos: tiempo, personas y precio por racion
         ChipGroup grupoInfo = findViewById(R.id.grupoInfo);
@@ -74,6 +85,32 @@ public class RecetaActivity extends BaseActivity {
             ((TextView) fila.findViewById(R.id.tvTextoPaso)).setText(receta.getPasos().get(i));
             contenedorPasos.addView(fila);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_receta, menu);
+        pintarFavorita(menu.findItem(R.id.accionFavorita));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.accionFavorita) {
+            boolean favorita = FavoritosStorage.alternar(this, idReceta);
+            pintarFavorita(item);
+            Snackbar.make(findViewById(R.id.raiz),
+                    favorita ? R.string.favorita_anadida : R.string.favorita_quitada, Snackbar.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /** Corazon relleno o vacio, en blanco para que se vea sobre la barra verde. */
+    private void pintarFavorita(MenuItem item) {
+        boolean favorita = FavoritosStorage.esFavorita(this, idReceta);
+        item.setIcon(favorita ? R.drawable.ic_corazon : R.drawable.ic_corazon_borde);
+        item.setIconTintList(ColorStateList.valueOf(Color.WHITE));
     }
 
     private void anadirInfo(ChipGroup grupo, String texto) {
