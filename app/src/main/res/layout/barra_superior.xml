@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Barra superior verde comun a todas las pantallas.
+    BaseActivity le anade por arriba el alto de la barra de estado (edge-to-edge),
+    asi el contenido nunca queda tapado.
+-->
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/verde"
+    android:theme="@style/ThemeOverlay.TFGRecetas.BarraSuperior"
+    app:liftOnScroll="false">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:titleTextColor="@color/sobre_verde" />
+
+</com.google.android.material.appbar.AppBarLayout>

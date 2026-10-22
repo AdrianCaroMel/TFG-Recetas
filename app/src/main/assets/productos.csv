@@ -3,46 +3,48 @@
 # unidad: g (gramos), ml (mililitros) o ud (unidades). envase: cantidad que trae cada envase.
 # alergenos: separados por | (GLUTEN, LACTOSA, HUEVO, FRUTOS_SECOS, PESCADO, MARISCO, SOJA)
 # origen: VEGETAL, LACTEO, HUEVO, CARNE, PESCADO, MARISCO
-id;nombre;categoria;unidad;envase;MERCADONA;DIA;LIDL;ALDI;ALCAMPO;CARREFOUR;alergenos;origen
-1;Arroz redondo;Cereales y pasta;g;1000;1.25;1.19;1.15;1.15;1.20;1.29;;VEGETAL
-2;Macarrones;Cereales y pasta;g;1000;1.15;1.09;0.99;0.99;1.10;1.19;GLUTEN;VEGETAL
-3;Espaguetis;Cereales y pasta;g;1000;1.15;1.09;0.99;0.99;1.10;1.19;GLUTEN;VEGETAL
-4;Pasta sin gluten;Cereales y pasta;g;500;1.60;1.75;1.49;;1.70;1.85;;VEGETAL
-5;Cuscus;Cereales y pasta;g;500;1.20;1.25;1.09;1.09;1.15;1.29;GLUTEN;VEGETAL
-6;Quinoa;Cereales y pasta;g;500;2.50;2.65;2.29;2.35;2.45;2.69;;VEGETAL
-7;Tortillas de trigo;Cereales y pasta;ud;8;1.35;1.29;1.19;1.19;1.25;1.39;GLUTEN;VEGETAL
-8;Pan rallado;Cereales y pasta;g;500;0.85;0.82;0.75;0.75;0.80;0.89;GLUTEN;VEGETAL
-9;Lentejas pardinas;Legumbres;g;1000;1.95;1.89;1.79;1.79;1.95;2.05;;VEGETAL
-10;Garbanzos cocidos;Legumbres;g;400;0.75;0.79;0.69;0.69;0.72;0.82;;VEGETAL
-11;Alubias cocidas;Legumbres;g;400;0.75;0.79;0.69;0.69;0.72;0.82;;VEGETAL
-12;Patatas;Verduras;g;3000;3.49;3.29;2.99;2.99;3.19;3.59;;VEGETAL
-13;Cebolla;Verduras;g;1000;1.49;1.39;1.29;1.29;1.35;1.55;;VEGETAL
-14;Ajos (malla de 3);Verduras;ud;3;1.20;1.15;0.99;0.99;1.10;1.25;;VEGETAL
-15;Tomate;Verduras;g;1000;2.20;2.15;1.99;1.99;2.10;2.29;;VEGETAL
-16;Pimiento rojo;Verduras;g;1000;2.60;2.49;2.29;2.29;2.45;2.69;;VEGETAL
-17;Calabacin;Verduras;g;1000;1.80;1.75;1.59;1.59;1.69;1.89;;VEGETAL
-18;Zanahoria;Verduras;g;1000;1.05;0.99;0.89;0.89;0.95;1.09;;VEGETAL
-19;Espinacas frescas;Verduras;g;300;1.35;1.29;1.19;1.19;1.25;1.39;;VEGETAL
-20;Brocoli;Verduras;g;500;1.40;1.35;1.25;1.25;1.30;1.45;;VEGETAL
-21;Lechuga;Verduras;ud;1;0.85;0.79;0.75;0.75;0.79;0.89;;VEGETAL
-22;Champinones;Verduras;g;250;1.30;1.25;1.15;1.15;1.20;1.35;;VEGETAL
-23;Berenjena;Verduras;g;1000;1.90;1.85;1.69;1.69;1.79;1.99;;VEGETAL
-24;Guisantes congelados;Congelados;g;1000;1.60;1.55;1.39;1.39;1.49;1.65;;VEGETAL
-25;Tomate triturado;Conservas;g;800;0.95;0.89;0.79;0.79;0.85;0.99;;VEGETAL
-26;Maiz dulce;Conservas;g;280;0.85;0.82;0.69;0.69;0.79;0.89;;VEGETAL
-27;Caldo de verduras;Conservas;ml;1000;1.10;1.05;0.95;0.95;1.00;1.15;;VEGETAL
-28;Atun en aceite (pack 3);Conservas;g;240;3.10;2.99;2.79;2.79;2.95;3.19;PESCADO;PESCADO
-29;Huevos;Huevos;ud;12;2.65;2.59;2.45;2.45;2.55;2.75;HUEVO;HUEVO
-30;Queso rallado;Lacteos;g;200;1.85;1.79;1.65;1.65;1.75;1.95;LACTOSA;LACTEO
-31;Pesto;Salsas;g;190;1.90;1.95;1.69;1.75;1.85;1.99;FRUTOS_SECOS|LACTOSA;LACTEO
-32;Salsa de soja;Salsas;ml;250;1.25;1.29;1.09;1.09;1.20;1.35;SOJA|GLUTEN;VEGETAL
-33;Tofu firme;Proteina vegetal;g;400;1.80;;1.69;1.75;1.85;1.95;SOJA;VEGETAL
-34;Pechuga de pollo;Carne;g;1000;6.50;6.29;5.99;5.99;6.19;6.79;;CARNE
-35;Carne picada mixta;Carne;g;500;3.40;3.29;3.15;3.15;3.25;3.49;;CARNE
-36;Lomo de cerdo;Carne;g;1000;6.90;6.75;6.49;6.49;6.69;7.09;;CARNE
-37;Chorizo;Carne;g;200;1.80;1.75;1.59;1.59;1.69;1.85;;CARNE
-38;Merluza congelada;Pescado;g;400;3.80;3.69;3.49;3.49;3.65;3.95;PESCADO;PESCADO
-39;Gambas congeladas;Marisco;g;400;4.50;4.35;3.99;3.99;4.25;4.69;MARISCO;MARISCO
-40;Aceite de oliva;Basicos;ml;1000;7.95;7.89;7.49;7.49;7.69;8.15;;VEGETAL
-41;Sal;Basicos;g;1000;0.30;0.29;0.25;0.25;0.28;0.32;;VEGETAL
-42;Pimenton;Basicos;g;75;0.95;0.92;0.85;0.85;0.89;0.99;;VEGETAL
+# kcal;proteinas;hidratos;grasas: valores nutricionales aproximados (tablas de referencia) por 100 g o 100 ml,
+# o por unidad cuando la unidad es ud (1 huevo, 1 tortilla, 1 lechuga, 1 cabeza de ajo).
+id;nombre;categoria;unidad;envase;MERCADONA;DIA;LIDL;ALDI;ALCAMPO;CARREFOUR;alergenos;origen;kcal;proteinas;hidratos;grasas
+1;Arroz redondo;Cereales y pasta;g;1000;1.25;1.19;1.15;1.15;1.20;1.29;;VEGETAL;354;7;78;0.6
+2;Macarrones;Cereales y pasta;g;1000;1.15;1.09;0.99;0.99;1.10;1.19;GLUTEN;VEGETAL;359;12;72;1.5
+3;Espaguetis;Cereales y pasta;g;1000;1.15;1.09;0.99;0.99;1.10;1.19;GLUTEN;VEGETAL;359;12;72;1.5
+4;Pasta sin gluten;Cereales y pasta;g;500;1.60;1.75;1.49;;1.70;1.85;;VEGETAL;357;7;79;1.5
+5;Cuscús;Cereales y pasta;g;500;1.20;1.25;1.09;1.09;1.15;1.29;GLUTEN;VEGETAL;362;13;72;1.5
+6;Quinoa;Cereales y pasta;g;500;2.50;2.65;2.29;2.35;2.45;2.69;;VEGETAL;368;14;64;6
+7;Tortillas de trigo;Cereales y pasta;ud;8;1.35;1.29;1.19;1.19;1.25;1.39;GLUTEN;VEGETAL;120;3.4;20;3
+8;Pan rallado;Cereales y pasta;g;500;0.85;0.82;0.75;0.75;0.80;0.89;GLUTEN;VEGETAL;395;13;72;5
+9;Lentejas pardinas;Legumbres;g;1000;1.95;1.89;1.79;1.79;1.95;2.05;;VEGETAL;336;24;49;1.5
+10;Garbanzos cocidos;Legumbres;g;400;0.75;0.79;0.69;0.69;0.72;0.82;;VEGETAL;120;7;16;2.5
+11;Alubias cocidas;Legumbres;g;400;0.75;0.79;0.69;0.69;0.72;0.82;;VEGETAL;95;6.5;13;0.5
+12;Patatas;Verduras;g;3000;3.49;3.29;2.99;2.99;3.19;3.59;;VEGETAL;77;2;17;0.1
+13;Cebolla;Verduras;g;1000;1.49;1.39;1.29;1.29;1.35;1.55;;VEGETAL;40;1.1;9;0.1
+14;Ajos (malla de 3);Verduras;ud;3;1.20;1.15;0.99;0.99;1.10;1.25;;VEGETAL;67;2.9;15;0.2
+15;Tomate;Verduras;g;1000;2.20;2.15;1.99;1.99;2.10;2.29;;VEGETAL;18;0.9;3.9;0.2
+16;Pimiento rojo;Verduras;g;1000;2.60;2.49;2.29;2.29;2.45;2.69;;VEGETAL;31;1;6;0.3
+17;Calabacín;Verduras;g;1000;1.80;1.75;1.59;1.59;1.69;1.89;;VEGETAL;17;1.2;3.1;0.3
+18;Zanahoria;Verduras;g;1000;1.05;0.99;0.89;0.89;0.95;1.09;;VEGETAL;41;0.9;10;0.2
+19;Espinacas frescas;Verduras;g;300;1.35;1.29;1.19;1.19;1.25;1.39;;VEGETAL;23;2.9;3.6;0.4
+20;Brócoli;Verduras;g;500;1.40;1.35;1.25;1.25;1.30;1.45;;VEGETAL;34;2.8;7;0.4
+21;Lechuga;Verduras;ud;1;0.85;0.79;0.75;0.75;0.79;0.89;;VEGETAL;60;5.6;11.6;0.8
+22;Champiñones;Verduras;g;250;1.30;1.25;1.15;1.15;1.20;1.35;;VEGETAL;22;3.1;3.3;0.3
+23;Berenjena;Verduras;g;1000;1.90;1.85;1.69;1.69;1.79;1.99;;VEGETAL;25;1;6;0.2
+24;Guisantes congelados;Congelados;g;1000;1.60;1.55;1.39;1.39;1.49;1.65;;VEGETAL;81;5.4;14;0.4
+25;Tomate triturado;Conservas;g;800;0.95;0.89;0.79;0.79;0.85;0.99;;VEGETAL;32;1.6;7;0.3
+26;Maíz dulce;Conservas;g;280;0.85;0.82;0.69;0.69;0.79;0.89;;VEGETAL;86;3.3;19;1.4
+27;Caldo de verduras;Conservas;ml;1000;1.10;1.05;0.95;0.95;1.00;1.15;;VEGETAL;5;0.2;0.8;0.1
+28;Atún en aceite (pack 3);Conservas;g;240;3.10;2.99;2.79;2.79;2.95;3.19;PESCADO;PESCADO;198;25;0;11
+29;Huevos;Huevos;ud;12;2.65;2.59;2.45;2.45;2.55;2.75;HUEVO;HUEVO;86;7.5;0.4;6
+30;Queso rallado;Lácteos;g;200;1.85;1.79;1.65;1.65;1.75;1.95;LACTOSA;LACTEO;400;28;2;31
+31;Pesto;Salsas;g;190;1.90;1.95;1.69;1.75;1.85;1.99;FRUTOS_SECOS|LACTOSA;LACTEO;470;5;6;47
+32;Salsa de soja;Salsas;ml;250;1.25;1.29;1.09;1.09;1.20;1.35;SOJA|GLUTEN;VEGETAL;53;8;5;0.6
+33;Tofu firme;Proteína vegetal;g;400;1.80;;1.69;1.75;1.85;1.95;SOJA;VEGETAL;120;13;2;7
+34;Pechuga de pollo;Carne;g;1000;6.50;6.29;5.99;5.99;6.19;6.79;;CARNE;110;23;0;1.5
+35;Carne picada mixta;Carne;g;500;3.40;3.29;3.15;3.15;3.25;3.49;;CARNE;240;18;0;18
+36;Lomo de cerdo;Carne;g;1000;6.90;6.75;6.49;6.49;6.69;7.09;;CARNE;145;22;0;6
+37;Chorizo;Carne;g;200;1.80;1.75;1.59;1.59;1.69;1.85;;CARNE;455;24;2;39
+38;Merluza congelada;Pescado;g;400;3.80;3.69;3.49;3.49;3.65;3.95;PESCADO;PESCADO;72;16;0;1
+39;Gambas congeladas;Marisco;g;400;4.50;4.35;3.99;3.99;4.25;4.69;MARISCO;MARISCO;85;18;0.5;1
+40;Aceite de oliva;Básicos;ml;1000;7.95;7.89;7.49;7.49;7.69;8.15;;VEGETAL;827;0;0;92
+41;Sal;Básicos;g;1000;0.30;0.29;0.25;0.25;0.28;0.32;;VEGETAL;0;0;0;0
+42;Pimentón;Básicos;g;75;0.95;0.92;0.85;0.85;0.89;0.99;;VEGETAL;282;14;54;13

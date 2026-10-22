@@ -1,41 +1,91 @@
 <resources>
-    <string name="app_name">Recetas con presupuesto</string>
+    <string name="app_name">PickEats</string>
 
-    <!-- Titulos de pantalla -->
-    <string name="titulo_supermercados">1. Supermercados</string>
-    <string name="titulo_restricciones">2. Restricciones</string>
-    <string name="titulo_presupuesto">3. Presupuesto</string>
+    <!-- Títulos de pantalla -->
+    <string name="titulo_supermercados">Supermercados</string>
+    <string name="titulo_restricciones">Alergias y dieta</string>
+    <string name="titulo_presupuesto">Presupuesto</string>
     <string name="titulo_plan">Mi plan del mes</string>
     <string name="titulo_receta">Receta</string>
     <string name="titulo_lista_compra">Lista de la compra</string>
 
     <!-- Inicio -->
     <string name="bienvenida_titulo">Come bien todo el mes sin pasarte del presupuesto</string>
-    <string name="bienvenida_texto">Dinos en qué supermercados compras, qué no puedes comer y cuánto puedes gastar al mes. Te preparamos un plan de comidas y cenas para 30 días con su lista de la compra.</string>
+    <string name="bienvenida_texto">Te preparamos un plan de comidas y cenas para 30 días con su lista de la compra.</string>
+    <string name="bienvenida_paso1">Elige los supermercados donde compras</string>
+    <string name="bienvenida_paso2">Cuéntanos tus alergias, intolerancias o dieta</string>
+    <string name="bienvenida_paso3">Dinos cuánto puedes gastar al mes</string>
     <string name="empezar">Empezar</string>
     <string name="ver_mi_plan">Ver mi plan</string>
     <string name="cambiar_datos">Cambiar mis datos</string>
+    <string name="tu_perfil">Tus datos</string>
 
     <!-- Pasos -->
-    <string name="pregunta_supermercados">¿En qué supermercados puedes o quieres comprar?</string>
-    <string name="ayuda_supermercados">Puedes marcar varios. Cada producto se compra donde salga más barato.</string>
-    <string name="pregunta_restricciones">¿Tienes alguna alergia, intolerancia o dieta?</string>
-    <string name="ayuda_restricciones">Si no tienes ninguna, deja todo sin marcar y pulsa Siguiente.</string>
+    <string name="paso_de">Paso %1$d de %2$d</string>
+    <string name="pregunta_supermercados">¿Dónde puedes comprar?</string>
+    <string name="ayuda_supermercados">Marca todos los que te vengan bien. Cada producto se compra donde salga más barato.</string>
+    <string name="pregunta_restricciones">¿Hay algo que no puedas comer?</string>
+    <string name="ayuda_restricciones">Si no tienes ninguna restricción, deja todo sin marcar y pulsa Siguiente.</string>
+    <string name="seccion_alergias">Alergias e intolerancias</string>
+    <string name="seccion_dieta">Dieta</string>
     <string name="siguiente">Siguiente</string>
     <string name="error_supermercado">Elige al menos un supermercado</string>
 
-    <string name="pregunta_presupuesto">¿Cuánto puedes gastar al mes en comida? (€)</string>
-    <string name="pregunta_personas">¿Cuántas personas coméis?</string>
+    <string name="pregunta_presupuesto">Tu presupuesto</string>
+    <string name="ayuda_presupuesto">¿Cuánto puedes gastar al mes en comida y para cuántas personas cocinas?</string>
+    <string name="hint_presupuesto">Presupuesto mensual</string>
+    <string name="ayuda_campo_presupuesto">Solo lo que gastas en el supermercado para comer</string>
+    <string name="pregunta_personas">Personas que coméis</string>
     <string name="pregunta_momentos">¿Qué quieres que te planifiquemos?</string>
     <string name="comida">Comida</string>
     <string name="cena">Cena</string>
     <string name="tengo_basicos">Ya tengo aceite, sal y pimentón en casa</string>
     <string name="generar_plan">Generar mi plan</string>
     <string name="error_presupuesto">Escribe un presupuesto mayor que 0</string>
-    <string name="error_personas">Escribe un número de personas entre 1 y 10</string>
     <string name="error_momentos">Marca al menos comida o cena</string>
+    <string name="estimacion_sin_presupuesto">Con tus datos, un mes de comidas cuesta desde unos %1$s.</string>
+    <string name="estimacion_llega">¡Bien! Tu presupuesto cubre el mínimo estimado (%1$s).</string>
+    <string name="estimacion_no_llega">Ojo: el mínimo estimado es %1$s. Con menos dinero solo podremos planificar parte del mes.</string>
+    <string name="estimacion_sin_recetas">No hay recetas para todo lo que has marcado con tus restricciones. Prueba a elegir más supermercados o quitar alguna restricción.</string>
 
     <!-- Plan -->
     <string name="boton_lista_compra">Lista de la compra</string>
     <string name="boton_otro_plan">Otro plan</string>
+    <string name="gasto_del_mes">Gasto del mes</string>
+    <string name="de_presupuesto">de %1$s</string>
+    <string name="te_sobran">Te sobran %1$s para desayunos, fruta y caprichos</string>
+    <string name="resumen_plan">%1$d días · %2$d recetas distintas · %3$s</string>
+    <string name="semana">Semana %1$d</string>
+    <string name="dia">Día %1$d</string>
+    <string name="cambiar_plato">Cambiar plato</string>
+    <string name="elegir_otro_plato">Elige otro plato para el día %1$d</string>
+    <string name="sin_alternativas">No hay otra receta que quepa en tu presupuesto para ese hueco.</string>
+    <string name="plato_cambiado">Plato cambiado</string>
+    <string name="otro_plan_generado">Nuevo plan generado</string>
+    <string name="por_racion">%1$s / ración</string>
+    <string name="mismo_precio">mismo precio</string>
+    <string name="cancelar">Cancelar</string>
+
+    <!-- Receta -->
+    <string name="ingredientes">Ingredientes</string>
+    <string name="preparacion">Preparación</string>
+    <string name="minutos">%1$d min</string>
+    <string name="por_racion_titulo">Por ración (1 persona)</string>
+    <string name="kcal">%1$d kcal</string>
+    <string name="macros">Proteínas %1$d g · Hidratos %2$d g · Grasas %3$d g</string>
+    <string name="racion_detalle">Una ración pesa unos %1$d g en crudo. Aporta el %2$d %% de las calorías de un día (referencia de 2000 kcal). Valores aproximados.</string>
+
+    <!-- Lista de la compra -->
+    <string name="compartir">Compartir</string>
+    <string name="compartir_con">Compartir lista con…</string>
+    <string name="total_compra">Total del mes</string>
+    <string name="productos_comprados">%1$d de %2$d productos comprados</string>
+    <string name="ya_tienes_basicos">Sin aceite, sal ni pimentón: ya los tienes en casa.</string>
+    <string name="aviso_precios">Precios aproximados de referencia. Los productos frescos conviene comprarlos cada semana.</string>
+    <string name="necesitas">necesitas %1$s</string>
+
+    <plurals name="personas">
+        <item quantity="one">%d persona</item>
+        <item quantity="other">%d personas</item>
+    </plurals>
 </resources>

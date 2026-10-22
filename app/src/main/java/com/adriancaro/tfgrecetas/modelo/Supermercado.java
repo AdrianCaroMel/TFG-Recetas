@@ -7,7 +7,7 @@ package com.adriancaro.tfgrecetas.modelo;
 public enum Supermercado {
 
     MERCADONA("Mercadona"),
-    DIA("DIA"),
+    DIA("Dia"),
     LIDL("Lidl"),
     ALDI("Aldi"),
     ALCAMPO("Alcampo"),

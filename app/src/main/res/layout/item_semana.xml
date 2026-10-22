@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Separador "Semana N" en la lista del plan -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvSemana"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="4dp"
+    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+    android:textColor="@color/verde"
+    android:textStyle="bold" />

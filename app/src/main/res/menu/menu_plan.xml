@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/accionOtroPlan"
+        android:icon="@drawable/ic_refrescar"
+        android:title="@string/boton_otro_plan"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/accionCambiarDatos"
+        android:icon="@drawable/ic_editar"
+        android:title="@string/cambiar_datos"
+        app:showAsAction="ifRoom" />
+</menu>

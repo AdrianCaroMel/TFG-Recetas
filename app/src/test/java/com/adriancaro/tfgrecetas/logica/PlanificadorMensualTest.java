@@ -8,6 +8,7 @@ import com.adriancaro.tfgrecetas.datos.CargadorDatos;
 import com.adriancaro.tfgrecetas.modelo.DiaPlan;
 import com.adriancaro.tfgrecetas.modelo.Ingrediente;
 import com.adriancaro.tfgrecetas.modelo.LineaCompra;
+import com.adriancaro.tfgrecetas.modelo.Momento;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
 import com.adriancaro.tfgrecetas.modelo.PlanMensual;
 import com.adriancaro.tfgrecetas.modelo.Producto;
@@ -126,6 +127,91 @@ public class PlanificadorMensualTest {
         for (LineaCompra linea : plan.getListaCompra()) {
             assertFalse(linea.getProducto().esBasico());
         }
+    }
+
+    @Test
+    public void sinMarcarBasicosSiAparecenEnLaLista() {
+        PerfilUsuario perfil = perfil(150, 1, Supermercado.LIDL);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        boolean hayBasicos = false;
+        for (LineaCompra linea : plan.getListaCompra()) {
+            hayBasicos |= linea.getProducto().esBasico();
+        }
+        assertTrue(hayBasicos);
+    }
+
+    @Test
+    public void elCosteMinimoNoSuperaAlDeUnPlanNormal() {
+        PerfilUsuario perfil = perfil(300, 2, Supermercado.MERCADONA, Supermercado.DIA);
+        double minimo = PlanificadorMensual.costeMinimo(perfil, recetas);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        assertTrue(minimo > 0);
+        assertTrue(minimo <= plan.getCosteTotal() + 0.001);
+    }
+
+    @Test
+    public void rehacerElPlanDesdeSusDiasDaElMismoCoste() {
+        PerfilUsuario perfil = perfil(150, 2, Supermercado.MERCADONA, Supermercado.LIDL);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        PlanMensual rehecho = PlanificadorMensual.desdeDias(perfil, plan.getDias(), recetas);
+        assertEquals(plan.getCosteTotal(), rehecho.getCosteTotal(), 0.001);
+        assertTrue(rehecho.isCompleto());
+    }
+
+    @Test
+    public void cambiarUnPlatoNoSePasaDelPresupuesto() {
+        PerfilUsuario perfil = perfil(110, 1, Supermercado.MERCADONA, Supermercado.LIDL);
+        PlanMensual plan = PlanificadorMensual.generar(perfil, recetas);
+        List<PlanificadorMensual.Alternativa> alternativas =
+                PlanificadorMensual.alternativas(perfil, plan, 4, Momento.CENA, recetas);
+        assertFalse(alternativas.isEmpty());
+
+        for (PlanificadorMensual.Alternativa alt : alternativas) {
+            assertTrue(alt.getReceta().sirvePara(Momento.CENA));
+            assertTrue(alt.getReceta() != plan.getDias().get(4).getCena());
+            // Aplicar el cambio y comprobar que el coste coincide y no se pasa
+            List<DiaPlan> dias = new ArrayList<DiaPlan>();
+            for (DiaPlan d : plan.getDias()) {
+                dias.add(d.copiar());
+            }
+            dias.get(4).setReceta(Momento.CENA, alt.getReceta());
+            PlanMensual cambiado = PlanificadorMensual.desdeDias(perfil, dias, recetas);
+            assertEquals(plan.getCosteTotal() + alt.getDiferencia(), cambiado.getCosteTotal(), 0.001);
+            assertTrue(cambiado.getCosteTotal() <= perfil.getPresupuesto() + 0.001);
+        }
+    }
+
+    @Test
+    public void elCostePorRacionEsPositivoYMenorQueUnEnvaseEntero() {
+        PerfilUsuario perfil = perfil(150, 1, Supermercado.MERCADONA);
+        CestaCompra cesta = new CestaCompra(perfil);
+        for (Receta r : recetas) {
+            double racion = cesta.costeRacion(r);
+            assertTrue(r.getNombre(), racion > 0 && racion < 10);
+        }
+    }
+
+    @Test
+    public void todasLasRecetasTienenCaloriasRazonables() {
+        for (Receta r : recetas) {
+            Nutricion n = Nutricion.deRacion(r);
+            assertTrue(r.getNombre() + ": " + n.getKcal() + " kcal", n.getKcal() > 150 && n.getKcal() < 1200);
+            assertTrue(r.getNombre(), n.getProteinas() > 0 && n.getPesoGramos() > 100);
+        }
+    }
+
+    @Test
+    public void lasCaloriasSeCalculanPorUnidadYPor100Gramos() {
+        Producto huevo = null;
+        Producto arroz = null;
+        for (Receta r : recetas) {
+            for (Ingrediente ing : r.getIngredientes()) {
+                if (ing.getProducto().getNombre().equals("Huevos")) huevo = ing.getProducto();
+                if (ing.getProducto().getNombre().equals("Arroz redondo")) arroz = ing.getProducto();
+            }
+        }
+        assertEquals(172, huevo.nutrientesDe(2)[0], 0.01);   // 2 huevos
+        assertEquals(283.2, arroz.nutrientesDe(80)[0], 0.01); // 80 g de arroz
     }
 
     // ---------- utilidades ----------

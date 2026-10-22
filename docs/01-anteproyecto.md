@@ -1,6 +1,6 @@
 # 01 · Anteproyecto
 
-**Título provisional:** Recetas con presupuesto — planificador mensual de comidas según supermercado, restricciones y dinero disponible.
+**Título:** PickEats — planificador mensual de comidas según supermercado, restricciones y dinero disponible.
 
 **Autor:** Adrián Caro Melgosa · DAM 2025-2027 · Madrid
 
@@ -29,7 +29,7 @@ La app junta esas tres cosas: el usuario dice **dónde compra**, **qué no puede
 **Entra en el proyecto:**
 
 - App Android nativa en Java (Android Studio).
-- 6 supermercados: Mercadona, DIA, Lidl, Aldi, Alcampo y Carrefour.
+- 6 supermercados: Mercadona, Dia, Lidl, Aldi, Alcampo y Carrefour.
 - 7 alergias/intolerancias + dieta vegetariana y vegana.
 - Planificación de comida y/o cena durante 30 días, para 1 a 10 personas.
 - Base de datos local de productos, precios y recetas (ficheros CSV en la app).

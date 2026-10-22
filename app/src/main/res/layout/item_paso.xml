@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Un paso numerado: circulo con el numero + texto. Se usa en el inicio y en las recetas. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvNumero"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/fondo_numero"
+        android:gravity="center"
+        android:textColor="@color/verde_oscuro"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvTextoPaso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:lineSpacingExtra="3dp"
+        android:textAppearance="@style/Texto.Cuerpo" />
+</LinearLayout>

@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pantalla reutilizada para elegir supermercados y restricciones (casillas creadas desde Java) -->
+<!-- Pantalla reutilizada para elegir supermercados y restricciones (las opciones se crean desde Java) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/fondo"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvPregunta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <include layout="@layout/barra_superior" />
 
-    <TextView
-        android:id="@+id/tvAyuda"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/texto_secundario" />
+    <include layout="@layout/progreso_pasos" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,13 +20,31 @@
             android:id="@+id/contenedorOpciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvPregunta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Texto.Titulo" />
+
+            <TextView
+                android:id="@+id/tvAyuda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textAppearance="@style/Texto.Secundario" />
+        </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnSiguiente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/siguiente" />
+    <LinearLayout style="@style/BarraInferior">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSiguiente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/siguiente" />
+    </LinearLayout>
 
 </LinearLayout>

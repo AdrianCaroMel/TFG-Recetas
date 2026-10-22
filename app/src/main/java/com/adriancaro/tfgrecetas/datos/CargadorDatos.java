@@ -27,7 +27,7 @@ public class CargadorDatos {
         int numSupers = Supermercado.values().length;
 
         for (String[] c : filas) {
-            // id;nombre;categoria;unidad;envase;6 precios;alergenos;origen
+            // id;nombre;categoria;unidad;envase;6 precios;alergenos;origen;kcal;proteinas;hidratos;grasas
             int id = Integer.parseInt(c[0].trim());
             String nombre = c[1].trim();
             String categoria = c[2].trim();
@@ -52,7 +52,14 @@ public class CargadorDatos {
             }
             String origen = c[6 + numSupers].trim();
 
-            productos.add(new Producto(id, nombre, categoria, unidad, envase, precios, alergenos, origen));
+            Producto producto = new Producto(id, nombre, categoria, unidad, envase, precios, alergenos, origen);
+            // Columnas opcionales de nutricion: kcal;proteinas;hidratos;grasas
+            int n = 7 + numSupers;
+            if (c.length >= n + 4) {
+                producto.setNutrientes(Double.parseDouble(c[n].trim()), Double.parseDouble(c[n + 1].trim()),
+                        Double.parseDouble(c[n + 2].trim()), Double.parseDouble(c[n + 3].trim()));
+            }
+            productos.add(producto);
         }
         return productos;
     }

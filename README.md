@@ -2,11 +2,11 @@
 
 Trabajo de Fin de Grado de **Adrián Caro Melgosa** — Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM), 2025-2027.
 
-Aplicación Android que, a partir de los **supermercados** donde compras, tus **restricciones alimenticias** y tu **presupuesto mensual**, te genera un **plan de comidas y cenas para todo el mes** con su **lista de la compra**, sin pasarse nunca del dinero que tienes.
+**PickEats** es una aplicación Android que, a partir de los **supermercados** donde compras, tus **restricciones alimenticias** y tu **presupuesto mensual**, te genera un **plan de comidas y cenas para todo el mes** con su **lista de la compra**, sin pasarse nunca del dinero que tienes.
 
 ## Cómo funciona
 
-1. **Supermercados**: el usuario marca dónde puede comprar (Mercadona, DIA, Lidl, Aldi, Alcampo, Carrefour).
+1. **Supermercados**: el usuario marca dónde puede comprar (Mercadona, Dia, Lidl, Aldi, Alcampo, Carrefour).
 2. **Restricciones**: alergias e intolerancias (gluten, lactosa, huevo, frutos secos, pescado, marisco, soja) y dietas (vegetariana, vegana).
 3. **Presupuesto**: euros al mes, número de personas, si quiere planificar comida, cena o ambas y si ya tiene en casa aceite, sal y pimentón.
 4. La app calcula un **plan de 30 días** y una **lista de la compra agrupada por supermercado**, comprando cada producto donde sale más barato.

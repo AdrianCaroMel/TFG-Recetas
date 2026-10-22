@@ -1,79 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Paso 3: presupuesto, personas y que comidas planificar -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raiz"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/barra_superior" />
+
+    <include layout="@layout/progreso_pasos" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pregunta_presupuesto"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etPresupuesto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="150"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pregunta_presupuesto"
+                android:textAppearance="@style/Texto.Titulo" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/pregunta_personas"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/ayuda_presupuesto"
+                android:textAppearance="@style/Texto.Secundario" />
 
-        <EditText
-            android:id="@+id/etPersonas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="1"
-            android:importantForAutofill="no"
-            android:inputType="number" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPresupuesto"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/hint_presupuesto"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusTopStart="14dp"
+                app:helperText="@string/ayuda_campo_presupuesto"
+                app:suffixText="€">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/pregunta_momentos"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPresupuesto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:maxLength="7"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/cbComida"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/comida" />
+            <!-- Personas: botones - y + -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
-        <CheckBox
-            android:id="@+id/cbCena"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/cena" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
-        <CheckBox
-            android:id="@+id/cbBasicos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/tengo_basicos" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:text="@string/pregunta_personas"
+                        android:textAppearance="@style/Texto.Cuerpo" />
 
-        <Button
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMenos"
+                        style="@style/Boton.Tonal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="Una persona menos"
+                        android:text="−" />
+
+                    <TextView
+                        android:id="@+id/tvPersonas"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="@color/texto_principal" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMas"
+                        style="@style/Boton.Tonal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="Una persona más"
+                        android:text="+" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/pregunta_momentos"
+                android:textAppearance="@style/Texto.Seccion" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:chipSpacingHorizontal="8dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipComida"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/comida"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCena"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cena"
+                    android:textSize="16sp" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/swBasicos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/tengo_basicos"
+                android:textAppearance="@style/Texto.Cuerpo" />
+
+            <!-- Estimacion del gasto minimo (cambia de color si el presupuesto no llega) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEstimacion"
+                style="@style/Tarjeta.Destacada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/tvEstimacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="3dp"
+                    android:padding="16dp"
+                    android:textAppearance="@style/Texto.Cuerpo" />
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout style="@style/BarraInferior">
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGenerar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:text="@string/generar_plan" />
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>
