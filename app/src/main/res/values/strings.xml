@@ -88,68 +88,7 @@
     <string name="todo_en">🛒 Toda la compra en %1$s, el más barato de tus supermercados para este plan</string>
     <string name="comparacion_titulo">Este mismo plan en tus supermercados</string>
     <string name="comparacion_mas">+%1$s</string>
-    <string name="ahorro_frente_caro">Ahorras %1$s frente al más caro</string>
-    <string name="sin_app_mapas">No hay ninguna app de mapas instalada</string>
-    <string name="toca_para_mapa">Toca el nombre de un supermercado para buscarlo en el mapa.</string>
-    <string name="precio_verificado">✓ precio verificado</string>
-    <string name="precio_estimado">≈ precio estimado</string>
     <string name="comparacion_no_vende">no vende todos los productos del plan</string>
-
-    <!-- ===== Versión fancy: inicio, recetario y consejos ===== -->
-    <string name="hola">¡Hola! ¿Qué cocinamos este mes?</string>
-    <string name="lema">Come rico, gasta justo.</string>
-    <string name="acceso_plan">Mi plan del mes</string>
-    <string name="acceso_plan_sub">30 días de comidas y cenas</string>
-    <string name="acceso_recetario">Recetario</string>
-    <string name="acceso_recetario_sub">Explora y guarda favoritas</string>
-    <string name="acceso_compra">Lista de la compra</string>
-    <string name="acceso_compra_sub">Ordenada por supermercado</string>
-    <string name="acceso_consejos">Consejos de cocina</string>
-    <string name="acceso_consejos_sub">Lo básico si empiezas</string>
-
-    <string name="titulo_recetario">Recetario</string>
-    <string name="buscar_receta">Buscar receta o ingrediente</string>
-    <string name="filtro_todas">Todas</string>
-    <string name="filtro_rapidas">Rápidas (≤ 20 min)</string>
-    <string name="filtro_favoritas">Favoritas</string>
-    <string name="filtro_ligeras">Ligeras (≤ 400 kcal)</string>
-    <string name="recetas_aptas">%1$d recetas aptas para ti</string>
-    <string name="sin_resultados">No hay recetas con esos filtros.</string>
-    <string name="favorita_anadida">Añadida a favoritas</string>
-    <string name="favorita_quitada">Quitada de favoritas</string>
-    <string name="favorita">Favorita</string>
-
-    <string name="titulo_consejos">Consejos de cocina</string>
-    <string name="consejos_intro">Si es tu primera vez en la cocina, lee esto antes de empezar. Son 2 minutos y te ahorrarán sustos.</string>
-
-    <string name="seccion_dieta_medica">Dietas por salud</string>
-    <string name="aviso_dieta_medica">Orientativo: si tienes una enfermedad, sigue siempre las indicaciones de tu médico o nutricionista.</string>
-
-    <string-array name="consejos_titulos">
-        <item>🔥 Los niveles del fuego</item>
-        <item>🔪 Cortar sin cortarte</item>
-        <item>🍝 Pasta perfecta</item>
-        <item>🍚 Arroz suelto</item>
-        <item>🧅 El sofrito, paso a paso</item>
-        <item>🍗 Seguridad con la carne y el pollo</item>
-        <item>❄️ Descongelar bien</item>
-        <item>🥡 Guardar las sobras</item>
-        <item>🧂 La sal, al final</item>
-        <item>🧽 Limpia sobre la marcha</item>
-    </string-array>
-
-    <string-array name="consejos_textos">
-        <item>En una vitro o inducción del 1 al 9: fuego bajo es 2-3, medio 5-6 y alto 8-9. Antes de echar la comida, deja que la sartén se caliente 1 minuto: si echas una gota de agua y chisporrotea, está lista.</item>
-        <item>Sujeta la comida con los dedos doblados hacia dentro, como una garra, para que el cuchillo roce los nudillos y no las yemas. Un cuchillo afilado es más seguro que uno sin filo. Pon un paño húmedo debajo de la tabla para que no resbale.</item>
-        <item>Usa 1 litro de agua por cada 100 g de pasta. Echa la sal cuando el agua hierva, no antes. No hace falta aceite: remueve el primer minuto y no se pegará. Prueba la pasta 1 minuto antes de lo que diga el paquete.</item>
-        <item>Para arroz blanco: mucha agua hirviendo con sal, 18 minutos y escurrir. Para arroces con caldo: no remuevas mientras se cuece y déjalo reposar 5 minutos tapado con un paño antes de servir.</item>
-        <item>La cebolla va primero, a fuego medio, 5-8 minutos hasta que esté transparente. El ajo se quema enseguida: échalo al final o solo 1 minuto. El pimentón, siempre con la sartén fuera del fuego, o amargará.</item>
-        <item>El pollo y la carne picada siempre bien hechos: sin nada rosa por dentro. Lávate las manos después de tocar carne cruda y no uses la misma tabla para la carne cruda y para la verdura sin cocinar.</item>
-        <item>Descongela en la nevera desde la noche anterior, nunca encima de la encimera. Si tienes prisa, mete el alimento en una bolsa cerrada dentro de agua fría. Lo que se ha descongelado no se vuelve a congelar en crudo.</item>
-        <item>Guarda las sobras en un táper cerrado en la nevera antes de 2 horas. Aguantan 3-4 días. Al recalentarlas, que queden bien calientes por dentro, no solo templadas.</item>
-        <item>Echa menos sal de la que creas y prueba al final: siempre se puede añadir, pero no quitar. Recuerda que el chorizo, el queso o la salsa de soja ya son salados.</item>
-        <item>Mientras algo se cuece, friega lo que ya no uses. Al terminar de comer tendrás casi todo limpio y cocinar no se hará tan pesado.</item>
-    </string-array>
 
     <plurals name="personas">
         <item quantity="one">%d persona</item>

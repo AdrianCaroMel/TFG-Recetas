@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Paleta de la app en modo oscuro -->
 <resources>
-    <color name="verde">#6FD6C0</color>
-    <color name="sobre_verde">#00201A</color>
-    <color name="verde_oscuro">#BDF0E3</color>
-    <color name="verde_claro">#123F37</color>
-    <color name="naranja">#FFA27F</color>
+    <color name="verde">#8FD18E</color>
+    <color name="sobre_verde">#00390A</color>
+    <color name="verde_oscuro">#B6E8B4</color>
+    <color name="verde_claro">#1F4D22</color>
+    <color name="naranja">#FFB781</color>
     <color name="sobre_naranja">#4A1F00</color>
-    <color name="naranja_claro">#5A2410</color>
+    <color name="naranja_claro">#5C2D00</color>
     <color name="sobre_naranja_claro">#FFDCC2</color>
 
     <color name="rojo_aviso">#F2B8B5</color>
     <color name="rojo_claro">#4A1714</color>
 
-    <color name="fondo">#0C1311</color>
-    <color name="superficie">#18221F</color>
-    <color name="fondo_tarjeta">#1F2B27</color>
-    <color name="texto_principal">#E4ECE8</color>
-    <color name="texto_secundario">#AAB8B3</color>
-    <color name="borde">#2C3A35</color>
-    <color name="degradado_inicio">#062C26</color>
-    <color name="degradado_medio">#094236</color>
-    <color name="degradado_fin">#0C5A4B</color>
-    <color name="calido_inicio">#8E300A</color>
-    <color name="calido_fin">#6E260D</color>
-    <color name="sobre_degradado">#FFFFFF</color>
-    <color name="cta">#FFC244</color>
-    <color name="sobre_cta">#1D2B2A</color>
-    <color name="comida_fondo">#4A3200</color>
-    <color name="comida_texto">#FFD98A</color>
-    <color name="cena_fondo">#262C66</color>
-    <color name="cena_texto">#C9CEFF</color>
-    <color name="degradado_alt_inicio">#062A33</color>
-    <color name="degradado_alt_fin">#0B4F45</color>
+    <color name="fondo">#111410</color>
+    <color name="superficie">#1A1E19</color>
+    <color name="fondo_tarjeta">#222A20</color>
+    <color name="texto_principal">#E2E4DE</color>
+    <color name="texto_secundario">#B3BAAE</color>
+    <color name="borde">#363F33</color>
 </resources>

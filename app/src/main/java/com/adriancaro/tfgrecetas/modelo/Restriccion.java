@@ -15,17 +15,7 @@ public enum Restriccion {
     SIN_MARISCO("Sin marisco"),
     SIN_SOJA("Sin soja"),
     VEGETARIANO("Vegetariana"),
-    VEGANO("Vegana"),
-    // Dietas por enfermedad o recomendacion medica
-    DIETA_BLANDA("Dieta blanda (estómago delicado)"),
-    BAJA_EN_SAL("Baja en sal (tensión alta)"),
-    CONTROL_AZUCAR("Control de azúcar (diabetes)"),
-    BAJA_EN_GRASA("Baja en grasa (colesterol)");
-
-    /** Maximo de hidratos de carbono por racion en la dieta de control de azucar (g). */
-    public static final double MAX_HIDRATOS_DIABETES = 65;
-    /** Maximo de grasa por racion en las dietas blanda y baja en grasa (g). */
-    public static final double MAX_GRASAS = 20;
+    VEGANO("Vegana");
 
     private final String nombreVisible;
 
@@ -40,11 +30,6 @@ public enum Restriccion {
     /** True para las dietas (vegetariana, vegana); false para alergias e intolerancias. */
     public boolean esDieta() {
         return this == VEGETARIANO || this == VEGANO;
-    }
-
-    /** True para las dietas por enfermedad (blanda, baja en sal...). */
-    public boolean esDietaMedica() {
-        return this == DIETA_BLANDA || this == BAJA_EN_SAL || this == CONTROL_AZUCAR || this == BAJA_EN_GRASA;
     }
 
     /**
@@ -73,12 +58,6 @@ public enum Restriccion {
             case VEGANO:
                 // solo productos de origen vegetal
                 return origen.equals("VEGETAL");
-            case DIETA_BLANDA:
-                return !p.tieneEtiqueta("IRRITANTE") && !p.tieneEtiqueta("INDIGESTO") && !p.tieneEtiqueta("GRASO");
-            case BAJA_EN_SAL:
-                return !p.tieneEtiqueta("SALADO");
-            case BAJA_EN_GRASA:
-                return !p.tieneEtiqueta("GRASO");
             default:
                 return true;
         }

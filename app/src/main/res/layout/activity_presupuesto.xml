@@ -20,7 +20,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutAnimation="@anim/lista_cascada"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -123,7 +122,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipComida"
-                    style="@style/Chip.Opcion"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/comida"
@@ -131,7 +130,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCena"
-                    style="@style/Chip.Opcion"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cena"

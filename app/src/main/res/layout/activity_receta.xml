@@ -18,20 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutAnimation="@anim/lista_cascada"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- Emoji grande de la receta (entra con un rebote) -->
-            <TextView
-                android:id="@+id/tvEmojiGrande"
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/fondo_emoji"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:textSize="44sp" />
 
             <TextView
                 android:id="@+id/tvNombreReceta"
@@ -49,13 +37,11 @@
             <!-- Informacion nutricional de una racion -->
             <com.google.android.material.card.MaterialCardView
                 style="@style/Tarjeta.Destacada"
-        app:cardElevation="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp">
 
                 <LinearLayout
-                    android:background="@drawable/degradado_verde"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -66,14 +52,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/por_racion_titulo"
                         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                        android:textColor="@color/sobre_degradado" />
+                        android:textColor="@color/verde_oscuro" />
 
                     <TextView
                         android:id="@+id/tvKcal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                        android:textColor="@color/sobre_degradado"
+                        android:textColor="@color/verde_oscuro"
                         android:textStyle="bold" />
 
                     <TextView
@@ -81,8 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:textAppearance="@style/Texto.Cuerpo"
-                android:textColor="@color/sobre_degradado" />
+                        android:textAppearance="@style/Texto.Cuerpo" />
 
                     <TextView
                         android:id="@+id/tvRacion"
@@ -90,9 +75,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="3dp"
-                        android:textAppearance="@style/Texto.Secundario"
-                android:alpha="0.9"
-                android:textColor="@color/sobre_degradado" />
+                        android:textAppearance="@style/Texto.Secundario" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

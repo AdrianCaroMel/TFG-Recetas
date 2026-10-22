@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Chip marcado: verde lleno. Sin marcar: blanco -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/verde" android:state_checked="true" />
-    <item android:color="@color/superficie" />
-</selector>
