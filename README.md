@@ -31,6 +31,13 @@ Si el presupuesto no da para el mes entero, la app lo avisa y dice cuánto harí
 | `version-fancy` | Más colores, animaciones, recetario, consejos y dietas por enfermedad. |
 | `Max` | Todo lo de la fancy y además: **modo cocina** paso a paso con temporizadores (vibra y suena), pantalla siempre encendida, **dónde comprar cada ingrediente** y a qué precio, ingredientes que se marcan al prepararlos y celebración al completar la compra. Estilo **minimalismo cálido** (crema, verde salvia y terracota, sin degradados ni emojis en los textos), siguiendo [docs/08](docs/08-referencias-diseno-ui.md). |
 
+## Versión web (rama `Max`)
+
+En la carpeta `web/` está PickEats para el navegador del ordenador, con los mismos datos y precios reales que la app.
+Basta con abrir `web/index.html` con doble clic (Chrome, Edge o Firefox). Estilo minimalista con capa de vidrio esmerilado (glassmorphism)
+que respeta el contraste AA y el ajuste de "reducir transparencias". Si cambias los CSV, regenera los datos con
+`python3 tools/generar_datos_web.py`.
+
 ## Estructura
 
 ```
