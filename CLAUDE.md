@@ -12,17 +12,25 @@ Antes de tocar layouts, colores, textos o iconos, lee [docs/08-referencias-disen
 
 ## Skills instaladas (`.claude/skills`)
 
+Diseño:
 - `frontend-design`: dirección visual que no parezca plantilla. Usar al rediseñar pantallas.
-- `grill-me` / `grilling`: entrevista para afinar una idea antes de programarla (se lanza con `/grill-me`).
-- `find-skills`: buscar más skills con `npx skills find`.
-- `design-mobile-apps`: diseño de pantallas con Sleek (necesita `SLEEK_API_KEY`; implementa en React Native/HTML, así que en esta app sirve como referencia visual).
-- `agent-browser`: automatizar el navegador (necesita `npm i -g agent-browser`).
-- `media-use`: medios para vídeos HyperFrames (necesita `npx hyperframes`); útil para el vídeo de presentación del TFG.
-- `hyperframes`: hacer vídeos con HTML (incluye el modo explainer, antes skill `faceless-explainer`). Para el vídeo de presentación del TFG; `media-use` depende de esta.
-- `high-end-visual-design`: estilo "premium" suave (solo se usa si se pide por nombre). Choca con las reglas de arriba (cristal, etiquetas sobre títulos, fondos negros con brillos): si se usa, mandan las reglas de este archivo y la paleta verde/naranja.
-- `video-edit`: editar vídeo con IA en RunComfy (cambiar fondo, estilo, ropa). Es de pago (necesita cuenta y `npm i -g @runcomfy/cli`).
-- `codebase-design`: diseñar módulos "profundos" (interfaz pequeña, mucha lógica dentro) y fáciles de probar. Usar al reorganizar `logica/` o `datos/`.
 - `web-design-guidelines`: revisión de UI con las guías de Vercel. Son reglas web; en los layouts Android aplicar solo las de accesibilidad, textos y estados.
+- `design-mobile-apps`: diseño de pantallas con Sleek (necesita `SLEEK_API_KEY`; implementa en React Native/HTML, así que en esta app sirve como referencia visual).
+
+Código y pruebas:
+- `tdd`: escribir primero el test JUnit y luego el código (rojo-verde-refactor).
+- `diagnosing-bugs`: bucle para encontrar fallos difíciles antes de tocar código.
+- `improve-codebase-architecture`, `codebase-design`, `domain-modeling`: revisar la estructura, diseñar módulos con interfaz pequeña y mantener un glosario del dominio (recetas, cesta, plan).
+- `git-guardrails-claude-code`: instala un hook que bloquea comandos git peligrosos. Ojo: también bloquea `git push`.
+
+Planificación y estudio:
+- `grill-me` / `grilling`: entrevista para afinar una idea antes de programarla (se lanza con `/grill-me`).
+- `to-spec` / `to-tickets`: convertir una idea en especificación y en tareas (issues). Útil para la memoria y la planificación del TFG.
+- `teach`: aprender un concepto paso a paso con ejercicios.
+- `find-skills`: buscar más skills con `npx skills find`.
+
+Vídeo de presentación del TFG:
+- `hyperframes` (incluye el modo explainer) y `media-use` (música, voz, subtítulos). Necesitan `npx hyperframes`.
 
 ## Código
 
