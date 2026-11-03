@@ -389,3 +389,63 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
   *, *::before, *::after { animation: none !important; transition: none !important; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
+
+/* ===== Cinta de precios reales ===== */
+.cinta { margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 8px; padding: 14px 0; overflow: hidden; border-block: 1px solid var(--linea);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.pista-cinta { display: flex; gap: 36px; width: max-content; animation: desplazar 70s linear infinite; }
+.cinta:hover .pista-cinta { animation-play-state: paused; }
+@keyframes desplazar { to { transform: translateX(-50%); } }
+.cinta .item { display: inline-flex; align-items: baseline; gap: 10px; white-space: nowrap; font-size: .92rem; }
+.cinta .item b { font-weight: 600; }
+.cinta .super { font-size: .76rem; font-weight: 600; color: var(--tinta-3); display: inline-flex; align-items: center; gap: 5px; }
+.cinta .super::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--c); }
+
+/* ===== Franja oscura con el mes ===== */
+.franja {
+  margin-top: 72px; display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; align-items: center;
+  padding: 48px; border-radius: 28px; background: #10261C; color: #EDEFE9; position: relative; overflow: hidden; isolation: isolate;
+  box-shadow: var(--sombra-3);
+}
+.franja::before { content: ""; position: absolute; inset: auto -10% -60% 30%; height: 120%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(233, 162, 59, .22), transparent); }
+.franja .antetitulo { color: #F2B55A; }
+.franja h2 { margin-top: 12px; font-size: clamp(1.7rem, 3.2vw, 2.6rem); }
+.franja-cifras { display: flex; gap: 32px; margin: 28px 0 32px; flex-wrap: wrap; }
+.franja-cifras div { display: grid; }
+.franja-cifras strong { font-size: 2.2rem; letter-spacing: -0.06em; color: #F2B55A; }
+.franja-cifras span { font-size: .85rem; opacity: .7; }
+.boton.claro-b { --fondo: #F2B55A; --texto: #1C1405; }
+.calendario { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.calendario .dia-sem { text-align: center; font: 600 .72rem var(--f-datos); opacity: .55; }
+.calendario .celda { position: relative; display: grid; place-items: center; aspect-ratio: 1; border-radius: 12px; background: rgba(255, 255, 255, .05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); transition: background .2s, transform .25s var(--muelle); }
+.calendario .celda:hover { background: rgba(255, 255, 255, .12); transform: scale(1.08); z-index: 1; }
+.calendario .celda .plato-svg { width: 70%; height: 70%; }
+.calendario .celda .plato-svg .borde-plato { fill: #1C3328; stroke: rgba(255, 255, 255, .12); }
+.calendario .celda .plato-svg circle:last-child { fill: #1C3328; }
+.calendario .celda .num { position: absolute; top: 4px; left: 6px; font-size: .62rem; opacity: .5; }
+/* Los platos del calendario aparecen al llegar con el scroll (si el navegador lo permite) */
+@supports (animation-timeline: view()) {
+  .calendario .celda { animation: brotar linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  .como > div { animation: subir linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+}
+@keyframes brotar { from { opacity: 0; transform: scale(.6) rotate(-40deg); } }
+
+/* ===== Mapa de calor del plan ===== */
+.calor { margin-top: 20px; padding: 18px 20px; }
+.leyenda-calor { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--tinta-3); }
+.leyenda-calor i { width: 80px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--albahaca-suave), var(--albahaca)); }
+.celdas-calor { display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 5px; margin-top: 14px; }
+.c-calor { aspect-ratio: 1; border: 0; border-radius: 6px; cursor: pointer; padding: 0; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--albahaca) calc(var(--k) * 85% + 12%), var(--albahaca-suave));
+  font: 600 .68rem var(--f-datos); transition: transform .2s var(--muelle), box-shadow .2s; }
+.c-calor:hover { transform: scale(1.15); }
+.c-calor.activa { box-shadow: 0 0 0 2px var(--papel), 0 0 0 3.5px var(--azafran); }
+
+@media (max-width: 860px) {
+  .franja { grid-template-columns: 1fr; padding: 28px 20px; gap: 28px; margin-top: 48px; }
+  .celdas-calor { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+}
+
+.cinta + .como { border-top: 0; }

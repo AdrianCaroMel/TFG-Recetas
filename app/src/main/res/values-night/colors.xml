@@ -1,36 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paleta en modo oscuro: tonos calidos, texto con contraste de al menos 7:1 sobre las tarjetas -->
+<!-- Identidad "mercado y ticket" (igual que la web): papel, albahaca y azafrán. Los mismos nombres se redefinen en values-night. -->
 <resources>
-    <color name="verde">#9FC9A9</color>
-    <color name="sobre_verde">#0F2618</color>
-    <color name="verde_oscuro">#D2E8D7</color>
-    <color name="verde_claro">#2A3D30</color>
-    <color name="naranja">#F0A585</color>
-    <color name="sobre_naranja">#4A1C08</color>
-    <color name="naranja_claro">#4E2716</color>
-    <color name="sobre_naranja_claro">#FFDCC9</color>
+    <color name="verde">#7CC4A2</color>
+    <color name="sobre_verde">#0B1A13</color>
+    <color name="verde_oscuro">#A5DCC0</color>
+    <color name="verde_claro">#183428</color>
+    <color name="naranja">#F2B55A</color>
+    <color name="sobre_naranja">#2A1C05</color>
+    <color name="naranja_claro">#3A2A10</color>
+    <color name="sobre_naranja_claro">#FBEFD9</color>
 
     <color name="rojo_aviso">#F2B8B5</color>
     <color name="rojo_claro">#4A1714</color>
 
-    <color name="fondo">#161513</color>
-    <color name="superficie">#211F1C</color>
-    <color name="fondo_tarjeta">#2A2723</color>
-    <color name="texto_principal">#EEE9E1</color>
-    <color name="texto_secundario">#C4BDB2</color>
-    <color name="borde">#3B3731</color>
-    <color name="degradado_inicio">#2C4234</color>
-    <color name="degradado_medio">#2C4234</color>
-    <color name="degradado_fin">#2C4234</color>
-    <color name="calido_inicio">#7E3A1D</color>
-    <color name="calido_fin">#7E3A1D</color>
+    <color name="fondo">#0F1311</color>
+    <color name="superficie">#1A201C</color>
+    <color name="fondo_tarjeta">#151A17</color>
+    <color name="texto_principal">#EDEFE9</color>
+    <color name="texto_secundario">#B9C1BA</color>
+    <color name="borde">#2E3530</color>
+    <color name="degradado_inicio">#0B1A13</color>
+    <color name="degradado_medio">#0B1A13</color>
+    <color name="degradado_fin">#0B1A13</color>
+    <color name="calido_inicio">#3A2A10</color>
+    <color name="calido_fin">#3A2A10</color>
     <color name="sobre_degradado">#FFFFFF</color>
-    <color name="cta">#E58F68</color>
-    <color name="sobre_cta">#2A1206</color>
-    <color name="comida_fondo">#4E2716</color>
-    <color name="comida_texto">#FFD3BC</color>
-    <color name="cena_fondo">#25323A</color>
-    <color name="cena_texto">#CFDDE6</color>
-    <color name="degradado_alt_inicio">#2C4234</color>
-    <color name="degradado_alt_fin">#2C4234</color>
+    <color name="cta">#7CC4A2</color>
+    <color name="sobre_cta">#0B1A13</color>
+    <color name="comida_fondo">#3A2A10</color>
+    <color name="comida_texto">#F7D9A3</color>
+    <color name="cena_fondo">#183428</color>
+    <color name="cena_texto">#C9EBD8</color>
+    <color name="degradado_alt_inicio">#0B1A13</color>
+    <color name="degradado_alt_fin">#0B1A13</color>
+
+    <color name="c_cereal">#D8B26A</color>
+    <color name="c_verdura">#6FA864</color>
+    <color name="c_legumbre">#B07E55</color>
+    <color name="c_carne">#C9694F</color>
+    <color name="c_pescado">#7FA9BE</color>
+    <color name="c_lacteo">#CFC7AE</color>
+    <color name="c_huevo">#F0C64B</color>
+    <color name="c_condimento">#A8A68E</color>
+    <color name="c_despensa">#8C9A8E</color>
+    <color name="azafran">#F2B55A</color>
 </resources>

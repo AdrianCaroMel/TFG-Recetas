@@ -162,7 +162,7 @@ public class RecetarioActivity extends BaseActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             Receta r = visibles.get(position);
             View v = holder.itemView;
-            ((TextView) v.findViewById(R.id.tvEmoji)).setText(Emoji.de(r));
+            ((PlatoView) v.findViewById(R.id.platoReceta)).setReceta(r);
             TextView tvMomento = v.findViewById(R.id.tvMomentoReceta);
             tvMomento.setText(momento(r));
             Formato.pildora(tvMomento, r.getTipo());

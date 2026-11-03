@@ -16,13 +16,10 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvEmoji"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/fondo_emoji"
-            android:gravity="center"
-            android:textSize="28sp" />
+        <com.adriancaro.tfgrecetas.ui.PlatoView
+            android:id="@+id/platoReceta"
+            android:layout_width="64dp"
+            android:layout_height="64dp" />
 
         <LinearLayout
             android:layout_width="0dp"

@@ -22,16 +22,13 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Emoji grande de la receta (entra con un rebote) -->
-            <TextView
-                android:id="@+id/tvEmojiGrande"
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/fondo_emoji"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:textSize="44sp" />
+            <!-- El plato dibujado con sus ingredientes (entra girando con un rebote) -->
+            <com.adriancaro.tfgrecetas.ui.PlatoView
+                android:id="@+id/platoGrande"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
 
             <TextView
                 android:id="@+id/tvNombreReceta"

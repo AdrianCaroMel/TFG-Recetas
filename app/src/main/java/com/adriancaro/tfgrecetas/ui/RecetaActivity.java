@@ -56,14 +56,14 @@ public class RecetaActivity extends BaseActivity {
 
         idReceta = receta.getId();
         ((TextView) findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
-        TextView tvEmoji = findViewById(R.id.tvEmojiGrande);
-        tvEmoji.setText(Emoji.de(receta));
-        // El emoji entra girando un poco y con rebote
-        tvEmoji.setScaleX(0.3f);
-        tvEmoji.setScaleY(0.3f);
-        tvEmoji.setRotation(-25f);
-        tvEmoji.animate().scaleX(1f).scaleY(1f).rotation(0f).setStartDelay(150).setDuration(650)
-                .setInterpolator(new OvershootInterpolator(2.5f)).start();
+        PlatoView plato = findViewById(R.id.platoGrande);
+        plato.setReceta(receta);
+        // El plato entra girando un poco y con rebote
+        plato.setScaleX(0.4f);
+        plato.setScaleY(0.4f);
+        plato.setRotation(-90f);
+        plato.animate().scaleX(1f).scaleY(1f).rotation(0f).setStartDelay(120).setDuration(800)
+                .setInterpolator(new OvershootInterpolator(1.6f)).start();
 
         // Datos rapidos: tiempo, personas y precio por racion
         ChipGroup grupoInfo = findViewById(R.id.grupoInfo);

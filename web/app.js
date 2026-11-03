@@ -326,11 +326,13 @@ function pantallaInicio() {
         <p class="suave" style="font-size:.8rem;margin-top:12px">Lo más barato que cuesta un mes completo en cada cadena, con precios de octubre de 2026.</p>
       </div>
     </div>
+    ${cintaPrecios()}
     <div class="como">
       <div><span class="paso-n">01</span><h3>Elige tus supermercados</h3><p class="suave">Calculamos dónde te sale más barato el mes entero, no producto a producto.</p></div>
       <div><span class="paso-n">02</span><h3>Marca lo que no comes</h3><p class="suave">Alergias, dieta vegetariana o vegana y dietas por salud como la blanda o la baja en sal.</p></div>
       <div><span class="paso-n">03</span><h3>Pon tu presupuesto</h3><p class="suave">Si no llega para todo el mes, te decimos cuánto haría falta.</p></div>
     </div>
+    ${franjaMes(ref[0])}
   </section>`;
 }
 
@@ -351,6 +353,53 @@ function simular() {
     const id = d.COMIDA || d.CENA;
     return `<div>${id ? platoSVG(RECETA_POR_ID.get(id), 38) : '<svg width="38" height="38" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--linea-fuerte)" stroke-dasharray="6 6"/></svg>'}${["L", "M", "X", "J", "V", "S", "D"][i]}</div>`;
   }).join("");
+}
+
+// Cinta con precios reales verificados que se desplaza sin parar (se para al pasar el ratón)
+function cintaPrecios() {
+  const items = [];
+  for (const p of window.DATOS.productos) {
+    for (const s of Object.keys(p.verificado)) {
+      const unidad = p.unidad === "ud" ? "ud" : p.unidad === "ml" ? "l" : "kg";
+      const porUnidad = p.unidad === "ud" ? p.precios[s] / p.envase : p.precios[s] * 1000 / p.envase;
+      items.push(`<span class="item"><b>${esc(p.nombre)}</b><span class="num">${euros(porUnidad)}/${unidad}</span><span class="super" style="--c:${SUPER[s].color}">${SUPER[s].nombre}</span></span>`);
+    }
+  }
+  const mitad = items.filter((_, i) => i % 3 === 0).slice(0, 30).join("");
+  return `<div class="cinta" aria-label="Precios reales verificados en octubre de 2026"><div class="pista-cinta">${mitad}${mitad}</div></div>`;
+}
+
+// Franja oscura: un mes completo dibujado en platos, con las cifras grandes al lado
+function franjaMes(mejor) {
+  const perfil = { supers: [mejor.s], restricciones: [], presupuesto: Infinity, personas: 1, comida: true, cena: true, basicos: false };
+  const plan = construir(perfil, [mejor.s], 11, Infinity);
+  const distintas = new Set(plan.dias.flatMap(d => Object.values(d))).size;
+  return `<section class="franja">
+    <div class="franja-texto">
+      <p class="antetitulo">Un mes de ejemplo en ${SUPER[mejor.s].nombre}</p>
+      <h2>60 platos, ${distintas} recetas distintas y ni una repetida dos días seguidos</h2>
+      <div class="franja-cifras">
+        <div><strong class="num">${euros(plan.coste)}</strong><span>el mes entero</span></div>
+        <div><strong class="num">${euros(plan.coste / 60)}</strong><span>por plato</span></div>
+      </div>
+      <a class="boton claro-b" href="#paso1">Hacer el mío <span class="flecha">→</span></a>
+    </div>
+    <div class="calendario">${["L", "M", "X", "J", "V", "S", "D"].map(d => `<span class="dia-sem">${d}</span>`).join("")}
+      ${plan.dias.map((d, i) => `<div class="celda" style="--i:${i}" title="Día ${i + 1}: ${esc(RECETA_POR_ID.get(d.COMIDA).nombre)}">${platoSVG(RECETA_POR_ID.get(d.COMIDA), 40)}<span class="num">${i + 1}</span></div>`).join("")}
+    </div>
+  </section>`;
+}
+
+// Gasto de cada día del plan como mapa de calor; pulsar un día abre su semana
+function calorMes(plan, perfil, semana) {
+  const gastos = plan.dias.map(d => Object.values(d).filter(Boolean).reduce((t, id) => t + costeRacion(RECETA_POR_ID.get(id), perfil, plan.supers) * perfil.personas, 0));
+  const max = Math.max(...gastos), min = Math.min(...gastos.filter(g => g > 0));
+  return `<div class="superficie calor"><div class="fila entre"><h3>Gasto por día</h3>
+    <span class="leyenda-calor"><span class="num">${euros(min)}</span><i></i><span class="num">${euros(max)}</span></span></div>
+    <div class="celdas-calor">${gastos.map((g, i) => {
+      const k = max > min ? (g - min) / (max - min) : 0;
+      return `<button class="c-calor ${Math.floor(i / 7) === semana || (semana === 4 && i >= 28) ? "activa" : ""}" data-semana="${Math.min(4, Math.floor(i / 7))}" style="--k:${k.toFixed(2)};color:${k > .4 ? "var(--sobre-albahaca)" : "var(--tinta)"}" title="Día ${i + 1}: ${euros(g)}" aria-label="Día ${i + 1}, ${euros(g)}"><span>${i + 1}</span></button>`;
+    }).join("")}</div></div>`;
 }
 
 const pasosBarra = n => `<div class="pasos-barra">${[1, 2, 3].map(i => `<i class="${i <= n ? "hecho" : ""}"></i>`).join("")}</div>`;
@@ -444,6 +493,7 @@ function pantallaPlan() {
       </div>
     </div>
     ${plan.necesario ? `<div class="alerta">Con ${euros(perfil.presupuesto)} no llega para todo el mes. Necesitarías unos ${euros(plan.necesario)}.</div>` : ""}
+    ${calorMes(plan, perfil, semana)}
     <div class="pestanas" role="tablist">${[0, 1, 2, 3, 4].map(i => `<button role="tab" data-semana="${i}" aria-selected="${i === semana}">${i < 4 ? `Semana ${i + 1}` : "Días 29 y 30"}</button>`).join("")}</div>
     <div class="dias cascada">${plan.dias.slice(desde, hasta).map((dia, k) => `<article class="superficie dia" style="--i:${k}">
       <div class="dia-cab"><h3>Día ${desde + k + 1}</h3><span class="num">${euros(Object.values(dia).filter(Boolean).reduce((t, id) => t + costeRacion(RECETA_POR_ID.get(id), perfil, plan.supers) * perfil.personas, 0))}</span></div>

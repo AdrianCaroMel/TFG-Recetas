@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paleta "minimalismo calido" (rama Max): fondo crema, verde salvia y acento terracota, sin degradados. Los mismos nombres se redefinen en values-night. -->
+<!-- Identidad "mercado y ticket" (igual que la web): papel, albahaca y azafrán. Los mismos nombres se redefinen en values-night. -->
 <resources>
     <!-- Marca -->
-    <color name="verde">#3E6A4F</color>
+    <color name="verde">#1D5B44</color>
     <color name="sobre_verde">#FFFFFF</color>
-    <color name="verde_oscuro">#22402E</color>
-    <color name="verde_claro">#E2EDE0</color>
-    <color name="naranja">#A94E27</color>
+    <color name="verde_oscuro">#154634</color>
+    <color name="verde_claro">#E1EDE6</color>
+    <color name="naranja">#8F5A0E</color>
     <color name="sobre_naranja">#FFFFFF</color>
-    <color name="naranja_claro">#F7E2D5</color>
-    <color name="sobre_naranja_claro">#55210B</color>
+    <color name="naranja_claro">#FBEFD9</color>
+    <color name="sobre_naranja_claro">#4A300A</color>
 
     <!-- Avisos -->
     <color name="rojo_aviso">#B3261E</color>
-    <color name="rojo_claro">#FBE7E4</color>
+    <color name="rojo_claro">#F8E3DE</color>
 
     <!-- Superficies y texto -->
-    <color name="fondo">#FAF6EF</color>
+    <color name="fondo">#F4F4EE</color>
     <color name="superficie">#FFFFFF</color>
-    <color name="fondo_tarjeta">#F3EDE3</color>
-    <color name="texto_principal">#2B2824</color>
-    <color name="texto_secundario">#5F5950</color>
-    <color name="borde">#E9E2D6</color>
+    <color name="fondo_tarjeta">#ECEDE5</color>
+    <color name="texto_principal">#151A16</color>
+    <color name="texto_secundario">#4B544D</color>
+    <color name="borde">#DDDFD6</color>
     <color name="blanco">#FFFFFF</color>
 
     <!-- Fondo del icono de la app (igual en claro y oscuro) -->
-    <color name="icono_fondo">#3E6A4F</color>
+    <color name="icono_fondo">#1D5B44</color>
     <!-- Degradados (version fancy) -->
-    <color name="degradado_inicio">#3E6A4F</color>
-    <color name="degradado_medio">#3E6A4F</color>
-    <color name="degradado_fin">#3E6A4F</color>
-    <color name="calido_inicio">#A94E27</color>
-    <color name="calido_fin">#A94E27</color>
+    <color name="degradado_inicio">#10261C</color>
+    <color name="degradado_medio">#10261C</color>
+    <color name="degradado_fin">#10261C</color>
+    <color name="calido_inicio">#8F5A0E</color>
+    <color name="calido_fin">#8F5A0E</color>
     <color name="sobre_degradado">#FFFFFF</color>
     <!-- Botones principales: amarillo calido (inspirado en Glovo) con texto oscuro -->
-    <color name="cta">#A94E27</color>
+    <color name="cta">#1D5B44</color>
     <color name="sobre_cta">#FFFFFF</color>
     <!-- Pildoras de color para distinguir comida y cena -->
-    <color name="comida_fondo">#F7E2D5</color>
-    <color name="comida_texto">#7A3416</color>
-    <color name="cena_fondo">#E3EAEE</color>
-    <color name="cena_texto">#2F4552</color>
+    <color name="comida_fondo">#FBEFD9</color>
+    <color name="comida_texto">#6B4A12</color>
+    <color name="cena_fondo">#E1EDE6</color>
+    <color name="cena_texto">#154634</color>
     <!-- Segundo juego de colores para la animacion del degradado de inicio -->
-    <color name="degradado_alt_inicio">#3E6A4F</color>
-    <color name="degradado_alt_fin">#3E6A4F</color>
+    <color name="degradado_alt_inicio">#10261C</color>
+    <color name="degradado_alt_fin">#10261C</color>
+
+    <!-- Grupos de alimentos para dibujar los platos (PlatoView) -->
+    <color name="c_cereal">#D8B26A</color>
+    <color name="c_verdura">#5E9654</color>
+    <color name="c_legumbre">#9C6B43</color>
+    <color name="c_carne">#B9573F</color>
+    <color name="c_pescado">#6F98AE</color>
+    <color name="c_lacteo">#E4DCC5</color>
+    <color name="c_huevo">#F0C64B</color>
+    <color name="c_condimento">#A8A68E</color>
+    <color name="c_despensa">#8C9A8E</color>
+    <!-- Acento para datos destacados -->
+    <color name="azafran">#E9A23B</color>
 </resources>
