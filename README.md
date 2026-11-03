@@ -53,5 +53,6 @@ docs/                       Documentación del TFG
 - [05 - Fuentes y fiabilidad de los precios](docs/05-fuentes-precios.md)
 - [06 - Precios por verificar](docs/06-precios-por-verificar.md)
 - [07 - Estado del arte: apps parecidas](docs/07-estado-del-arte.md)
+- [08 - Referencias de diseño de la interfaz](docs/08-referencias-diseno-ui.md)
 
 > Los precios son **orientativos**: combinan el índice de precios real de cada cadena (estudio OCU 2026) con algunos precios verificados en octubre de 2026. Ver [docs/05-fuentes-precios.md](docs/05-fuentes-precios.md).
