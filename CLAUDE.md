@@ -18,6 +18,7 @@ Antes de tocar layouts, colores, textos o iconos, lee [docs/08-referencias-disen
 - `design-mobile-apps`: diseño de pantallas con Sleek (necesita `SLEEK_API_KEY`; implementa en React Native/HTML, así que en esta app sirve como referencia visual).
 - `agent-browser`: automatizar el navegador (necesita `npm i -g agent-browser`).
 - `media-use`: medios para vídeos HyperFrames (necesita `npx hyperframes`); útil para el vídeo de presentación del TFG.
+- `hyperframes`: hacer vídeos con HTML (incluye el modo explainer, antes skill `faceless-explainer`). Para el vídeo de presentación del TFG; `media-use` depende de esta.
 - `codebase-design`: diseñar módulos "profundos" (interfaz pequeña, mucha lógica dentro) y fáciles de probar. Usar al reorganizar `logica/` o `datos/`.
 - `web-design-guidelines`: revisión de UI con las guías de Vercel. Son reglas web; en los layouts Android aplicar solo las de accesibilidad, textos y estados.
 
