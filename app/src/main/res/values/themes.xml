@@ -32,6 +32,24 @@
 
         <item name="android:windowAnimationStyle">@style/AnimacionPantallas</item>
         <item name="materialCardViewStyle">@style/Tarjeta</item>
+
+        <!-- Tipografías propias (las mismas que la web): Instrument Sans para leer,
+             Bricolage Grotesque para titulares y JetBrains Mono para precios y cifras -->
+        <item name="android:textViewStyle">@style/TextoBase</item>
+        <item name="editTextStyle">@style/CampoBase</item>
+        <item name="textAppearanceDisplaySmall">@style/Letra.Titular.Display</item>
+        <item name="textAppearanceHeadlineLarge">@style/Letra.Titular.Grande</item>
+        <item name="textAppearanceHeadlineMedium">@style/Letra.Titular.Medio</item>
+        <item name="textAppearanceHeadlineSmall">@style/Letra.Titular</item>
+        <item name="textAppearanceTitleLarge">@style/Letra.TituloGrande</item>
+        <item name="textAppearanceTitleMedium">@style/Letra.Titulo</item>
+        <item name="textAppearanceTitleSmall">@style/Letra.TituloPeque</item>
+        <item name="textAppearanceBodyLarge">@style/Letra.Cuerpo</item>
+        <item name="textAppearanceBodyMedium">@style/Letra.CuerpoMedio</item>
+        <item name="textAppearanceBodySmall">@style/Letra.CuerpoPeque</item>
+        <item name="textAppearanceLabelLarge">@style/Letra.Etiqueta</item>
+        <item name="textAppearanceLabelMedium">@style/Letra.EtiquetaMedia</item>
+        <item name="textAppearanceLabelSmall">@style/Letra.EtiquetaPeque</item>
         <item name="materialButtonStyle">@style/Boton</item>
     </style>
 
@@ -45,19 +63,28 @@
 
     <!-- Colores de los iconos y textos de la barra superior verde -->
     <style name="ThemeOverlay.TFGRecetas.BarraSuperior" parent="">
-        <item name="colorControlNormal">@color/sobre_degradado</item>
-        <item name="colorOnSurface">@color/sobre_degradado</item>
-        <item name="colorOnSurfaceVariant">@color/sobre_degradado</item>
+        <item name="colorControlNormal">@color/texto_principal</item>
+        <item name="colorOnSurface">@color/texto_principal</item>
+        <item name="colorOnSurfaceVariant">@color/texto_principal</item>
+    </style>
+
+    <style name="Letra.Barra" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/bricolage</item>
+        <item name="fontFamily">@font/bricolage</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <!-- ===== Componentes ===== -->
 
     <!-- Tarjeta blanca con sombra suave sobre el fondo salvia (nunca blanco sobre blanco) -->
     <style name="Tarjeta" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardCornerRadius">20dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="cardBackgroundColor">@color/superficie</item>
-        <!-- Sombra muy suave en vez de borde: más cómodo a la vista -->
-        <item name="cardElevation">1dp</item>
+        <!-- Borde fino neutro y casi sin sombra: separa sin ensuciar -->
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/borde</item>
+        <item name="strokeWidth">1dp</item>
         <!-- Al pulsar una tarjeta se hunde un poco -->
         <item name="android:stateListAnimator">@animator/pulsar</item>
     </style>
@@ -74,23 +101,28 @@
     </style>
 
     <style name="Boton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">28dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:fontFamily">@font/instrument</item>
+        <item name="android:letterSpacing">0</item>
         <item name="backgroundTint">@color/cta</item>
         <item name="android:textColor">@color/sobre_cta</item>
         <item name="iconTint">@color/sobre_cta</item>
         <item name="android:stateListAnimator">@animator/pulsar</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
-    </style>
+    <item name="android:textStyle">bold</item></style>
 
     <style name="Boton.Contorno" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="cornerRadius">28dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:fontFamily">@font/instrument</item>
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="strokeColor">@color/borde_fuerte</item>
+        <item name="backgroundTint">@color/superficie</item>
         <item name="android:minHeight">52dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
-    </style>
+    <item name="android:textStyle">bold</item></style>
 
     <style name="Boton.Tonal" parent="Widget.Material3.Button.TonalButton">
         <item name="cornerRadius">14dp</item>
@@ -106,7 +138,7 @@
         <item name="chipStrokeColor">@color/chip_borde</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="checkedIconTint">@color/sobre_verde</item>
-        <item name="chipCornerRadius">50dp</item>
+        <item name="chipCornerRadius">10dp</item>
         <item name="chipMinHeight">40dp</item>
         <item name="android:textSize">15sp</item>
     </style>
@@ -118,11 +150,11 @@
         <item name="android:paddingEnd">10dp</item>
         <item name="android:paddingTop">3dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">0.06</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/instrument</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">false</item>
+    <item name="android:textStyle">bold</item></style>
 
     <!-- Barra inferior con el boton principal de cada pantalla -->
     <style name="BarraInferior">
@@ -138,29 +170,82 @@
 
     <style name="Texto.Titulo" parent="TextAppearance.Material3.HeadlineSmall">
         <item name="android:textColor">@color/texto_principal</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:letterSpacing">-0.01</item>
-    </style>
+        <item name="android:fontFamily">@font/bricolage</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:lineSpacingMultiplier">0.95</item>
+    <item name="android:textStyle">bold</item></style>
 
     <style name="Texto.Seccion" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textColor">@color/verde</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:fontFamily">@font/bricolage</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="Texto.Cuerpo" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:fontFamily">@font/instrument</item>
     </style>
 
     <style name="Texto.Secundario" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">@color/texto_secundario</item>
+        <item name="android:fontFamily">@font/instrument</item>
     </style>
 
+    <!-- Antetítulo: mayúsculas pequeñas en letra de datos, como en la web -->
     <style name="Texto.Etiqueta" parent="TextAppearance.Material3.LabelMedium">
-        <item name="android:textColor">@color/naranja</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/texto_secundario</item>
+        <item name="android:fontFamily">@font/jetbrains</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
     </style>
+
+    <!-- Titular grande de la portada (sobre verde oscuro) -->
+    <style name="Texto.Portada" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:fontFamily">@font/bricolage</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">38sp</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textColor">@color/sobre_degradado</item>
+    </style>
+
+    <!-- Texto de cada paso en el modo cocina: grande y claro sobre el fondo oscuro -->
+    <style name="Texto.Cocina" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:fontFamily">@font/instrument</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#EDEFE9</item>
+    </style>
+
+    <!-- Precios y cifras: monoespaciada, como un ticket -->
+    <style name="Texto.Precio" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:fontFamily">@font/jetbrains</item>
+        <item name="android:letterSpacing">-0.02</item>
+    <item name="android:textStyle">bold</item></style>
+
+    <!-- Texto por defecto: solo fija la apariencia, para que cada textAppearance pueda cambiar la letra -->
+    <style name="TextoBase" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/Letra.CuerpoMedio</item>
+    </style>
+    <style name="CampoBase" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/Letra.Cuerpo</item>
+    </style>
+
+    <!-- Escala tipográfica que usan los componentes de Material -->
+    <style name="Letra.Titular.Display" parent="TextAppearance.Material3.DisplaySmall"><item name="fontFamily">@font/bricolage</item><item name="android:fontFamily">@font/bricolage</item><item name="android:letterSpacing">-0.03</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.Titular.Grande" parent="TextAppearance.Material3.HeadlineLarge"><item name="fontFamily">@font/bricolage</item><item name="android:fontFamily">@font/bricolage</item><item name="android:letterSpacing">-0.03</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.Titular.Medio" parent="TextAppearance.Material3.HeadlineMedium"><item name="fontFamily">@font/bricolage</item><item name="android:fontFamily">@font/bricolage</item><item name="android:letterSpacing">-0.02</item></style>
+    <style name="Letra.Titular" parent="TextAppearance.Material3.HeadlineSmall"><item name="fontFamily">@font/bricolage</item><item name="android:fontFamily">@font/bricolage</item><item name="android:letterSpacing">-0.02</item></style>
+    <style name="Letra.TituloGrande" parent="TextAppearance.Material3.TitleLarge"><item name="fontFamily">@font/bricolage</item><item name="android:fontFamily">@font/bricolage</item></style>
+    <style name="Letra.Titulo" parent="TextAppearance.Material3.TitleMedium"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.TituloPeque" parent="TextAppearance.Material3.TitleSmall"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.Cuerpo" parent="TextAppearance.Material3.BodyLarge"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item></style>
+    <style name="Letra.CuerpoMedio" parent="TextAppearance.Material3.BodyMedium"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item></style>
+    <style name="Letra.CuerpoPeque" parent="TextAppearance.Material3.BodySmall"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item></style>
+    <style name="Letra.Etiqueta" parent="TextAppearance.Material3.LabelLarge"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.EtiquetaMedia" parent="TextAppearance.Material3.LabelMedium"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item><item name="android:textStyle">bold</item></style>
+    <style name="Letra.EtiquetaPeque" parent="TextAppearance.Material3.LabelSmall"><item name="fontFamily">@font/instrument</item><item name="android:fontFamily">@font/instrument</item><item name="android:textStyle">bold</item></style>
 </resources>

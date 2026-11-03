@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/gasto_del_mes"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
                 android:textColor="@color/sobre_degradado" />
 
             <LinearLayout
@@ -37,10 +37,12 @@
 
                 <TextView
                     android:id="@+id/tvGasto"
+                    android:fontFamily="@font/jetbrains"
+                    android:letterSpacing="-0.04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
-                    android:textColor="@color/sobre_degradado"
+                    android:textSize="40sp"
+                    android:textColor="@color/azafran"
                     android:textStyle="bold" />
 
                 <TextView
@@ -48,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="@color/sobre_degradado" />
             </LinearLayout>
 

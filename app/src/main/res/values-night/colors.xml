@@ -22,8 +22,8 @@
     <color name="degradado_inicio">#0B1A13</color>
     <color name="degradado_medio">#0B1A13</color>
     <color name="degradado_fin">#0B1A13</color>
-    <color name="calido_inicio">#3A2A10</color>
-    <color name="calido_fin">#3A2A10</color>
+    <color name="calido_inicio">#12301F</color>
+    <color name="calido_fin">#12301F</color>
     <color name="sobre_degradado">#FFFFFF</color>
     <color name="cta">#7CC4A2</color>
     <color name="sobre_cta">#0B1A13</color>
@@ -44,4 +44,6 @@
     <color name="c_condimento">#A8A68E</color>
     <color name="c_despensa">#8C9A8E</color>
     <color name="azafran">#F2B55A</color>
+    <color name="borde_fuerte">#3E4640</color>
+    <color name="azafran_fijo">#F2B55A</color>
 </resources>

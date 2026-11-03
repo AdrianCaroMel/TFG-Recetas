@@ -40,15 +40,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/total_compra"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:textColor="@color/sobre_degradado" />
 
                     <TextView
                         android:id="@+id/tvTotalCompra"
+                    android:fontFamily="@font/jetbrains"
+                    android:letterSpacing="-0.04"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
-                        android:textColor="@color/sobre_degradado"
+                        android:textSize="40sp"
+                        android:textColor="@color/azafran"
                         android:textStyle="bold" />
 
                     <com.google.android.material.progressindicator.LinearProgressIndicator

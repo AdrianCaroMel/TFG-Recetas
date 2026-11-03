@@ -1,23 +1,31 @@
 package com.adriancaro.tfgrecetas.ui;
 
 import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
 import com.adriancaro.tfgrecetas.R;
 import com.adriancaro.tfgrecetas.datos.PerfilStorage;
+import com.adriancaro.tfgrecetas.datos.RepositorioDatos;
 import com.adriancaro.tfgrecetas.modelo.PerfilUsuario;
+import com.adriancaro.tfgrecetas.modelo.Receta;
 import com.adriancaro.tfgrecetas.modelo.Restriccion;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Pantalla de inicio. La primera vez explica los pasos; despues muestra
@@ -33,6 +41,7 @@ public class MainActivity extends BaseActivity {
     private TextView tvPerfil;
     private boolean logoAnimado = false;
     private ValueAnimator animacionFondo;
+    private ObjectAnimator giroPlato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +56,27 @@ public class MainActivity extends BaseActivity {
         accesos = findViewById(R.id.accesos);
         tvPerfil = findViewById(R.id.tvPerfil);
 
+        // Plato de adorno de la portada: una receta al azar que gira muy despacio
+        List<Receta> recetas = RepositorioDatos.get(this).getRecetas();
+        PlatoView platoPortada = findViewById(R.id.platoPortada);
+        platoPortada.setReceta(recetas.get(new Random().nextInt(recetas.size())));
+        giroPlato = ObjectAnimator.ofFloat(platoPortada, View.ROTATION, 0f, 360f);
+        giroPlato.setDuration(60000);
+        giroPlato.setRepeatCount(ValueAnimator.INFINITE);
+        giroPlato.setInterpolator(new LinearInterpolator());
+
         rellenarPaso(R.id.paso1, 1, R.string.bienvenida_paso1);
         rellenarPaso(R.id.paso2, 2, R.string.bienvenida_paso2);
         rellenarPaso(R.id.paso3, 3, R.string.bienvenida_paso3);
 
         // El primer acceso (el plan) va destacado con el degradado calido
-        configurarAcceso(R.id.accesoPlan, "📅", R.string.acceso_plan, R.string.acceso_plan_sub,
+        configurarAcceso(R.id.accesoPlan, R.drawable.ic_calendario, R.string.acceso_plan, R.string.acceso_plan_sub,
                 PlanActivity.class, true);
-        configurarAcceso(R.id.accesoRecetario, "📖", R.string.acceso_recetario, R.string.acceso_recetario_sub,
+        configurarAcceso(R.id.accesoRecetario, R.drawable.ic_libro, R.string.acceso_recetario, R.string.acceso_recetario_sub,
                 RecetarioActivity.class, false);
-        configurarAcceso(R.id.accesoCompra, "🛒", R.string.acceso_compra, R.string.acceso_compra_sub,
+        configurarAcceso(R.id.accesoCompra, R.drawable.ic_carrito, R.string.acceso_compra, R.string.acceso_compra_sub,
                 ListaCompraActivity.class, false);
-        configurarAcceso(R.id.accesoConsejos, "👩‍🍳", R.string.acceso_consejos, R.string.acceso_consejos_sub,
+        configurarAcceso(R.id.accesoConsejos, R.drawable.ic_bombilla, R.string.acceso_consejos, R.string.acceso_consejos_sub,
                 ConsejosActivity.class, false);
 
         // Boton principal: empezar o ver el plan
@@ -112,6 +130,7 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         animacionFondo.pause();
+        giroPlato.pause();
     }
 
     @Override
@@ -129,6 +148,11 @@ public class MainActivity extends BaseActivity {
             tvPerfil.setText(resumenPerfil(PerfilStorage.cargar(this)));
         }
 
+        if (giroPlato.isPaused()) {
+            giroPlato.resume();
+        } else if (!giroPlato.isStarted()) {
+            giroPlato.start();
+        }
         if (animacionFondo.isPaused()) {
             animacionFondo.resume();
         } else if (!animacionFondo.isStarted()) {
@@ -146,12 +170,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void configurarAcceso(int idAcceso, String emoji, int titulo, int subtitulo,
+    private void configurarAcceso(int idAcceso, int icono, int titulo, int subtitulo,
                                   Class<?> pantalla, boolean destacado) {
         View acceso = findViewById(idAcceso);
         TextView tvTitulo = acceso.findViewById(R.id.tvTituloAcceso);
         TextView tvSub = acceso.findViewById(R.id.tvSubAcceso);
-        ((TextView) acceso.findViewById(R.id.tvEmojiAcceso)).setText(emoji);
+        ImageView ivIcono = acceso.findViewById(R.id.ivIconoAcceso);
+        ivIcono.setImageResource(icono);
+        ivIcono.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.verde)));
         tvTitulo.setText(titulo);
         tvSub.setText(subtitulo);
         if (destacado) {
@@ -159,6 +185,9 @@ public class MainActivity extends BaseActivity {
             int blanco = ContextCompat.getColor(this, R.color.sobre_degradado);
             tvTitulo.setTextColor(blanco);
             tvSub.setTextColor(blanco);
+            // En el acceso destacado, icono azafrán sobre un cuadrado translúcido
+            ivIcono.setBackgroundResource(R.drawable.fondo_icono_destacado);
+            ivIcono.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.azafran)));
         }
         acceso.setOnClickListener(new View.OnClickListener() {
             @Override

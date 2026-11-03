@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">PickEats</string>
+    <string name="antetitulo_inicio">Plan de 30 días · 6 supermercados</string>
 
     <!-- Títulos de pantalla -->
     <string name="titulo_supermercados">Supermercados</string>
@@ -96,8 +97,8 @@
     <string name="comparacion_no_vende">no vende todos los productos del plan</string>
 
     <!-- ===== Versión fancy: inicio, recetario y consejos ===== -->
-    <string name="hola">¡Hola! ¿Qué cocinamos este mes?</string>
-    <string name="lema">Come rico, gasta justo.</string>
+    <string name="hola">Come casero todo el mes sin pasarte</string>
+    <string name="lema">Te damos el menú del mes, cada receta paso a paso y la lista de la compra con precios reales.</string>
     <string name="acceso_plan">Mi plan del mes</string>
     <string name="acceso_plan_sub">30 días de comidas y cenas</string>
     <string name="acceso_recetario">Recetario</string>

@@ -24,7 +24,7 @@
             android:id="@+id/tvCosteBarra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
             android:textColor="@color/texto_principal" />
     </LinearLayout>
 

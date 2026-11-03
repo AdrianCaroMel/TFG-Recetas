@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cuadrado redondeado detrás del icono de cada acceso del inicio -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/verde_claro" />
+    <corners android:radius="12dp" />
+</shape>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Marca de PickEats (igual que en la web): plato con un cuarto en azafrán -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path android:fillColor="#1D5B44" android:pathData="M9,0h14a9,9 0,0 1,9 9v14a9,9 0,0 1,-9 9H9a9,9 0,0 1,-9 -9V9a9,9 0,0 1,9 -9z" />
+    <path android:strokeColor="#F4F4EE" android:strokeWidth="2" android:fillColor="#00000000" android:pathData="M16,6.5a9.5,9.5 0,1 1,0 19a9.5,9.5 0,1 1,0 -19z" />
+    <path android:fillColor="#E9A23B" android:pathData="M16,6.5A9.5,9.5 0,0 1,25.5 16H16z" />
+</vector>

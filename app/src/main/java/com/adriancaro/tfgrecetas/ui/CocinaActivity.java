@@ -63,6 +63,7 @@ public class CocinaActivity extends BaseActivity {
             return;
         }
         setTitle(receta.getNombre());
+        oscurecerBarra();
         pasos = receta.getPasos();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -136,7 +137,7 @@ public class CocinaActivity extends BaseActivity {
         }
         tvPaso.setText(getString(R.string.cocina_paso, paso + 1, pasos.size()));
         progreso.setProgressCompat(paso + 1, true);
-        tvNumero.setText(String.valueOf(paso + 1));
+        tvNumero.setText(String.format(java.util.Locale.ROOT, "%02d", paso + 1));
         tvTexto.setText(pasos.get(paso));
         btnAnterior.setEnabled(paso > 0);
         btnSiguiente.setText(paso == pasos.size() - 1 ? R.string.cocina_terminar : R.string.siguiente);
@@ -222,5 +223,19 @@ public class CocinaActivity extends BaseActivity {
             }
         }).start();
         Snackbar.make(findViewById(R.id.raiz), R.string.cocina_fin_tiempo, Snackbar.LENGTH_LONG).show();
+    }
+
+    /** En el modo cocina la barra va sobre el fondo oscuro: transparente, con texto e iconos claros. */
+    private void oscurecerBarra() {
+        int claro = 0xFFEDEFE9;
+        findViewById(R.id.appbar).setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        findViewById(R.id.lineaBarra).setVisibility(View.GONE);
+        com.google.android.material.appbar.MaterialToolbar barra = findViewById(R.id.toolbar);
+        barra.setTitleTextColor(claro);
+        if (barra.getNavigationIcon() != null) {
+            barra.getNavigationIcon().setTint(claro);
+        }
+        androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView())
+                .setAppearanceLightStatusBars(false);
     }
 }

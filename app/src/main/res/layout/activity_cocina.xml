@@ -27,14 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/Texto.Etiqueta"
-            android:textColor="@color/cta" />
+            android:textColor="@color/azafran_fijo" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progresoCocina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:indicatorColor="@color/cta"
+            app:indicatorColor="@color/azafran_fijo"
             app:trackColor="#33FFFFFF"
             app:trackCornerRadius="4dp"
             app:trackThickness="8dp" />
@@ -49,9 +49,11 @@
                 android:id="@+id/tarjetaPaso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="6dp"
-                app:strokeWidth="0dp">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:contentPadding="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,22 +63,21 @@
 
                     <TextView
                         android:id="@+id/tvNumeroGrande"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:background="@drawable/fondo_numero"
-                        android:gravity="center"
-                        android:textColor="@color/verde_oscuro"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/jetbrains"
+                android:textStyle="bold"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.06"
+                        android:textColor="#29FFFFFF"
+                        android:textSize="88sp" />
 
                     <TextView
                         android:id="@+id/tvTextoCocina"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:lineSpacingExtra="6dp"
-                        android:textColor="@color/texto_principal"
-                        android:textSize="22sp" />
+                        android:layout_marginTop="18dp" 
+                        android:textAppearance="@style/Texto.Cocina" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </ScrollView>
@@ -101,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:max="1000"
-                    app:indicatorColor="@color/cta"
+                    app:indicatorColor="@color/azafran_fijo"
                     app:indicatorSize="96dp"
                     app:trackColor="#33FFFFFF"
                     app:trackCornerRadius="4dp"
@@ -138,8 +139,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:backgroundTint="@color/cta"
-                    android:textColor="@color/sobre_cta" />
+                    android:backgroundTint="@color/azafran_fijo"
+                    android:textColor="#1C1405" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -157,8 +158,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cocina_anterior"
-            android:textColor="@color/sobre_degradado"
-            app:strokeColor="#99FFFFFF" />
+            android:textColor="#EDEFE9"
+            app:backgroundTint="@android:color/transparent"
+            app:strokeColor="#40FFFFFF" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSiguiente"
@@ -167,7 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_weight="1.4"
-            android:backgroundTint="@color/cta"
-            android:textColor="@color/sobre_cta" />
+            android:backgroundTint="@color/azafran_fijo"
+            android:textColor="#1C1405" />
     </LinearLayout>
 </LinearLayout>

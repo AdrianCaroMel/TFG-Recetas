@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Barra superior verde comun a todas las pantallas.
+    Barra superior clara comun a todas las pantallas.
     BaseActivity le anade por arriba el alto de la barra de estado (edge-to-edge),
     asi el contenido nunca queda tapado.
 -->
@@ -9,7 +9,8 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/degradado_barra"
+    android:background="@color/fondo"
+    app:elevation="0dp"
     android:theme="@style/ThemeOverlay.TFGRecetas.BarraSuperior"
     app:liftOnScroll="false">
 
@@ -18,7 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
-        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-        app:titleTextColor="@color/sobre_degradado" />
+        app:titleTextAppearance="@style/Letra.Barra"
+        app:titleTextColor="@color/texto_principal" />
+
+    <!-- Línea fina bajo la barra, como la cabecera de la web -->
+    <View
+        android:id="@+id/lineaBarra"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/borde" />
 
 </com.google.android.material.appbar.AppBarLayout>

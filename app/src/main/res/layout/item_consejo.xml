@@ -16,7 +16,7 @@
             android:id="@+id/tvTituloConsejo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="@color/verde"
             android:textStyle="bold" />
 

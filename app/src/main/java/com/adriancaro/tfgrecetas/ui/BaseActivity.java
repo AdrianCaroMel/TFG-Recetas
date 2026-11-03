@@ -71,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         WindowInsetsControllerCompat controlador =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        controlador.setAppearanceLightStatusBars(appbar == null ? !modoOscuro : modoOscuro);
+        controlador.setAppearanceLightStatusBars(!modoOscuro);
         controlador.setAppearanceLightNavigationBars(!modoOscuro);
     }
 

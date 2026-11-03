@@ -30,8 +30,8 @@
     <color name="degradado_inicio">#10261C</color>
     <color name="degradado_medio">#10261C</color>
     <color name="degradado_fin">#10261C</color>
-    <color name="calido_inicio">#8F5A0E</color>
-    <color name="calido_fin">#8F5A0E</color>
+    <color name="calido_inicio">#10261C</color>
+    <color name="calido_fin">#10261C</color>
     <color name="sobre_degradado">#FFFFFF</color>
     <!-- Botones principales: amarillo calido (inspirado en Glovo) con texto oscuro -->
     <color name="cta">#1D5B44</color>
@@ -57,4 +57,6 @@
     <color name="c_despensa">#8C9A8E</color>
     <!-- Acento para datos destacados -->
     <color name="azafran">#E9A23B</color>
+    <color name="borde_fuerte">#C9CCC1</color>
+    <color name="azafran_fijo">#F2B55A</color>
 </resources>
