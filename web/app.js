@@ -1,4 +1,4 @@
-// PickEats web: misma idea y mismos datos que la app Android, para abrirla en el navegador del ordenador.
+// PickEats web: misma lógica y mismos datos que la app Android, con una interfaz propia para el navegador.
 "use strict";
 
 // ===== Datos =====
@@ -35,12 +35,6 @@ const RESTRICCIONES = [
 ];
 const RESTRICCION = Object.fromEntries(RESTRICCIONES.map(r => [r.id, r]));
 
-const ILUSTRACIONES = [["hamburguesa", "🍔"], ["burrito", "🌯"], ["tortilla", "🍳"], ["revuelto", "🍳"], ["ensalada", "🥗"],
-  ["crema", "🥣"], ["sopa", "🍲"], ["puré", "🥣"], ["gambas", "🍤"], ["merluza", "🐟"], ["atún", "🐟"], ["pollo", "🍗"],
-  ["lomo", "🥩"], ["albóndigas", "🥩"], ["berenjena", "🍆"], ["espaguetis", "🍝"], ["macarrones", "🍝"], ["pasta", "🍝"],
-  ["arroz", "🍚"], ["lentejas", "🍲"], ["alubias", "🫘"], ["garbanzos", "🫘"], ["brócoli", "🥦"], ["champiñones", "🍄"],
-  ["tofu", "🥢"], ["quinoa", "🥗"], ["cuscús", "🥘"], ["pisto", "🥘"]];
-const ilustracion = r => (ILUSTRACIONES.find(([clave]) => r.nombre.toLowerCase().includes(clave)) || [0, "🍽️"])[1];
 
 // ===== Formato =====
 const euros = n => n.toLocaleString("es-ES", { style: "currency", currency: "EUR" });
@@ -157,6 +151,12 @@ function generarPlan(perfil, semilla) {
     plan.llenos = llenos;
     if (!mejor || llenos > mejor.llenos || (llenos === mejor.llenos && plan.coste < mejor.coste)) mejor = plan;
   }
+  // Con un solo súper, el mismo carro puede salir más barato en otra cadena: entonces se compra allí
+  if (perfil.unSolo && perfil.supers.length > 1) {
+    const cesta = cestaDe(mejor.dias, perfil.personas);
+    const actual = costeCesta(cesta, perfil, mejor.supers);
+    for (const s of perfil.supers) if (costeCesta(cesta, perfil, [s]) < actual - 0.005 && costeCesta(cesta, perfil, [s]) <= costeCesta(cesta, perfil, mejor.supers)) mejor.supers = [s];
+  }
   // Si el presupuesto no llega, calcular cuánto haría falta para el mes completo
   if (mejor.sinDinero) mejor.necesario = construir(perfil, mejor.supers, semilla, Infinity).coste;
   return { dias: mejor.dias, supers: mejor.supers, semilla, necesario: mejor.necesario || null };
@@ -204,6 +204,60 @@ function segundosDe(paso) {
 }
 const reloj = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
+
+// ===== Platos dibujados: cada ingrediente es un sector del color de su categoría =====
+const GRUPOS = {
+  "Cereales y pasta": ["cereal", "Cereales"], "Verduras": ["verdura", "Verdura"], "Congelados": ["verdura", "Verdura"],
+  "Legumbres": ["legumbre", "Legumbres"], "Proteína vegetal": ["legumbre", "Legumbres"], "Carne": ["carne", "Carne"],
+  "Pescado": ["pescado", "Pescado"], "Marisco": ["pescado", "Pescado"], "Lácteos": ["lacteo", "Lácteos"],
+  "Huevos": ["huevo", "Huevo"], "Básicos": ["basico", "Condimentos"], "Salsas": ["basico", "Condimentos"], "Conservas": ["otro", "Despensa"],
+};
+const grupoDe = p => GRUPOS[p.categoria] || ["otro", "Despensa"];
+
+function composicion(r) {
+  // Peso aproximado de cada ingrediente; las unidades cuentan como 50 g
+  const partes = r.ingredientes.map(({ p, c }) => ({ g: grupoDe(p), peso: p.unidad === "ud" ? c * 50 : c }))
+    .filter(x => x.peso >= 3);
+  const total = partes.reduce((t, x) => t + x.peso, 0) || 1;
+  return partes.map(x => ({ ...x, frac: x.peso / total }));
+}
+
+function sector(cx, cy, r1, r2, a0, a1) {
+  const p = (r, a) => `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(2)}`;
+  const grande = a1 - a0 > Math.PI ? 1 : 0;
+  return `M${p(r2, a0)}A${r2} ${r2} 0 ${grande} 1 ${p(r2, a1)}L${p(r1, a1)}A${r1} ${r1} 0 ${grande} 0 ${p(r1, a0)}Z`;
+}
+
+function platoSVG(r, tam, nombreTransicion) {
+  let a = -Math.PI / 2;
+  const sectores = composicion(r).map(x => {
+    const a1 = a + x.frac * Math.PI * 2;
+    const hueco = Math.min(0.04, (a1 - a) / 4);
+    const d = sector(50, 50, 13, 35, a + hueco, a1 - hueco);
+    a = a1;
+    return `<path d="${d}" fill="var(--c-${x.g[0]})"/>`;
+  }).join("");
+  const estilo = nombreTransicion ? ` style="view-transition-name:${nombreTransicion}"` : "";
+  return `<svg class="plato-svg" width="${tam}" height="${tam}" viewBox="0 0 100 100" aria-hidden="true"${estilo}>
+    <circle class="borde-plato" cx="50" cy="50" r="47" stroke-width="1"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--linea)" stroke-width="1"/>
+    <g class="giro">${sectores}</g>
+    <circle cx="50" cy="50" r="9" fill="var(--superficie)"/>
+  </svg>`;
+}
+
+function leyendaPlato(r) {
+  const vistos = new Map();
+  composicion(r).forEach(x => vistos.set(x.g[1], (vistos.get(x.g[1]) || 0) + x.frac));
+  return `<div class="leyenda">${[...vistos].sort((a, b) => b[1] - a[1]).map(([nombre, f]) => {
+    const g = Object.values(GRUPOS).find(v => v[1] === nombre) || ["otro"];
+    return `<span><i style="background:var(--c-${g[0]})"></i>${nombre} <span class="num">${Math.round(f * 100)} %</span></span>`;
+  }).join("")}</div>`;
+}
+
+// Resalta los tiempos y temperaturas dentro del texto de un paso
+const resaltarPaso = t => esc(t).replace(/(\d+(?:[-–]\d+)?\s*(?:segundos?|minutos?|min|horas?|°C|ºC|grados))/gi, "<mark>$1</mark>");
+
 // ===== Interfaz =====
 const app = document.getElementById("app");
 function avisar(texto) {
@@ -212,75 +266,129 @@ function avisar(texto) {
   clearTimeout(avisar.t); avisar.t = setTimeout(() => a.classList.remove("visible"), 2800);
 }
 
+// Cuenta hasta un número con una curva suave (para los importes)
+function contar(el, hasta, formato) {
+  const desde = 0, ms = 900, t0 = performance.now();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = formato(hasta); return; }
+  (function paso(ahora) {
+    const k = Math.min(1, (ahora - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = formato(desde + (hasta - desde) * e);
+    if (k < 1) requestAnimationFrame(paso);
+  })(t0);
+}
+
 function pintarMenu(ruta) {
   const enlaces = [["inicio", "Inicio"], ["plan", "Mi plan"], ["recetario", "Recetas"], ["lista", "Compra"]];
   document.getElementById("menu").innerHTML = enlaces
     .filter(([r]) => estado.plan || r === "inicio" || r === "recetario")
-    .map(([r, t]) => `<a href="#${r}" ${ruta === r ? 'aria-current="page"' : ""}>${t}</a>`).join("");
+    .map(([r, t]) => `<a href="#${r}" ${ruta === r || (ruta === "receta" && r === "recetario") ? 'aria-current="page"' : ""}>${t}</a>`).join("");
+}
+
+// Coste del mes más barato en cada súper (1 persona, comida y cena), calculado una vez
+let referencia = null;
+function calcularReferencia() {
+  if (referencia) return referencia;
+  const base = { supers: SUPERS.map(s => s.id), restricciones: [], presupuesto: Infinity, personas: 1, comida: true, cena: true, basicos: false };
+  referencia = SUPERS.map(s => ({ s: s.id, coste: construir(base, [s.id], 7, Infinity).coste })).sort((a, b) => a.coste - b.coste);
+  return referencia;
 }
 
 function pantallaInicio() {
-  const tienePlan = !!estado.plan;
-  return `<section class="pantalla">
+  const ref = calcularReferencia();
+  const presu = estado.perfil ? estado.perfil.presupuesto : 120;
+  return `<section>
     <div class="portada">
       <div>
-        <p class="etiqueta">Tu mes de comidas, resuelto</p>
-        <h1 style="margin-top:12px">30 días de comida casera con <em>${euros(estado.perfil ? estado.perfil.presupuesto : 150).replace(",00", "")}</em></h1>
-        <p class="entradilla">Dinos dónde compras, qué no puedes comer y cuánto quieres gastar. Te damos el menú del mes, cada receta paso a paso y la lista de la compra.</p>
-        <div class="fila" style="flex-wrap:wrap">
-          ${tienePlan ? `<a class="boton" href="#plan">Ver mi plan</a><a class="boton secundario" href="#paso1">Cambiar mis datos</a>`
-                      : `<a class="boton" href="#paso1">Empezar ahora</a><a class="boton secundario" href="#recetario">Ver recetas</a>`}
+        <p class="antetitulo">Planificador de comidas · ${SUPERS.length} supermercados</p>
+        <h1 style="margin-top:16px">Come casero todo el mes por <span class="resalte">${Math.ceil(ref[0].coste)} €</span></h1>
+        <p class="lema">Dinos dónde compras, qué no puedes comer y cuánto quieres gastar. Te damos el menú de 30 días, cada receta explicada paso a paso y la lista de la compra con precios reales.</p>
+        <div class="fila">
+          ${estado.plan ? `<a class="boton marca-b" href="#plan">Ver mi plan <span class="flecha">→</span></a><a class="boton fantasma" href="#paso1">Cambiar mis datos</a>`
+                        : `<a class="boton marca-b" href="#paso1">Crear mi plan <span class="flecha">→</span></a><a class="boton fantasma" href="#recetario">Ver las recetas</a>`}
+        </div>
+        <div class="sellos">
+          <div><strong>${RECETAS.length}</strong><span>recetas para principiantes</span></div>
+          <div><strong>${window.DATOS.productos.reduce((n, p) => n + Object.keys(p.verificado).length, 0)}</strong><span>precios verificados</span></div>
+          <div><strong>0 €</strong><span>sin registro ni anuncios</span></div>
         </div>
       </div>
-      <div class="plato" aria-hidden="true">
-        <span class="comida-plato">🥗</span>
-        <div class="nota n1">${RECETAS.length} recetas<small>pensadas para principiantes</small></div>
-        <div class="nota n2">6 supermercados<small>con precios reales</small></div>
+      <div class="elevada simulador">
+        <canvas class="sombreado" data-colores="claro"></canvas>
+        <p class="antetitulo">Pruébalo · 1 persona, comida y cena</p>
+        <label for="simPresu" class="fila entre" style="margin-top:14px;align-items:baseline">
+          <span class="cifra num" id="simCifra">${presu} €</span><span class="suave">al mes</span>
+        </label>
+        <input type="range" id="simPresu" min="40" max="300" step="5" value="${presu}">
+        <p id="simTexto" class="suave" style="min-height:3em"></p>
+        <div class="semana-muestra" id="simSemana"></div>
+        <div class="comparador">${ref.map(x => `<div class="linea"><span>${SUPER[x.s].nombre}</span>
+          <span class="pista"><i style="width:${Math.round(x.coste * 100 / ref[ref.length - 1].coste)}%"></i></span><span class="num">${euros(x.coste)}</span></div>`).join("")}</div>
+        <p class="suave" style="font-size:.8rem;margin-top:12px">Lo más barato que cuesta un mes completo en cada cadena, con precios de octubre de 2026.</p>
       </div>
     </div>
-    <ol class="pasos-inicio">
-      <li class="tarjeta"><h3>Elige tus supermercados</h3><p class="suave">Mercadona, Dia, Lidl, Aldi, Alcampo o Carrefour.</p></li>
-      <li class="tarjeta"><h3>Marca lo que no comes</h3><p class="suave">Alergias, dieta vegana o vegetariana y dietas por salud.</p></li>
-      <li class="tarjeta"><h3>Pon tu presupuesto</h3><p class="suave">Si no llega, te decimos cuánto haría falta.</p></li>
-    </ol>
+    <div class="como">
+      <div><span class="paso-n">01</span><h3>Elige tus supermercados</h3><p class="suave">Calculamos dónde te sale más barato el mes entero, no producto a producto.</p></div>
+      <div><span class="paso-n">02</span><h3>Marca lo que no comes</h3><p class="suave">Alergias, dieta vegetariana o vegana y dietas por salud como la blanda o la baja en sal.</p></div>
+      <div><span class="paso-n">03</span><h3>Pon tu presupuesto</h3><p class="suave">Si no llega para todo el mes, te decimos cuánto haría falta.</p></div>
+    </div>
   </section>`;
 }
 
-function cabeceraPaso(n, titulo, ayuda) {
-  return `<p class="etiqueta">Paso ${n} de 3</p>
-    <div class="progreso"><span style="width:${n * 33.4}%"></span></div>
-    <h2>${titulo}</h2><p class="suave" style="margin-top:8px">${ayuda}</p>`;
+function simular() {
+  const entrada = document.getElementById("simPresu");
+  if (!entrada) return;
+  const presu = +entrada.value;
+  entrada.style.setProperty("--lleno", ((presu - 40) * 100 / 260) + "%");
+  document.getElementById("simCifra").textContent = presu + " €";
+  const ref = calcularReferencia();
+  const perfil = { supers: [ref[0].s], restricciones: [], presupuesto: presu, personas: 1, comida: true, cena: true, basicos: false };
+  const plan = construir(perfil, [ref[0].s], 11, presu);
+  const huecos = plan.dias.reduce((n, d) => n + Object.values(d).filter(Boolean).length, 0);
+  document.getElementById("simTexto").innerHTML = huecos === 60
+    ? `Te da para <strong>las 60 comidas</strong> del mes en ${SUPER[ref[0].s].nombre} y te sobran <strong class="num">${euros(presu - plan.coste)}</strong> para desayunos y fruta.`
+    : `Llegas a <strong>${huecos} de 60</strong> comidas. Para el mes entero harían falta unos <strong class="num">${euros(ref[0].coste)}</strong>.`;
+  document.getElementById("simSemana").innerHTML = plan.dias.slice(0, 7).map((d, i) => {
+    const id = d.COMIDA || d.CENA;
+    return `<div>${id ? platoSVG(RECETA_POR_ID.get(id), 38) : '<svg width="38" height="38" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--linea-fuerte)" stroke-dasharray="6 6"/></svg>'}${["L", "M", "X", "J", "V", "S", "D"][i]}</div>`;
+  }).join("");
 }
-const casilla = (nombre, valor, marcado, texto, extra = "") =>
-  `<label class="opcion"><input type="checkbox" name="${nombre}" value="${valor}" ${marcado ? "checked" : ""}>${extra}<span>${texto}</span><span class="tic"></span></label>`;
+
+const pasosBarra = n => `<div class="pasos-barra">${[1, 2, 3].map(i => `<i class="${i <= n ? "hecho" : ""}"></i>`).join("")}</div>`;
+const CHECK = '<svg viewBox="0 0 12 12"><path d="M2 6.5l2.5 2.5L10 3"/></svg>';
+const casilla = (nombre, valor, marcado, texto, delante = "", i = 0) =>
+  `<label class="opcion" style="--i:${i}"><input type="checkbox" name="${nombre}" value="${valor}" ${marcado ? "checked" : ""}>${delante}<span>${texto}</span><span class="caja">${CHECK}</span></label>`;
 
 function pantallaPaso1() {
-  return `<section class="pantalla asistente">
-    ${cabeceraPaso(1, "¿Dónde puedes comprar?", "Marca todos los que te vengan bien.")}
-    <div class="opciones">${SUPERS.map(s => casilla("super", s.id, borrador.supers.includes(s.id), s.nombre,
-      `<span class="marca-super" style="background:${s.color}"></span>`)).join("")}</div>
-    <div class="acciones"><a class="boton secundario" href="#inicio">Volver</a><button class="boton" data-ir="paso2">Siguiente</button></div>
+  return `<section class="asistente">
+    <p class="antetitulo">Paso 1 de 3</p>${pasosBarra(1)}
+    <h2>¿Dónde puedes comprar?</h2><p class="suave" style="margin-top:8px">Marca todos los que te queden cerca. Elegimos el que salga más barato para tu plan.</p>
+    <div class="opciones cascada">${SUPERS.map((s, i) => casilla("super", s.id, borrador.supers.includes(s.id), s.nombre,
+      `<span class="logo" style="background:${s.color}">${s.nombre.slice(0, 2).toUpperCase()}</span>`, i)).join("")}</div>
+    <div class="acciones"><a class="boton fantasma" href="#inicio">Volver</a><button class="boton marca-b" data-ir="paso2">Siguiente <span class="flecha">→</span></button></div>
   </section>`;
 }
 
 function pantallaPaso2() {
-  const grupo = (g, titulo) => `<h3 class="grupo-titulo">${titulo}</h3><div class="opciones">${RESTRICCIONES.filter(r => r.grupo === g)
-    .map(r => casilla("restriccion", r.id, borrador.restricciones.includes(r.id), r.nombre)).join("")}</div>`;
-  return `<section class="pantalla asistente">
-    ${cabeceraPaso(2, "¿Hay algo que no puedas comer?", "Si no tienes ninguna restricción, deja todo sin marcar.")}
+  let i = 0;
+  const grupo = (g, titulo) => `<h3 class="grupo-titulo">${titulo}</h3><div class="opciones cascada">${RESTRICCIONES.filter(r => r.grupo === g)
+    .map(r => casilla("restriccion", r.id, borrador.restricciones.includes(r.id), r.nombre, "", i++)).join("")}</div>`;
+  return `<section class="asistente">
+    <p class="antetitulo">Paso 2 de 3</p>${pasosBarra(2)}
+    <h2>¿Hay algo que no puedas comer?</h2><p class="suave" style="margin-top:8px">Si no tienes ninguna restricción, deja todo sin marcar.</p>
     ${grupo("alergias", "Alergias e intolerancias")}${grupo("dieta", "Dieta")}${grupo("salud", "Dietas por salud")}
-    <div class="acciones"><a class="boton secundario" href="#paso1">Atrás</a><button class="boton" data-ir="paso3">Siguiente</button></div>
+    <div class="acciones"><a class="boton fantasma" href="#paso1">Atrás</a><button class="boton marca-b" data-ir="paso3">Siguiente <span class="flecha">→</span></button></div>
   </section>`;
 }
 
 function pantallaPaso3() {
-  return `<section class="pantalla asistente">
-    ${cabeceraPaso(3, "Tu presupuesto", "Solo lo que gastas en el supermercado para comer.")}
-    <label class="campo"><span>Presupuesto al mes</span>
-      <div class="importe"><output id="vPresu">${borrador.presupuesto}</output> € <small>al mes</small></div>
-      <input type="range" id="presu" min="30" max="600" step="5" value="${borrador.presupuesto}">
+  return `<section class="asistente">
+    <p class="antetitulo">Paso 3 de 3</p>${pasosBarra(3)}
+    <h2>Tu presupuesto</h2><p class="suave" style="margin-top:8px">Solo lo que gastas en el supermercado para comer.</p>
+    <label class="campo" for="presu"><span class="etq">Presupuesto al mes</span>
+      <span class="importe"><output id="vPresu">${borrador.presupuesto}</output> € <small>al mes</small></span>
+      <input type="range" id="presu" min="30" max="600" step="5" value="${borrador.presupuesto}" style="--lleno:${(borrador.presupuesto - 30) * 100 / 570}%">
     </label>
-    <div class="campo"><span>Personas que coméis</span>
+    <div class="campo"><span class="etq">Personas que coméis</span>
       <div class="contador"><button type="button" data-personas="-1" aria-label="Una persona menos">−</button><output id="vPersonas">${borrador.personas}</output><button type="button" data-personas="1" aria-label="Una persona más">+</button></div>
     </div>
     <div class="opciones">
@@ -289,8 +397,8 @@ function pantallaPaso3() {
       ${casilla("basicos", 1, borrador.basicos, "Ya tengo aceite, sal y pimentón")}
       ${casilla("unSolo", 1, borrador.unSolo, "Toda la compra en un solo súper")}
     </div>
-    <div id="estimacion" class="estimacion"></div>
-    <div class="acciones"><a class="boton secundario" href="#paso2">Atrás</a><button class="boton" id="generar">Generar mi plan</button></div>
+    <div id="estimacion" class="estimacion" aria-live="polite"></div>
+    <div class="acciones"><a class="boton fantasma" href="#paso2">Atrás</a><button class="boton marca-b" id="generar">Generar mi plan <span class="flecha">→</span></button></div>
   </section>`;
 }
 
@@ -301,7 +409,7 @@ function actualizarEstimacion() {
   caja.classList.toggle("mal", min === null || min > borrador.presupuesto);
   caja.textContent = min === null ? "No hay recetas para todo lo que has marcado. Prueba a elegir más supermercados o quitar alguna restricción."
     : min > borrador.presupuesto ? `El mínimo estimado es ${euros(min)}. Con menos solo podremos planificar parte del mes.`
-    : `Tu presupuesto cubre el mínimo estimado (${euros(min)}).`;
+    : `Tu presupuesto cubre el mínimo estimado, ${euros(min)}.`;
 }
 
 function pantallaPlan() {
@@ -309,56 +417,62 @@ function pantallaPlan() {
   if (!plan) { location.hash = "#inicio"; return ""; }
   const coste = costeCesta(cestaDe(plan.dias, perfil.personas), perfil, plan.supers);
   const distintas = new Set(plan.dias.flatMap(d => Object.values(d)).filter(Boolean)).size;
-  const pct = Math.min(100, Math.round(coste * 100 / perfil.presupuesto));
+  const raciones = plan.dias.reduce((n, d) => n + Object.values(d).filter(Boolean).length, 0) * perfil.personas;
+  const frac = Math.min(1, coste / perfil.presupuesto);
   const semana = pantallaPlan.semana || 0;
-  const desde = semana * 7, hasta = Math.min(30, desde + 7);
-  const sobra = perfil.presupuesto - coste;
-  return `<section class="pantalla">
-    <div class="tarjeta cabecera-plan">
-      <div class="anillo" style="--p:${pct}"><div><div><strong>${euros(coste)}</strong><small>de ${euros(perfil.presupuesto)}</small></div></div></div>
-      <div>
-        <p class="etiqueta">Mi plan del mes</p>
-        <h2 style="margin-top:6px">${plan.supers.length === 1 ? `Toda la compra en ${SUPER[plan.supers[0]].nombre}` : "Cada producto donde sale más barato"}</h2>
-        <p class="suave" style="margin-top:6px">${distintas} recetas distintas · ${personasTexto(perfil.personas)}${sobra > 0 ? ` · te sobran ${euros(sobra)} para desayunos y fruta` : ""}</p>
+  const desde = semana * 7, hasta = semana === 4 ? 30 : desde + 7;
+  const L = 2 * Math.PI * 52;
+  return `<section>
+    <div class="elevada resumen">
+      <div class="medidor">
+        <svg width="124" height="124" viewBox="0 0 124 124"><circle class="fondo-arco" cx="62" cy="62" r="52" fill="none" stroke-width="10"/>
+        <circle class="arco-gasto" cx="62" cy="62" r="52" fill="none" stroke-width="10" stroke-dasharray="${L}" stroke-dashoffset="${L}" data-final="${L * (1 - frac)}"/></svg>
+        <div class="centro"><strong data-contar="${coste}">0 €</strong><small>de ${euros(perfil.presupuesto)}</small></div>
       </div>
-      <div class="acciones-plan fila" style="flex-wrap:wrap">
-        <a class="boton" href="#lista">Lista de la compra</a>
-        <button class="boton secundario" id="otroPlan">Otro plan</button>
+      <div>
+        <p class="antetitulo">Plan de 30 días · ${personasTexto(perfil.personas)}</p>
+        <h2 style="margin-top:8px">${plan.supers.length === 1 ? `Toda la compra en ${SUPER[plan.supers[0]].nombre}` : "Cada producto donde sale más barato"}</h2>
+        <div class="cifras">
+          <div><strong>${distintas}</strong><span>recetas distintas</span></div>
+          <div><strong>${euros(raciones ? coste / raciones : 0)}</strong><span>por ración</span></div>
+          <div><strong>${euros(Math.max(0, perfil.presupuesto - coste))}</strong><span>te sobran</span></div>
+        </div>
+      </div>
+      <div class="acciones-plan fila">
+        <a class="boton marca-b" href="#lista">Lista de la compra</a>
+        <button class="boton fantasma" id="otroPlan">Otro plan</button>
       </div>
     </div>
     ${plan.necesario ? `<div class="alerta">Con ${euros(perfil.presupuesto)} no llega para todo el mes. Necesitarías unos ${euros(plan.necesario)}.</div>` : ""}
     <div class="pestanas" role="tablist">${[0, 1, 2, 3, 4].map(i => `<button role="tab" data-semana="${i}" aria-selected="${i === semana}">${i < 4 ? `Semana ${i + 1}` : "Días 29 y 30"}</button>`).join("")}</div>
-    <div class="dias">${plan.dias.slice(desde, semana === 4 ? 30 : Math.min(hasta, 28)).map((dia, k) => {
-      const n = desde + k + 1;
-      return `<article class="tarjeta dia"><div class="dia-titulo"><h3>Día ${n}</h3></div>
-        ${Object.entries(dia).map(([m, id]) => platoDia(m, id, perfil, plan)).join("")}</article>`;
-    }).join("")}</div>
+    <div class="dias cascada">${plan.dias.slice(desde, hasta).map((dia, k) => `<article class="superficie dia" style="--i:${k}">
+      <div class="dia-cab"><h3>Día ${desde + k + 1}</h3><span class="num">${euros(Object.values(dia).filter(Boolean).reduce((t, id) => t + costeRacion(RECETA_POR_ID.get(id), perfil, plan.supers) * perfil.personas, 0))}</span></div>
+      ${Object.entries(dia).map(([m, id]) => platoDia(m, id, perfil, plan)).join("")}</article>`).join("")}</div>
   </section>`;
 }
 
 function platoDia(momento, id, perfil, plan) {
-  const etiqueta = `<span class="pildora ${momento === "COMIDA" ? "comida" : "cena"}">${momento === "COMIDA" ? "Comida" : "Cena"}</span>`;
-  if (!id) return `<div class="plato-dia vacio">${etiqueta}<span>Sin presupuesto para este hueco</span></div>`;
+  const etiqueta = `<span class="dato ${momento === "COMIDA" ? "comida" : "cena"}">${momento === "COMIDA" ? "Comida" : "Cena"}</span>`;
+  if (!id) return `<div class="hueco-vacio">${etiqueta} Sin presupuesto para este hueco</div>`;
   const r = RECETA_POR_ID.get(id);
-  return `<button class="plato-dia" data-receta="${id}">
-    <span class="ilustracion" aria-hidden="true">${ilustracion(r)}</span>
-    <span><span class="nombre">${esc(r.nombre)}</span><br><span class="datos">${etiqueta} ${r.minutos} min · ${euros(costeRacion(r, perfil, plan.supers))} ración</span></span>
-  </button>`;
+  return `<button class="tarjeta-receta" data-receta="${id}">${platoSVG(r, 52)}
+    <span class="texto"><span class="nombre">${esc(r.nombre)}</span><span class="meta">${etiqueta}<span>${r.minutos} min</span></span></span>
+    <span class="precio">${euros(costeRacion(r, perfil, plan.supers))}</span></button>`;
 }
 
 function pantallaRecetario() {
   const filtro = pantallaRecetario.filtro || "TODAS";
   const lista = RECETAS.filter(r => filtro === "TODAS" || r.tipo === filtro || r.tipo === "AMBAS");
-  return `<section class="pantalla">
-    <p class="etiqueta">Recetario</p><h2 style="margin-top:6px">${RECETAS.length} recetas explicadas para tu primera vez</h2>
+  return `<section>
+    <p class="antetitulo">Recetario</p><h2 style="margin-top:8px">${RECETAS.length} recetas explicadas para tu primera vez</h2>
+    <p class="suave" style="margin-top:8px;max-width:60ch">Cada plato se dibuja con sus ingredientes: el color indica de qué está hecho y el tamaño, cuánto lleva.</p>
     <div class="pestanas">${[["TODAS", "Todas"], ["COMIDA", "Comidas"], ["CENA", "Cenas"]].map(([f, t]) =>
       `<button data-filtro="${f}" aria-selected="${f === filtro}">${t}</button>`).join("")}</div>
-    <div class="dias">${lista.map(r => {
+    <div class="rejilla-recetas cascada">${lista.map((r, i) => {
       const n = nutricion(r);
-      return `<article class="tarjeta dia"><button class="plato-dia" data-receta="${r.id}">
-        <span class="ilustracion" aria-hidden="true">${ilustracion(r)}</span>
-        <span><span class="nombre">${esc(r.nombre)}</span><br><span class="datos">${r.minutos} min · ${Math.round(n.kcal)} kcal</span></span>
-      </button></article>`;
+      return `<button class="superficie ficha" data-receta="${r.id}" style="--i:${Math.min(i, 16)}">${platoSVG(r, 88)}
+        <span class="nombre">${esc(r.nombre)}</span>
+        <span class="meta"><span>${r.minutos} min</span><span class="num">${Math.round(n.kcal)} kcal</span></span></button>`;
     }).join("")}</div>
   </section>`;
 }
@@ -370,44 +484,53 @@ function pantallaReceta(id) {
   const supers = estado.plan ? estado.plan.supers : (perfil.supers.length ? perfil.supers : SUPERS.map(s => s.id));
   const personas = perfil.personas || 1;
   const n = nutricion(r);
-  return `<section class="pantalla">
-    <div class="receta-cabecera">
-      <span class="ilustracion" aria-hidden="true">${ilustracion(r)}</span>
+  const macro = (nombre, g, ref, color) => `<div class="macro"><span>${nombre}</span><span class="pista"><i style="width:${Math.min(100, g * 100 / ref)}%;background:${color}"></i></span><span class="num">${Math.round(g)} g</span></div>`;
+  return `<section>
+    <div class="receta-cab">
+      ${platoSVG(r, 260, "plato-activo")}
       <div>
-        <p class="etiqueta">${r.tipo === "AMBAS" ? "Comida o cena" : r.tipo === "COMIDA" ? "Comida" : "Cena"}</p>
-        <h1 style="font-size:clamp(2rem,4.5vw,3.2rem);margin-top:8px">${esc(r.nombre)}</h1>
-        <div class="chips">
-          <span class="pildora">${r.minutos} min</span><span class="pildora">${personasTexto(personas)}</span>
-          <span class="pildora">${euros(costeRacion(r, perfil, supers))} por ración</span><span class="pildora">${r.pasos.length} pasos</span>
+        <p class="antetitulo">${r.tipo === "AMBAS" ? "Comida o cena" : r.tipo === "COMIDA" ? "Comida" : "Cena"} · ${r.minutos} min · ${r.pasos.length} pasos</p>
+        <h1 style="font-size:clamp(2.1rem,4.6vw,3.6rem);margin-top:12px">${esc(r.nombre)}</h1>
+        ${leyendaPlato(r)}
+        <div class="fila" style="margin-top:26px">
+          <button class="boton marca-b" data-cocinar="${r.id}">Empezar a cocinar <span class="flecha">→</span></button>
+          <span class="suave"><span class="num" style="color:var(--tinta);font-weight:700">${euros(costeRacion(r, perfil, supers))}</span> por ración · ${personasTexto(personas)}</span>
         </div>
-        <button class="boton" style="margin-top:24px" data-cocinar="${r.id}">Empezar a cocinar</button>
       </div>
     </div>
     <div class="columnas">
       <div class="pila">
-        <div class="tarjeta">
+        <div class="superficie bloque">
           <h3>Por ración</h3>
-          <div class="nutricion">
-            <div><strong>${Math.round(n.kcal)}</strong><small>kcal</small></div>
-            <div><strong>${Math.round(n.prot)} g</strong><small>proteínas</small></div>
-            <div><strong>${Math.round(n.hid)} g</strong><small>hidratos</small></div>
-            <div><strong>${Math.round(n.gra)} g</strong><small>grasas</small></div>
+          <div class="kcal"><strong>${Math.round(n.kcal)}</strong><span class="suave">kcal · el ${Math.round(n.kcal / 20)} % de un día</span></div>
+          <div class="macros">
+            ${macro("Proteínas", n.prot, 50, "var(--c-carne)")}
+            ${macro("Hidratos", n.hid, 130, "var(--c-cereal)")}
+            ${macro("Grasas", n.gra, 35, "var(--c-huevo)")}
           </div>
-          <p class="suave" style="margin-top:12px;font-size:.9rem">Unos ${Math.round(n.peso)} g en crudo, el ${Math.round(n.kcal / 20)} % de las calorías de un día. Valores aproximados.</p>
+          <p class="suave" style="margin-top:14px;font-size:.84rem">Barras sobre una referencia de comida principal. Valores aproximados, unos ${Math.round(n.peso)} g en crudo.</p>
         </div>
-        <div class="tarjeta">
+        <div class="superficie bloque">
           <h3>Ingredientes</h3>
           ${r.ingredientes.map(({ p, c }) => {
             const s = mejorSuper(p, supers);
             const donde = perfil.basicos && p.categoria === "Básicos" ? "Ya lo tienes en casa"
               : s ? `${SUPER[s].nombre} · ${euros(p.precios[s])} el envase` : "";
-            return `<label class="ingrediente"><input type="checkbox"><span class="info"><span class="nombre">${esc(p.nombre)}</span><br><span class="donde">${donde}</span></span><span class="cantidad">${cantidad(c * personas, p.unidad)}</span></label>`;
+            return `<label class="ingrediente"><input type="checkbox"><span><span class="nombre">${esc(p.nombre)}</span><span class="donde">${donde}</span></span><span class="cantidad">${cantidad(c * personas, p.unidad)}</span></label>`;
           }).join("")}
         </div>
       </div>
-      <div class="tarjeta"><h3>Preparación</h3><ol class="lista-pasos">${r.pasos.map(p => `<li><span>${esc(p)}</span></li>`).join("")}</ol></div>
+      <div class="superficie bloque"><h3>Preparación</h3><ol class="pasos">${r.pasos.map(p => `<li><span>${resaltarPaso(p)}</span></li>`).join("")}</ol></div>
     </div>
   </section>`;
+}
+
+// Código de barras de adorno a partir de un número (como el del ticket)
+function codigoBarras(semilla) {
+  const rnd = azar(semilla || 7);
+  let x = 0, barras = "";
+  while (x < 200) { const w = 1 + Math.floor(rnd() * 3); if (rnd() > .35) barras += `<rect x="${x}" y="0" width="${w}" height="44"/>`; x += w + 1; }
+  return `<svg class="codigo" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">${barras}</svg>`;
 }
 
 function pantallaLista() {
@@ -417,45 +540,60 @@ function pantallaLista() {
   const total = lineas.reduce((t, l) => t + l.total, 0);
   const hechos = lineas.filter(l => estado.comprados.includes(l.p.id)).length;
   const comparacion = compararSupers(plan, perfil);
-  const caro = comparacion.length ? comparacion[comparacion.length - 1].coste : 1;
   const grupos = [...new Set(lineas.map(l => l.s))];
-  return `<section class="pantalla">
-    <div class="tarjeta">
-      <div class="fila entre"><div><p class="etiqueta">Lista de la compra</p><h2 style="margin-top:6px">${euros(total)} en total</h2></div>
-      <button class="boton secundario" id="copiar">Copiar lista</button></div>
-      <p class="suave" style="margin-top:8px" id="contador">${hechos} de ${lineas.length} productos comprados</p>
-      <div class="progreso" style="margin-bottom:0"><span id="barraCompra" style="width:${lineas.length ? hechos * 100 / lineas.length : 0}%"></span></div>
+  const verificados = lineas.filter(l => l.p.verificado[l.s]).length;
+  const hoy = new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return `<section>
+    <div class="fila entre" style="align-items:end">
+      <div><p class="antetitulo">Lista de la compra</p><h2 style="margin-top:8px">${lineas.length} productos para 30 días</h2></div>
+      <button class="boton fantasma" id="copiar">Copiar lista</button>
     </div>
-    ${comparacion.length > 1 ? `<div class="tarjeta comparacion" style="margin-top:16px"><h3>Este mismo plan en tus supermercados</h3>
-      ${comparacion.map((x, i) => `<div class="barra-super ${i === 0 ? "ganador" : ""}"><span>${SUPER[x.s].nombre}</span>
-        <span class="pista"><span data-ancho="${Math.round(x.coste * 100 / caro)}"></span></span>
-        <span>${i === 0 ? euros(x.coste) : "+" + euros(x.coste - comparacion[0].coste)}</span></div>`).join("")}</div>` : ""}
-    ${grupos.map(s => `<div class="tarjeta grupo-super">
-      <div class="fila entre"><h3><span class="punto" style="background:${SUPER[s].color}"></span>${SUPER[s].nombre}</h3>
-      <strong>${euros(lineas.filter(l => l.s === s).reduce((t, l) => t + l.total, 0))}</strong></div>
-      ${lineas.filter(l => l.s === s).map(l => `<label class="producto"><input type="checkbox" data-comprado="${l.p.id}" ${estado.comprados.includes(l.p.id) ? "checked" : ""}>
-        <span><span class="nombre">${esc(l.p.nombre)}</span><small>${l.envases} × ${cantidad(l.p.envase, l.p.unidad)} · necesitas ${cantidad(l.q, l.p.unidad)}${l.p.verificado[s] ? ' · <span class="verificado">precio verificado</span>' : " · precio estimado"}</small></span>
-        <span class="precio">${euros(l.total)}</span></label>`).join("")}
-    </div>`).join("")}
-    ${perfil.basicos ? '<p class="suave" style="margin-top:16px">Sin aceite, sal ni pimentón: ya los tienes en casa.</p>' : ""}
+    <p class="suave" style="margin-top:10px" id="contador">${hechos} de ${lineas.length} comprados</p>
+    <div class="progreso-compra"><i id="barraCompra" style="width:${lineas.length ? hechos * 100 / lineas.length : 0}%"></i></div>
+    <div class="compra" style="margin-top:24px">
+      <div>${grupos.map(s => `<div class="superficie grupo-super">
+        <div class="cab"><h3><span class="logo" style="width:26px;height:26px;border-radius:6px;display:grid;place-items:center;color:#fff;font:800 .72rem var(--f-titulo);background:${SUPER[s].color}">${SUPER[s].nombre.slice(0, 2).toUpperCase()}</span>${SUPER[s].nombre}</h3>
+        <span class="precio">${euros(lineas.filter(l => l.s === s).reduce((t, l) => t + l.total, 0))}</span></div>
+        ${lineas.filter(l => l.s === s).map(l => `<label class="producto"><input type="checkbox" data-comprado="${l.p.id}" ${estado.comprados.includes(l.p.id) ? "checked" : ""}>
+          <span><span class="nombre">${esc(l.p.nombre)}</span><small>${l.envases} × ${cantidad(l.p.envase, l.p.unidad)} · necesitas ${cantidad(l.q, l.p.unidad)}${l.p.verificado[s] ? ' · <span class="verificado">precio verificado</span>' : ""}</small></span>
+          <span class="precio">${euros(l.total)}</span></label>`).join("")}
+      </div>`).join("")}</div>
+      <aside class="ticket" aria-label="Resumen de la compra">
+        <div class="ticket-papel"></div>
+        <div class="centro"><div class="tienda">PickEats</div><div class="suave">Compra del mes · ${hoy}</div></div>
+        <hr>
+        ${grupos.map(s => `<div class="renglon"><span>${SUPER[s].nombre.toUpperCase()}</span><span class="relleno"></span><span>${euros(lineas.filter(l => l.s === s).reduce((t, l) => t + l.total, 0))}</span></div>`).join("")}
+        ${perfil.basicos ? '<div class="renglon"><span>BÁSICOS EN CASA</span><span class="relleno"></span><span>0,00 €</span></div>' : ""}
+        <hr>
+        <div class="renglon total"><span>TOTAL</span><span class="relleno"></span><span>${euros(total)}</span></div>
+        <div class="renglon"><span>PRESUPUESTO</span><span class="relleno"></span><span>${euros(perfil.presupuesto)}</span></div>
+        <div class="renglon"><span>TE SOBRA</span><span class="relleno"></span><span>${euros(Math.max(0, perfil.presupuesto - total))}</span></div>
+        ${comparacion.length > 1 ? `<div class="seccion">Mismo carro en otros súper</div>
+          ${comparacion.map(x => `<div class="renglon"><span>${SUPER[x.s].nombre}</span><span class="relleno"></span><span>${x === comparacion[0] ? euros(x.coste) : "+" + euros(x.coste - comparacion[0].coste)}</span></div>`).join("")}` : ""}
+        <hr>
+        <div class="centro suave">${verificados} de ${lineas.length} precios verificados<br>en webs oficiales y RadarSuper</div>
+        ${codigoBarras(plan.semilla)}
+        <div class="centro suave" style="letter-spacing:.3em">${String(plan.semilla).padStart(8, "0")}</div>
+      </aside>
+    </div>
   </section>`;
 }
 
 // ===== Modo cocina =====
 let cocina = null;
 function abrirCocina(id) {
-  const r = RECETA_POR_ID.get(+id);
-  cocina = { r, paso: 0, fin: false, restante: 0, total: 0, t: null };
+  cocina = { r: RECETA_POR_ID.get(+id), paso: 0, fin: false, restante: 0, total: 0, t: null };
   const capa = document.getElementById("cocina");
   capa.hidden = false;
   document.body.style.overflow = "hidden";
   pintarCocina();
-  if (navigator.wakeLock) navigator.wakeLock.request("screen").then(w => { cocina.bloqueo = w; }).catch(() => {});
+  if (navigator.wakeLock) navigator.wakeLock.request("screen").then(w => { if (cocina) cocina.bloqueo = w; }).catch(() => {});
 }
 function cerrarCocina() {
   if (!cocina) return;
   clearInterval(cocina.t);
-  if (cocina.bloqueo) cocina.bloqueo.release();
+  if (cocina.bloqueo) cocina.bloqueo.release().catch(() => {});
+  if (cocina.pararFondo) cocina.pararFondo();
   cocina = null;
   document.getElementById("cocina").hidden = true;
   document.body.style.overflow = "";
@@ -465,32 +603,40 @@ function pintarCocina() {
   const n = c.r.pasos.length;
   clearInterval(c.t); c.t = null;
   if (!c.fin) { c.total = segundosDe(c.r.pasos[c.paso]); c.restante = c.total; }
-  capa.innerHTML = `<div class="arriba"><div><p class="etiqueta" style="color:#F4C9A8">${c.fin ? "Listo" : `Paso ${c.paso + 1} de ${n}`}</p>
+  const L = 2 * Math.PI * 40;
+  if (!capa.querySelector("canvas")) {
+    capa.innerHTML = '<canvas class="sombreado"></canvas><div class="contenido" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>';
+    c.pararFondo = window.iniciarFondo ? window.iniciarFondo(capa.querySelector("canvas"), ["#0E1A14", "#15382A", "#3A2A10"], .02) : null;
+  } else if (!c.pararFondo && window.iniciarFondo) {
+    c.pararFondo = window.iniciarFondo(capa.querySelector("canvas"), ["#0E1A14", "#15382A", "#3A2A10"], .02);
+  }
+  capa.querySelector(".contenido").innerHTML = `<div class="arriba"><div><p class="antetitulo">${c.fin ? "Listo" : `Paso ${c.paso + 1} de ${n}`}</p>
       <h3 style="margin-top:4px">${esc(c.r.nombre)}</h3></div><button class="cerrar" data-cocina="cerrar" aria-label="Cerrar modo cocina">✕</button></div>
-    <div class="barra-pasos"><span style="width:${c.fin ? 100 : (c.paso + 1) * 100 / n}%"></span></div>
-    <div class="paso" key="${c.paso}"><div class="numero">${c.fin ? "✓" : c.paso + 1}</div>
-      ${c.fin ? "Plato terminado. Sírvelo recién hecho y que aproveche." : esc(c.r.pasos[c.paso])}</div>
-    ${!c.fin && c.total ? `<div class="reloj" id="reloj">
-      <svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="46" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="8"/>
-      <circle id="arco" cx="52" cy="52" r="46" fill="none" stroke="#F4C9A8" stroke-width="8" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="0"/></svg>
-      <div><div class="tiempo" id="tiempo">${reloj(c.total)}</div><p style="opacity:.85">Este paso lleva su tiempo. Pon el temporizador y te avisamos.</p>
-      <button class="boton claro" style="margin-top:8px" data-cocina="reloj">Iniciar ${reloj(c.total)}</button></div></div>` : ""}
+    <div class="segmentos">${c.r.pasos.map((_, i) => `<i class="${c.fin || i <= c.paso ? "hecho" : ""}"></i>`).join("")}</div>
+    <div class="paso"><span class="n">${c.fin ? "✓" : String(c.paso + 1).padStart(2, "0")}</span>
+      <p>${c.fin ? "Plato terminado. Sírvelo recién hecho y que aproveche." : esc(c.r.pasos[c.paso])}</p>
+      ${!c.fin && c.total ? `<div class="reloj" id="reloj">
+        <svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="40" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="6"/>
+        <circle id="arco" cx="46" cy="46" r="40" fill="none" stroke="#F2B55A" stroke-width="6" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="0"/></svg>
+        <div><div class="tiempo num" id="tiempo">${reloj(c.total)}</div><p style="opacity:.75;font-size:.95rem">Pon el temporizador y te avisamos con un sonido.</p>
+        <button class="boton claro" style="margin-top:10px;min-height:42px" data-cocina="reloj">Iniciar ${reloj(c.total)}</button></div></div>` : ""}
+    </div>
     <div class="abajo"><button class="boton contorno" data-cocina="atras" ${c.paso === 0 && !c.fin ? "disabled" : ""}>Anterior</button>
-      <button class="boton claro" data-cocina="${c.fin ? "cerrar" : "siguiente"}">${c.fin ? "Volver a la receta" : c.paso === n - 1 ? "¡Terminado!" : "Siguiente"}</button></div>`;
+      <button class="boton claro" data-cocina="${c.fin ? "cerrar" : "siguiente"}">${c.fin ? "Volver a la receta" : c.paso === n - 1 ? "Terminar" : "Siguiente"}</button></div>`;
+  if (c.fin) confeti();
 }
 function alternarReloj(boton) {
-  const c = cocina;
+  const c = cocina, L = 2 * Math.PI * 40;
   if (c.t) { clearInterval(c.t); c.t = null; boton.textContent = "Seguir"; return; }
   if (c.restante <= 0) c.restante = c.total;
   boton.textContent = "Pausar";
-  let ultimo = Date.now(), acumulado = 0;
+  let fin = Date.now() + c.restante * 1000;
   c.t = setInterval(() => {
-    const ahora = Date.now(); acumulado += ahora - ultimo; ultimo = ahora;
-    if (acumulado >= 1000) { c.restante -= Math.floor(acumulado / 1000); acumulado %= 1000; }
-    document.getElementById("tiempo").textContent = reloj(Math.max(0, c.restante));
-    document.getElementById("arco").setAttribute("stroke-dashoffset", String(289 * (1 - Math.max(0, c.restante) / c.total)));
+    c.restante = Math.max(0, Math.ceil((fin - Date.now()) / 1000));
+    document.getElementById("tiempo").textContent = reloj(c.restante);
+    document.getElementById("arco").setAttribute("stroke-dashoffset", String(L * (1 - (fin - Date.now()) / (c.total * 1000))));
     if (c.restante <= 0) { clearInterval(c.t); c.t = null; boton.textContent = `Iniciar ${reloj(c.total)}`; finTiempo(); }
-  }, 200);
+  }, 100);
 }
 function finTiempo() {
   document.getElementById("reloj").classList.add("sonando");
@@ -499,41 +645,68 @@ function finTiempo() {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     [0, .35, .7].forEach(t => {
       const o = ctx.createOscillator(), g = ctx.createGain();
-      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
-      g.gain.setValueAtTime(.25, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .3);
-      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .3);
+      o.type = "sine"; o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(.0001, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.25, ctx.currentTime + t + .02);
+      g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + t + .3);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .32);
     });
   } catch (e) { /* sin sonido */ }
   avisar("¡Tiempo! Mira cómo va antes de seguir.");
 }
 
+// Confeti con física simple en un canvas (papelitos que giran y caen)
 function confeti() {
-  const colores = ["#3E6A4F", "#A94E27", "#F4E3B5", "#F7E2D5", "#9FC9A9"];
-  for (let i = 0; i < 60; i++) {
-    const c = document.createElement("span");
-    c.className = "confeti";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.background = colores[i % colores.length];
-    c.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
-    c.style.animationDelay = Math.random() * .5 + "s";
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 4200);
-  }
-  avisar("¡Compra completada! Ya tienes todo lo del mes.");
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.createElement("canvas");
+  cv.id = "confeti"; document.body.appendChild(cv);
+  const ctx = cv.getContext("2d"), dpr = devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.scale(dpr, dpr);
+  const colores = ["#1D5B44", "#E9A23B", "#C8462E", "#5E9654", "#6F98AE", "#F0C64B"];
+  const trozos = Array.from({ length: 140 }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 200, y: innerHeight * .35,
+    vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, g: .32 + Math.random() * .1,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, a: Math.random() * 6, va: (Math.random() - .5) * .3,
+    c: colores[Math.floor(Math.random() * colores.length)],
+  }));
+  const t0 = performance.now();
+  (function cuadro(ahora) {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (const t of trozos) {
+      t.vx *= .985; t.vy = t.vy * .985 + t.g; t.x += t.vx; t.y += t.vy; t.a += t.va;
+      ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.a); ctx.scale(1, Math.cos(t.a * 2));
+      ctx.fillStyle = t.c; ctx.fillRect(-t.w / 2, -t.h / 2, t.w, t.h); ctx.restore();
+    }
+    if (ahora - t0 < 3200) requestAnimationFrame(cuadro); else cv.remove();
+  })(t0);
 }
 
 // ===== Rutas y eventos =====
+let pararFondoPortada = null;
 function pintar() {
   const [ruta, arg] = (location.hash.slice(1) || "inicio").split("/");
   const pantallas = { inicio: pantallaInicio, paso1: pantallaPaso1, paso2: pantallaPaso2, paso3: pantallaPaso3,
     plan: pantallaPlan, recetario: pantallaRecetario, receta: () => pantallaReceta(arg), lista: pantallaLista };
+  if (pararFondoPortada) { pararFondoPortada(); pararFondoPortada = null; }
   app.innerHTML = (pantallas[ruta] || pantallaInicio)();
   pintarMenu(ruta);
   if (ruta === "paso3") actualizarEstimacion();
-  if (ruta === "lista") requestAnimationFrame(() => document.querySelectorAll("[data-ancho]").forEach(b => { b.style.width = b.dataset.ancho + "%"; }));
-  window.scrollTo(0, 0);
+  if (ruta === "inicio" || !pantallas[ruta]) {
+    simular();
+    const cv = app.querySelector("canvas.sombreado");
+    const oscuro = getComputedStyle(document.documentElement).getPropertyValue("--superficie").trim().toLowerCase() !== "#ffffff";
+    if (cv && window.iniciarFondo) pararFondoPortada = window.iniciarFondo(cv, oscuro ? ["#1A201C", "#173126", "#2E2410"] : ["#FFFFFF", "#EAF2EC", "#FBEFD9"], .015);
+  }
+  app.querySelectorAll("[data-contar]").forEach(el => contar(el, +el.dataset.contar, euros));
+  requestAnimationFrame(() => app.querySelectorAll("[data-final]").forEach(a => a.setAttribute("stroke-dashoffset", a.dataset.final)));
 }
-window.addEventListener("hashchange", () => { cerrarCocina(); pintar(); });
+
+// Cambio de pantalla con View Transitions cuando el navegador las tiene
+function conTransicion(fn) {
+  if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.startViewTransition(() => { fn(); window.scrollTo(0, 0); });
+  } else { fn(); window.scrollTo(0, 0); }
+}
+window.addEventListener("hashchange", () => { cerrarCocina(); conTransicion(pintar); });
 
 function leerFormulario() {
   const marcados = n => [...document.querySelectorAll(`input[name=${n}]:checked`)].map(i => i.value);
@@ -553,9 +726,9 @@ app.addEventListener("change", e => {
     guardar();
     const total = listaCompra(estado.plan, estado.perfil).length;
     const hechos = estado.comprados.length;
-    document.getElementById("contador").textContent = `${hechos} de ${total} productos comprados`;
+    document.getElementById("contador").textContent = `${hechos} de ${total} comprados`;
     document.getElementById("barraCompra").style.width = hechos * 100 / total + "%";
-    if (e.target.checked && hechos >= total) confeti();
+    if (e.target.checked && hechos >= total) { confeti(); avisar("Compra completada. Ya tienes todo lo del mes."); }
   }
   actualizarEstimacion();
 });
@@ -563,9 +736,11 @@ app.addEventListener("change", e => {
 app.addEventListener("input", e => {
   if (e.target.id === "presu") {
     borrador.presupuesto = +e.target.value;
+    e.target.style.setProperty("--lleno", (borrador.presupuesto - 30) * 100 / 570 + "%");
     document.getElementById("vPresu").textContent = borrador.presupuesto;
     clearTimeout(app.t); app.t = setTimeout(actualizarEstimacion, 120);
   }
+  if (e.target.id === "simPresu") { cancelAnimationFrame(app.sim); app.sim = requestAnimationFrame(simular); }
 });
 
 app.addEventListener("click", e => {
@@ -589,16 +764,21 @@ app.addEventListener("click", e => {
   if (b.id === "otroPlan") {
     estado.plan = generarPlan(estado.perfil, estado.plan.semilla + 7919);
     estado.comprados = [];
-    guardar(); pintar(); avisar("Nuevo plan generado.");
+    guardar(); conTransicion(pintar); avisar("Nuevo plan generado.");
   }
-  if (b.dataset.semana) { pantallaPlan.semana = +b.dataset.semana; pintar(); }
-  if (b.dataset.filtro) { pantallaRecetario.filtro = b.dataset.filtro; pintar(); }
-  if (b.dataset.receta) location.hash = "#receta/" + b.dataset.receta;
+  if (b.dataset.semana) { pantallaPlan.semana = +b.dataset.semana; conTransicion(pintar); }
+  if (b.dataset.filtro) { pantallaRecetario.filtro = b.dataset.filtro; conTransicion(pintar); }
+  if (b.dataset.receta) {
+    // El plato pulsado "vuela" hasta la cabecera de la receta
+    const svg = b.querySelector(".plato-svg");
+    if (svg) svg.style.viewTransitionName = "plato-activo";
+    location.hash = "#receta/" + b.dataset.receta;
+  }
   if (b.dataset.cocinar) abrirCocina(b.dataset.cocinar);
   if (b.id === "copiar") {
     const lineas = listaCompra(estado.plan, estado.perfil);
     const texto = "Lista de la compra (PickEats)\n" + lineas.map(l => `- ${l.p.nombre}: ${l.envases} × ${cantidad(l.p.envase, l.p.unidad)} en ${SUPER[l.s].nombre} (${euros(l.total)})`).join("\n");
-    navigator.clipboard.writeText(texto).then(() => avisar("Lista copiada."), () => avisar("No se pudo copiar."));
+    navigator.clipboard.writeText(texto).then(() => avisar("Lista copiada."), () => avisar("No se pudo copiar. Selecciona el texto a mano."));
   }
 });
 
