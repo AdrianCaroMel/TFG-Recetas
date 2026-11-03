@@ -10,6 +10,15 @@ Antes de tocar layouts, colores, textos o iconos, lee [docs/08-referencias-disen
 - Nada de emojis en títulos, glassmorphism, tarjetas con borde de color ni textos genéricos de marketing.
 - Márgenes en múltiplos de 4/8 dp y contraste suficiente en modo oscuro.
 
+## Skills instaladas (`.claude/skills`)
+
+- `frontend-design`: dirección visual que no parezca plantilla. Usar al rediseñar pantallas.
+- `grill-me` / `grilling`: entrevista para afinar una idea antes de programarla (se lanza con `/grill-me`).
+- `find-skills`: buscar más skills con `npx skills find`.
+- `design-mobile-apps`: diseño de pantallas con Sleek (necesita `SLEEK_API_KEY`; implementa en React Native/HTML, así que en esta app sirve como referencia visual).
+- `agent-browser`: automatizar el navegador (necesita `npm i -g agent-browser`).
+- `media-use`: medios para vídeos HyperFrames (necesita `npx hyperframes`); útil para el vídeo de presentación del TFG.
+
 ## Código
 
 - Java sin lambdas (clases anónimas), métodos pocos y claros, comentarios de una línea que digan qué hace cada parte.
