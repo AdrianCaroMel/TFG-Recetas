@@ -79,24 +79,35 @@ public class CocinaActivity extends BaseActivity {
         btnSiguiente = findViewById(R.id.btnSiguiente);
         progreso.setMax(pasos.size());
 
-        btnAnterior.setOnClickListener(v -> {
-            if (terminado) {
-                terminado = false;
-                mostrar(pasos.size() - 1, -1);
-            } else if (paso > 0) {
-                mostrar(paso - 1, -1);
+        btnAnterior.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (terminado) {
+                    terminado = false;
+                    mostrar(pasos.size() - 1, -1);
+                } else if (paso > 0) {
+                    mostrar(paso - 1, -1);
+                }
             }
         });
-        btnSiguiente.setOnClickListener(v -> {
-            if (terminado) {
-                finish();
-            } else if (paso < pasos.size() - 1) {
-                mostrar(paso + 1, 1);
-            } else {
-                mostrarFinal();
+        btnSiguiente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (terminado) {
+                    finish();
+                } else if (paso < pasos.size() - 1) {
+                    mostrar(paso + 1, 1);
+                } else {
+                    mostrarFinal();
+                }
             }
         });
-        btnTemporizador.setOnClickListener(v -> alternarTemporizador());
+        btnTemporizador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alternarTemporizador();
+            }
+        });
 
         int inicial = savedInstanceState == null ? 0 : savedInstanceState.getInt(ESTADO_PASO, 0);
         mostrar(Math.min(inicial, pasos.size() - 1), 0);
@@ -143,7 +154,7 @@ public class CocinaActivity extends BaseActivity {
         terminado = true;
         zonaTemporizador.setVisibility(View.GONE);
         tvPaso.setText(R.string.cocina_listo);
-        tvNumero.setText("🎉");
+        tvNumero.setText("✓");
         tvTexto.setText(R.string.cocina_final);
         btnAnterior.setEnabled(true);
         btnSiguiente.setText(R.string.cocina_volver);
@@ -204,9 +215,12 @@ public class CocinaActivity extends BaseActivity {
         if (sonido != null) {
             sonido.play();
         }
-        tarjeta.animate().scaleX(1.05f).scaleY(1.05f).setDuration(180).withEndAction(() ->
-                tarjeta.animate().scaleX(1f).scaleY(1f).setDuration(260)
-                        .setInterpolator(new OvershootInterpolator(3f)).start()).start();
+        tarjeta.animate().scaleX(1.05f).scaleY(1.05f).setDuration(180).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                tarjeta.animate().scaleX(1f).scaleY(1f).setDuration(260) .setInterpolator(new OvershootInterpolator(3f)).start();
+            }
+        }).start();
         Snackbar.make(findViewById(R.id.raiz), R.string.cocina_fin_tiempo, Snackbar.LENGTH_LONG).show();
     }
 }

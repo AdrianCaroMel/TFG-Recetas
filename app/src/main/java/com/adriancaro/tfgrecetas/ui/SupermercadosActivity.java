@@ -1,5 +1,6 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.view.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -46,20 +47,23 @@ public class SupermercadosActivity extends BaseActivity {
             chips.add(anadirChip(grupo, s.getNombreVisible(), perfil.getSupermercados().contains(s)));
         }
 
-        btnSiguiente.setOnClickListener(v -> {
-            List<Supermercado> elegidos = new ArrayList<Supermercado>();
-            for (int i = 0; i < chips.size(); i++) {
-                if (chips.get(i).isChecked()) {
-                    elegidos.add(Supermercado.values()[i]);
+        btnSiguiente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Supermercado> elegidos = new ArrayList<Supermercado>();
+                for (int i = 0; i < chips.size(); i++) {
+                    if (chips.get(i).isChecked()) {
+                        elegidos.add(Supermercado.values()[i]);
+                    }
                 }
+                if (elegidos.isEmpty()) {
+                    Snackbar.make(v, R.string.error_supermercado, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+                perfil.setSupermercados(elegidos);
+                PerfilStorage.guardar(SupermercadosActivity.this, perfil);
+                startActivity(new Intent(SupermercadosActivity.this, RestriccionesActivity.class));
             }
-            if (elegidos.isEmpty()) {
-                Snackbar.make(v, R.string.error_supermercado, Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            perfil.setSupermercados(elegidos);
-            PerfilStorage.guardar(this, perfil);
-            startActivity(new Intent(this, RestriccionesActivity.class));
         });
     }
 }

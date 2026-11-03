@@ -29,7 +29,7 @@ Si el presupuesto no da para el mes entero, la app lo avisa y dice cuánto harí
 |---|---|
 | `main` / `version-limpia-simple` | Versión limpia: plan, recetas, lista de la compra y precios reales. |
 | `version-fancy` | Más colores, animaciones, recetario, consejos y dietas por enfermedad. |
-| `Max` | Todo lo de la fancy y además: **modo cocina** paso a paso con temporizadores (vibra y suena), pantalla siempre encendida, **dónde comprar cada ingrediente** y a qué precio, ingredientes que se marcan al prepararlos y celebración al completar la compra. |
+| `Max` | Todo lo de la fancy y además: **modo cocina** paso a paso con temporizadores (vibra y suena), pantalla siempre encendida, **dónde comprar cada ingrediente** y a qué precio, ingredientes que se marcan al prepararlos y celebración al completar la compra. Estilo **minimalismo cálido** (crema, verde salvia y terracota, sin degradados ni emojis en los textos), siguiendo [docs/08](docs/08-referencias-diseno-ui.md). |
 
 ## Estructura
 

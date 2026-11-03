@@ -1,5 +1,7 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.widget.CompoundButton;
+import android.view.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -81,12 +83,42 @@ public class PresupuestoActivity extends BaseActivity {
         swBasicos.setChecked(perfil.isTengoBasicos());
         swUnSolo.setChecked(perfil.isUnSoloSupermercado());
 
-        btnMenos.setOnClickListener(v -> cambiarPersonas(-1));
-        btnMas.setOnClickListener(v -> cambiarPersonas(+1));
-        chipComida.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
-        chipCena.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
-        swBasicos.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
-        swUnSolo.setOnCheckedChangeListener((b, marcado) -> recalcularMinimo());
+        btnMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarPersonas(-1);
+            }
+        });
+        btnMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarPersonas(+1);
+            }
+        });
+        chipComida.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton b, boolean marcado) {
+                recalcularMinimo();
+            }
+        });
+        chipCena.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton b, boolean marcado) {
+                recalcularMinimo();
+            }
+        });
+        swBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton b, boolean marcado) {
+                recalcularMinimo();
+            }
+        });
+        swUnSolo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton b, boolean marcado) {
+                recalcularMinimo();
+            }
+        });
         etPresupuesto.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -101,7 +133,12 @@ public class PresupuestoActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.btnGenerar).setOnClickListener(v -> generar());
+        findViewById(R.id.btnGenerar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generar();
+            }
+        });
         cambiarPersonas(0);
     }
 

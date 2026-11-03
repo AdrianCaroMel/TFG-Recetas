@@ -62,16 +62,24 @@ public class MainActivity extends BaseActivity {
                 ConsejosActivity.class, false);
 
         // Boton principal: empezar o ver el plan
-        btnPrincipal.setOnClickListener(v -> {
-            if (PerfilStorage.estaCompleto(this)) {
-                startActivity(new Intent(this, PlanActivity.class));
-            } else {
-                startActivity(new Intent(this, SupermercadosActivity.class));
+        btnPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PerfilStorage.estaCompleto(MainActivity.this)) {
+                    startActivity(new Intent(MainActivity.this, PlanActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, SupermercadosActivity.class));
+                }
             }
         });
 
         // Volver a rellenar los pasos
-        btnCambiarDatos.setOnClickListener(v -> startActivity(new Intent(this, SupermercadosActivity.class)));
+        btnCambiarDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SupermercadosActivity.class));
+            }
+        });
 
         prepararFondoAnimado();
     }
@@ -91,9 +99,12 @@ public class MainActivity extends BaseActivity {
         animacionFondo.setDuration(8000);
         animacionFondo.setRepeatMode(ValueAnimator.REVERSE);
         animacionFondo.setRepeatCount(ValueAnimator.INFINITE);
-        animacionFondo.addUpdateListener(a -> {
-            float f = (Float) a.getAnimatedValue();
-            fondo.setColors(new int[]{(Integer) mezcla.evaluate(f, a1, a2), (Integer) mezcla.evaluate(f, b1, b2)});
+        animacionFondo.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator a) {
+                float f = (Float) a.getAnimatedValue();
+                fondo.setColors(new int[]{(Integer) mezcla.evaluate(f, a1, a2), (Integer) mezcla.evaluate(f, b1, b2)});
+            }
         });
     }
 
@@ -149,16 +160,21 @@ public class MainActivity extends BaseActivity {
             tvTitulo.setTextColor(blanco);
             tvSub.setTextColor(blanco);
         }
-        acceso.setOnClickListener(v -> startActivity(new Intent(this, pantalla)));
+        acceso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, pantalla));
+            }
+        });
     }
 
     private String resumenPerfil(PerfilUsuario perfil) {
         StringBuilder texto = new StringBuilder();
-        texto.append("💶 ").append(Formato.euros(perfil.getPresupuesto())).append(" al mes · ")
+        texto.append(Formato.euros(perfil.getPresupuesto())).append(" al mes · ")
                 .append(Formato.personas(this, perfil.getPersonas()));
-        texto.append("\n🛒 ").append(Formato.lista(perfil.getSupermercados()));
+        texto.append("\n").append(Formato.lista(perfil.getSupermercados()));
         if (!perfil.getRestricciones().isEmpty()) {
-            texto.append("\n🥗 ");
+            texto.append("\n");
             for (int i = 0; i < perfil.getRestricciones().size(); i++) {
                 Restriccion r = perfil.getRestricciones().get(i);
                 texto.append(i == 0 ? r.getNombreVisible() : r.getNombreVisible().toLowerCase(Locale.ROOT));

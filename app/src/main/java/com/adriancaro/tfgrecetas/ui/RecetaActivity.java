@@ -67,11 +67,11 @@ public class RecetaActivity extends BaseActivity {
 
         // Datos rapidos: tiempo, personas y precio por racion
         ChipGroup grupoInfo = findViewById(R.id.grupoInfo);
-        anadirInfo(grupoInfo, "⏱ " + getString(R.string.minutos, receta.getMinutos()));
-        anadirInfo(grupoInfo, "👥 " + Formato.personas(this, personas));
-        anadirInfo(grupoInfo, "💶 " + getString(R.string.por_racion,
+        anadirInfo(grupoInfo, getString(R.string.minutos, receta.getMinutos()));
+        anadirInfo(grupoInfo, Formato.personas(this, personas));
+        anadirInfo(grupoInfo, getString(R.string.por_racion,
                 Formato.euros(new CestaCompra(perfil).costeRacion(receta))));
-        anadirInfo(grupoInfo, "📋 " + getResources().getQuantityString(R.plurals.pasos,
+        anadirInfo(grupoInfo, getResources().getQuantityString(R.plurals.pasos,
                 receta.getPasos().size(), receta.getPasos().size()));
 
         // Nutricion de una racion (las cantidades de la receta son por persona)
@@ -106,21 +106,27 @@ public class RecetaActivity extends BaseActivity {
                 tvDonde.setVisibility(View.GONE);
             }
             MaterialCheckBox cb = fila.findViewById(R.id.cbIngrediente);
-            fila.setOnClickListener(v -> {
-                boolean marcado = !cb.isChecked();
-                cb.setChecked(marcado);
-                tvNombre.setPaintFlags(marcado
-                        ? tvNombre.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-                        : tvNombre.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                fila.animate().alpha(marcado ? 0.5f : 1f).setDuration(200).start();
+            fila.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean marcado = !cb.isChecked();
+                    cb.setChecked(marcado);
+                    tvNombre.setPaintFlags(marcado
+                            ? tvNombre.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                            : tvNombre.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                    fila.animate().alpha(marcado ? 0.5f : 1f).setDuration(200).start();
+                }
             });
             contenedorIngredientes.addView(fila);
         }
 
-        findViewById(R.id.btnCocina).setOnClickListener(v -> {
-            Intent intent = new Intent(this, CocinaActivity.class);
-            intent.putExtra(EXTRA_ID_RECETA, idReceta);
-            startActivity(intent);
+        findViewById(R.id.btnCocina).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecetaActivity.this, CocinaActivity.class);
+                intent.putExtra(EXTRA_ID_RECETA, idReceta);
+                startActivity(intent);
+            }
         });
 
         // Pasos numerados

@@ -1,5 +1,7 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.view.View;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -48,8 +50,12 @@ public class PlanActivity extends BaseActivity implements PlanAdapter.Acciones {
         adapter = new PlanAdapter(this, this);
         rvPlan.setAdapter(adapter);
 
-        findViewById(R.id.btnListaCompra).setOnClickListener(v ->
-                startActivity(new Intent(this, ListaCompraActivity.class)));
+        findViewById(R.id.btnListaCompra).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PlanActivity.this, ListaCompraActivity.class));
+            }
+        });
 
         mostrarPlan();
     }
@@ -120,16 +126,19 @@ public class PlanActivity extends BaseActivity implements PlanAdapter.Acciones {
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.elegir_otro_plato, plan.getDias().get(indiceDia).getNumero()))
-                .setItems(opciones, (dialogo, elegido) -> {
-                    List<DiaPlan> dias = new ArrayList<DiaPlan>();
-                    for (DiaPlan d : plan.getDias()) {
-                        dias.add(d.copiar());
+                .setItems(opciones, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogo, int elegido) {
+                        List<DiaPlan> dias = new ArrayList<DiaPlan>();
+                        for (DiaPlan d : plan.getDias()) {
+                            dias.add(d.copiar());
+                        }
+                        dias.get(indiceDia).setReceta(momento, alternativas.get(elegido).getReceta());
+                        plan = PlanificadorMensual.desdeDias(perfil, dias, recetas);
+                        PlanStorage.guardar(PlanActivity.this, plan);
+                        adapter.mostrar(plan, perfil);
+                        Snackbar.make(rvPlan, R.string.plato_cambiado, Snackbar.LENGTH_SHORT).show();
                     }
-                    dias.get(indiceDia).setReceta(momento, alternativas.get(elegido).getReceta());
-                    plan = PlanificadorMensual.desdeDias(perfil, dias, recetas);
-                    PlanStorage.guardar(this, plan);
-                    adapter.mostrar(plan, perfil);
-                    Snackbar.make(rvPlan, R.string.plato_cambiado, Snackbar.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.cancelar, null)
                 .show();

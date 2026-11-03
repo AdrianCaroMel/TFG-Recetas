@@ -1,5 +1,7 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import android.widget.CompoundButton;
+import android.view.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -56,22 +58,28 @@ public class RestriccionesActivity extends BaseActivity {
         }
 
         // Vegana ya incluye vegetariana: si marca vegana, se marca tambien vegetariana
-        chips.get(Restriccion.VEGANO).setOnCheckedChangeListener((boton, marcado) -> {
-            if (marcado) {
-                chips.get(Restriccion.VEGETARIANO).setChecked(true);
+        chips.get(Restriccion.VEGANO).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton boton, boolean marcado) {
+                if (marcado) {
+                    chips.get(Restriccion.VEGETARIANO).setChecked(true);
+                }
             }
         });
 
-        btnSiguiente.setOnClickListener(v -> {
-            List<Restriccion> elegidas = new ArrayList<Restriccion>();
-            for (Restriccion r : Restriccion.values()) {
-                if (chips.get(r).isChecked()) {
-                    elegidas.add(r);
+        btnSiguiente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Restriccion> elegidas = new ArrayList<Restriccion>();
+                for (Restriccion r : Restriccion.values()) {
+                    if (chips.get(r).isChecked()) {
+                        elegidas.add(r);
+                    }
                 }
+                perfil.setRestricciones(elegidas);
+                PerfilStorage.guardar(RestriccionesActivity.this, perfil);
+                startActivity(new Intent(RestriccionesActivity.this, PresupuestoActivity.class));
             }
-            perfil.setRestricciones(elegidas);
-            PerfilStorage.guardar(this, perfil);
-            startActivity(new Intent(this, PresupuestoActivity.class));
         });
     }
 }

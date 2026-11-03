@@ -1,5 +1,7 @@
 package com.adriancaro.tfgrecetas.ui;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.annotation.NonNull;
 import android.content.res.Configuration;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,19 +48,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         final View raiz = findViewById(R.id.raiz);
         final View appbar = findViewById(R.id.appbar);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (v, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            Insets teclado = insets.getInsets(WindowInsetsCompat.Type.ime());
-            int abajo = Math.max(barras.bottom, teclado.bottom);
-            if (appbar != null) {
-                // La barra verde se estira por detras de la barra de estado
-                appbar.setPadding(0, barras.top, 0, 0);
-                v.setPadding(barras.left, 0, barras.right, abajo);
-            } else {
-                v.setPadding(barras.left, barras.top, barras.right, abajo);
+        ViewCompat.setOnApplyWindowInsetsListener(raiz, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                        | WindowInsetsCompat.Type.displayCutout());
+                Insets teclado = insets.getInsets(WindowInsetsCompat.Type.ime());
+                int abajo = Math.max(barras.bottom, teclado.bottom);
+                if (appbar != null) {
+                    // La barra verde se estira por detras de la barra de estado
+                    appbar.setPadding(0, barras.top, 0, 0);
+                    v.setPadding(barras.left, 0, barras.right, abajo);
+                } else {
+                    v.setPadding(barras.left, barras.top, barras.right, abajo);
+                }
+                return WindowInsetsCompat.CONSUMED;
             }
-            return WindowInsetsCompat.CONSUMED;
         });
 
         // Iconos de la barra de estado: claros sobre la barra verde, oscuros sobre fondo claro
@@ -98,11 +103,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         chip.setText(texto);
         chip.setChecked(marcado);
         // Pequeno "pop" al tocarlo para que se note que ha cambiado
-        chip.setOnClickListener(v -> {
-            v.setScaleX(0.88f);
-            v.setScaleY(0.88f);
-            v.animate().scaleX(1f).scaleY(1f).setDuration(260)
-                    .setInterpolator(new android.view.animation.OvershootInterpolator(3f)).start();
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setScaleX(0.88f);
+                v.setScaleY(0.88f);
+                v.animate().scaleX(1f).scaleY(1f).setDuration(260)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator(3f)).start();
+            }
         });
         grupo.addView(chip);
         return chip;

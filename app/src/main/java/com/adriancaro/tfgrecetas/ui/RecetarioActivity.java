@@ -71,7 +71,12 @@ public class RecetarioActivity extends BaseActivity {
         rvRecetas.setLayoutManager(new LinearLayoutManager(this));
         rvRecetas.setAdapter(adaptador);
 
-        grupoFiltros.setOnCheckedStateChangeListener((grupo, marcados) -> filtrar(true));
+        grupoFiltros.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup grupo, @NonNull List<Integer> marcados) {
+                filtrar(true);
+            }
+        });
         etBuscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -162,28 +167,34 @@ public class RecetarioActivity extends BaseActivity {
             tvMomento.setText(momento(r));
             Formato.pildora(tvMomento, r.getTipo());
             ((TextView) v.findViewById(R.id.tvNombre)).setText(r.getNombre());
-            ((TextView) v.findViewById(R.id.tvDatos)).setText("⏱ " + getString(R.string.minutos, r.getMinutos())
-                    + "  ·  🔥 " + getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(r).getKcal()))
+            ((TextView) v.findViewById(R.id.tvDatos)).setText(getString(R.string.minutos, r.getMinutos())
+                    + "  ·  " + getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(r).getKcal()))
                     + "  ·  " + getString(R.string.por_racion, Formato.euros(precios.costeRacion(r))));
 
             ImageButton btnFavorita = v.findViewById(R.id.btnFavorita);
             pintarCorazon(btnFavorita, FavoritosStorage.esFavorita(RecetarioActivity.this, r.getId()));
-            btnFavorita.setOnClickListener(boton -> {
-                boolean favorita = FavoritosStorage.alternar(RecetarioActivity.this, r.getId());
-                pintarCorazon(btnFavorita, favorita);
-                // Pequeno "latido" del corazon
-                boton.setScaleX(0.6f);
-                boton.setScaleY(0.6f);
-                boton.animate().scaleX(1f).scaleY(1f).setDuration(350)
-                        .setInterpolator(new OvershootInterpolator(4f)).start();
-                Snackbar.make(rvRecetas, favorita ? R.string.favorita_anadida : R.string.favorita_quitada,
-                        Snackbar.LENGTH_SHORT).show();
+            btnFavorita.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View boton) {
+                    boolean favorita = FavoritosStorage.alternar(RecetarioActivity.this, r.getId());
+                    pintarCorazon(btnFavorita, favorita);
+                    // Pequeno "latido" del corazon
+                    boton.setScaleX(0.6f);
+                    boton.setScaleY(0.6f);
+                    boton.animate().scaleX(1f).scaleY(1f).setDuration(350)
+                            .setInterpolator(new OvershootInterpolator(4f)).start();
+                    Snackbar.make(rvRecetas, favorita ? R.string.favorita_anadida : R.string.favorita_quitada,
+                            Snackbar.LENGTH_SHORT).show();
+                }
             });
 
-            v.setOnClickListener(tarjeta -> {
-                Intent intent = new Intent(RecetarioActivity.this, RecetaActivity.class);
-                intent.putExtra(RecetaActivity.EXTRA_ID_RECETA, r.getId());
-                startActivity(intent);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View tarjeta) {
+                    Intent intent = new Intent(RecetarioActivity.this, RecetaActivity.class);
+                    intent.putExtra(RecetaActivity.EXTRA_ID_RECETA, r.getId());
+                    startActivity(intent);
+                }
             });
         }
 

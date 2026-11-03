@@ -68,9 +68,14 @@ public class ListaCompraActivity extends BaseActivity {
                 actual = linea.getSupermercado();
                 View tarjeta = getLayoutInflater().inflate(R.layout.item_supermercado, contenedor, false);
                 TextView tvSuper = tarjeta.findViewById(R.id.tvSupermercado);
-                tvSuper.setText("📍 " + actual.getNombreVisible());
+                tvSuper.setText(actual.getNombreVisible());
                 final Supermercado elSuper = actual;
-                tvSuper.setOnClickListener(v -> abrirMapa(elSuper));
+                tvSuper.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        abrirMapa(elSuper);
+                    }
+                });
                 ((TextView) tarjeta.findViewById(R.id.tvSubtotal)).setText(Formato.euros(subtotal(actual)));
                 // Antes del aviso de precios, que es la ultima vista
                 contenedor.addView(tarjeta, contenedor.getChildCount() - 1);
@@ -121,13 +126,18 @@ public class ListaCompraActivity extends BaseActivity {
             View fila = getLayoutInflater().inflate(R.layout.item_barra_comparacion, filas, false);
             boolean ganador = i == 0;
             ((TextView) fila.findViewById(R.id.tvSuperBarra)).setText(
-                    (ganador ? "🏆 " : "") + e.getKey().getNombreVisible());
+                    e.getKey().getNombreVisible());
             ((TextView) fila.findViewById(R.id.tvCosteBarra)).setText(ganador ? Formato.euros(e.getValue())
                     : getString(R.string.comparacion_mas, Formato.euros(e.getValue() - masBarato)));
             LinearProgressIndicator barra = fila.findViewById(R.id.barraSuper);
             barra.setIndicatorColor(ContextCompat.getColor(this, ganador ? R.color.verde : R.color.naranja));
             int progreso = (int) Math.round(1000 * e.getValue() / masCaro);
-            barra.postDelayed(() -> barra.setProgressCompat(progreso, true), 300 + 120L * i);
+            barra.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    barra.setProgressCompat(progreso, true);
+                }
+            }, 300 + 120L * i);
             filas.addView(fila);
             i++;
         }
@@ -164,22 +174,25 @@ public class ListaCompraActivity extends BaseActivity {
 
         final int id = linea.getProducto().getId();
         pintarComprado(fila, cb, tvProducto, comprados.contains(id));
-        fila.setOnClickListener(v -> {
-            boolean marcado = !comprados.contains(id);
-            if (marcado) {
-                comprados.add(id);
-            } else {
-                comprados.remove(id);
-            }
-            PlanStorage.marcarComprado(this, id, marcado);
-            pintarComprado(fila, cb, tvProducto, marcado);
-            actualizarContador();
-            if (marcado) {
-                fila.setScaleX(0.96f);
-                fila.setScaleY(0.96f);
-                fila.animate().scaleX(1f).scaleY(1f).setDuration(220).start();
-                if (comprados.size() >= plan.getListaCompra().size()) {
-                    celebrarCompra();
+        fila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean marcado = !comprados.contains(id);
+                if (marcado) {
+                    comprados.add(id);
+                } else {
+                    comprados.remove(id);
+                }
+                PlanStorage.marcarComprado(ListaCompraActivity.this, id, marcado);
+                pintarComprado(fila, cb, tvProducto, marcado);
+                actualizarContador();
+                if (marcado) {
+                    fila.setScaleX(0.96f);
+                    fila.setScaleY(0.96f);
+                    fila.animate().scaleX(1f).scaleY(1f).setDuration(220).start();
+                    if (comprados.size() >= plan.getListaCompra().size()) {
+                        celebrarCompra();
+                    }
                 }
             }
         });
@@ -205,7 +218,12 @@ public class ListaCompraActivity extends BaseActivity {
                     .setStartDelay(azar.nextInt(500))
                     .setDuration(1600 + azar.nextInt(1200))
                     .setInterpolator(new android.view.animation.AccelerateInterpolator(0.7f))
-                    .withEndAction(() -> capa.removeView(confeti))
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            capa.removeView(confeti);
+                        }
+                    })
                     .start();
         }
         Snackbar.make(findViewById(R.id.raiz), R.string.compra_completa, Snackbar.LENGTH_LONG).show();
@@ -281,7 +299,7 @@ public class ListaCompraActivity extends BaseActivity {
 
     /** Envia la lista como texto (WhatsApp, correo, notas...). Solo lo que falta por comprar. */
     private void compartir() {
-        StringBuilder texto = new StringBuilder("🛒 ").append(getString(R.string.titulo_lista_compra))
+        StringBuilder texto = new StringBuilder().append(getString(R.string.titulo_lista_compra))
                 .append(" (").append(Formato.euros(plan.getCosteTotal())).append(")\n");
         Supermercado actual = null;
         for (LineaCompra linea : plan.getListaCompra()) {

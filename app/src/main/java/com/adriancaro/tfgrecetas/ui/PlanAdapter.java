@@ -125,7 +125,12 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ValueAnimator contador = ValueAnimator.ofFloat(0f, (float) plan.getCosteTotal());
         contador.setDuration(900);
         contador.setInterpolator(new DecelerateInterpolator());
-        contador.addUpdateListener(a -> tvGasto.setText(Formato.euros((Float) a.getAnimatedValue())));
+        contador.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator a) {
+                tvGasto.setText(Formato.euros((Float) a.getAnimatedValue()));
+            }
+        });
         contador.start();
         tvPresupuesto.setText(context.getString(R.string.de_presupuesto, Formato.euros(plan.getPresupuesto())));
         int porcentaje = 0;
@@ -174,13 +179,23 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tvMomento.setText(momento.getNombreVisible());
         Formato.pildora(tvMomento, momento.name());
         ((TextView) fila.findViewById(R.id.tvNombreReceta)).setText(receta.getNombre());
-        String info = "⏱ " + context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
+        String info = context.getString(R.string.minutos, receta.getMinutos()) + "  ·  "
                 + context.getString(R.string.kcal, (int) Math.round(Nutricion.deRacion(receta).getKcal())) + "  ·  "
                 + context.getString(R.string.por_racion, Formato.euros(precios.costeRacion(receta)));
         ((TextView) fila.findViewById(R.id.tvInfoReceta)).setText(info);
 
-        fila.setOnClickListener(v -> acciones.abrirReceta(receta));
-        fila.findViewById(R.id.btnCambiar).setOnClickListener(v -> acciones.cambiarPlato(indiceDia, momento));
+        fila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acciones.abrirReceta(receta);
+            }
+        });
+        fila.findViewById(R.id.btnCambiar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acciones.cambiarPlato(indiceDia, momento);
+            }
+        });
         return fila;
     }
 
